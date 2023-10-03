@@ -1,0 +1,19 @@
+.mouse {
+    color: #fff;
+    font-size: 20px;
+    opacity: 80%;
+    left: 0;
+    right: 0;
+    width: 90px;
+    height: 90px;
+    position: absolute;
+    flex-direction: row;
+    display: flex;
+}
+
+.mouseToolTip {
+    font-size: 8px;
+    color: #fff;
+    margin-top: 5px;
+    margin-left: 10px;
+}

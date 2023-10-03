@@ -1,0 +1,231 @@
+.mac-window-screen {
+    background: #0d1922;
+    cursor: default;
+    width: 600px;
+    height: 300px;
+    position: absolute;
+    top: 100px;
+    left: 100px;
+    border-radius: 9px;
+    z-index: 1;
+}
+
+.mac-window-screen header {
+    background: #162938;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    height: 30px;
+    align-items: center;
+    display: flex;
+    border-top-left-radius: 9px;
+    border-top-right-radius: 9px;
+}
+
+.mac-window-screen header .close {
+    background: #fc6255;
+    height: 13px;
+    width: 13px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    margin-left: 10px;
+    border-radius: 50%;
+    font-size: 12px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.mac-window-screen header .close span {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    transition: .6s;
+    opacity: 0;
+}
+
+.mac-window-screen header .close span:hover {
+    opacity: 1;
+}
+
+.mac-window-screen header .maximize {
+    background: #13ca33;
+    height: 13px;
+    width: 13px;
+    margin-left: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.mac-window-screen header .minimize {
+    background: #f7c105;
+    height: 13px;
+    width: 13px;
+    margin-left: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.mac-window-screen h3 {
+    color: #fff;
+    margin-left: 20px;
+    line-height: 15px;
+}
+
+.mac-window-screen h3 span.cursor {
+    display: inline-block;
+    background-color: #ccc;
+    margin-left: 0.1rem;
+    width: 3px;
+    border: 1px solid #ccc;
+}
+
+.mac-window-screen h3 span.cursor.typing {
+    animation: none;
+}
+
+.mac-window-screen header .terminal {
+    color: gray;
+    font-weight: 500;
+    font-size: 15px;
+    text-align: center;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    margin-left: 50px;
+}
+
+.mac-desk {
+    width: 77%;
+    height: 70px;
+    border-radius: 20px;
+    background: rgba(0, 0, 0, .5);
+    bottom: 20px;
+    position: absolute;
+    backdrop-filter: blur(7px);
+    align-items: center;
+    display: flex;
+}
+
+.mac-desk img {
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.mac-window-screen .run-screen {
+    width: 560px;
+    height: 90%;
+    padding: 20px;
+    font-size: 15px;
+    position: absolute;
+    bottom: -20px;
+    animation: slideTop 1s ease forwards;
+    transition: 1.5s;
+}
+
+.mac-window-screen .run-screen h4 {
+    margin-left: 20px;
+    color: #fff;
+    animation: slideRight 1s ease forwards;
+}
+
+.mac-window-screen .install-app {
+    background: #1c3345;
+    color: #fff;
+    height: 65px;
+    width: 200px;
+    border-radius: 15px;
+    position: absolute;
+    bottom: -35px;
+    left: -50px;
+    cursor: pointer;
+    align-items: center;
+    display: flex;
+}
+
+.mac-window-screen .install-app b {
+    left: 40px;
+    position: absolute;
+}
+
+.mac-window-screen .install-app span {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    position: absolute;
+    font-size: 25px;
+    left: 10px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 140px;
+  }
+  .buttons button {
+    padding: 0 25px;
+    border-radius: 4px;
+    min-width: 140px;
+    height: 50px;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 10px;
+    position: relative;
+    overflow: hidden;
+    border: solid 1px #69cec2;
+    cursor: pointer;
+  }
+  .buttons button:after, .buttons button:before {
+    width: 0%;
+    height: 0%;
+    content: "";
+    position: absolute;
+    border-radius: 100%;
+  }
+  .buttons button:after {
+    transition: all 0.5s ease;
+    background-color: white;
+  }
+  .buttons button:before {
+    transition: all 0.5s ease-out;
+    background: #7de1c2;
+  }
+  .buttons button span {
+    z-index: 1;
+    transition: all 0.3s ease-out;
+  }
+  .buttons button.cta-01 {
+    background: linear-gradient(90deg, #69cec2 0%, #41bbac 100%);
+    color: white;
+  }
+  .buttons button.cta-02 {
+    background-color: transparent;
+    color: #69cec2;
+  }
+  .buttons button.cta-02:after {
+    background: linear-gradient(90deg, #69cec2 0%, #41bbac 100%);
+  }
+  .buttons button:hover.cta-01 {
+    color: #69cec2;
+  }
+  .buttons button:hover.cta-02 {
+    color: white;
+  }
+  .buttons button:hover:after, .buttons button:hover:before {
+    width: 200px;
+    height: 200px;
+    border-radius: 4px;
+  }
+  .buttons button:hover:after {
+    transition: all 0.7s ease-in;
+  }
+  .buttons button:hover:before {
+    transition: all 0.5s ease-in;
+  }

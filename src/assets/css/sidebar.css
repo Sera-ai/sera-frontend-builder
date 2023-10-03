@@ -1,0 +1,341 @@
+.sera-flow {
+    flex-direction: column;
+    display: flex;
+    flex-grow: 1;
+    height: 100%;
+    font-size: 12px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #fff;
+    background-color: #141414;
+}
+
+.sera-flow aside {
+    margin: 5px;
+    padding: 15px 0px;
+    font-size: 12px;
+    border-radius: 5px;
+    background: #242431;
+}
+
+.sera-flow aside .description {
+    margin-bottom: 10px;
+}
+
+.sera-flow .dndnode {
+    display: flex;
+    padding: 10px 15px;
+    align-items: center;
+    gap: 15px;
+    align-self: stretch;
+    border-radius: 5px;
+    border: 1px solid #343B48;
+    cursor: grab;
+}
+
+.nodeTitle {
+    height: 16px;
+    align-self: stretch;
+    color: #FFF;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.nodeSubtitle {
+    height: 16px;
+    align-self: stretch;
+    color: rgba(255, 255, 255, 0.50);
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.sera-flow .dndnode.input {
+    border-color: #0041d0;
+}
+
+.sera-flow .dndnode.output {
+    border-color: #ff0072;
+}
+
+.sera-flow .reactflow-wrapper {
+    flex-grow: 1;
+    height: 100%;
+}
+
+.sera-flow .selectall {
+    margin-top: 10px;
+}
+
+@media screen and (min-width: 768px) {
+    .sera-flow {
+        flex-direction: row;
+    }
+
+    .sera-flow aside {
+        width: 320px;
+    }
+}
+
+.nodeCategoryContainer {
+    padding: 0px 0px;
+    border-bottom: #343B48 solid 1px;
+}
+
+.nodeCategoryInner {
+    border-top: #343B48 solid 1px;
+}
+
+.nodeCategoryText {
+    padding: 0px 10px;
+    text-transform: capitalize;
+    font-size: 16px;
+    font-weight: 400;
+    color: #fff;
+}
+
+.Collapsible__trigger {
+    display: block;
+    position: relative;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.Collapsible__contentInner P {
+    margin: 0px;
+}
+
+.Collapsible__trigger:after {
+    font-family: 'FontAwesome';
+    content: '\f107';
+    position: absolute;
+    font-size: 16px;
+    right: 10px;
+    top: 3px;
+    display: block;
+    transition: transform 300ms;
+}
+
+.Collapsible__trigger.is-open:after {
+    transform: rotateZ(180deg);
+}
+
+.Collapsible__trigger.is-disabled {
+    opacity: 0.5;
+    background-color: grey;
+}
+
+.scrollContainer {
+    display: flex;
+    padding: 15px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    flex: 1 0 0;
+    align-self: stretch;
+    height: 250px;
+    background-color: #1E1E1E;
+    overflow-y: scroll;
+    /* Internet Explorer 10+ */
+    -ms-overflow-style: none;
+    /* Firefox */
+    scrollbar-width: none;
+}
+
+.scrollContainer::-webkit-scrollbar {
+    /* Safari and Chrome */
+    display: none;
+}
+
+.reactflow-wrapper {}
+
+.font-blue {
+    color: #00A3FF
+}
+
+.font-green {
+    color: #4DE36E
+}
+
+.font-orange {
+    color: #FF7A00
+}
+
+.functionText {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+.detailsMenu {
+    display: flex;
+    width: 344px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    align-self: stretch;
+}
+
+.detailsMenuComponent {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    align-self: stretch;
+}
+
+.detailFont {
+    color: #FFF;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.detailsOverview {
+    display: flex;
+    padding: 0px 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    align-self: stretch;
+}
+
+.detailsOverviewHeader {
+    display: flex;
+    padding: 10px 0px 10px 0px;
+    align-items: center;
+    gap: 15px;
+    align-self: stretch;
+    border-bottom: #343B48 solid 1px;
+    cursor: pointer;
+}
+
+.debugButtonContainer {
+    display: flex;
+    padding: 7.5px 10px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 5px;
+    border: 1px solid #343B48;
+}
+
+.detailsAction {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.detailsNavBar {
+    display: flex;
+    padding: 0px 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    align-self: stretch;
+    border-top: 1px solid #343B48;
+    border-bottom: 1px solid #343B48;
+    background: #141414;
+}
+
+.detailsNavBarContainer {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.navBarFont {
+    color: rgba(255, 255, 255, 0.50);
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    cursor: pointer;
+}
+
+.navselect {
+    display: flex;
+    padding: 15px 0px;
+    align-items: flex-start;
+    gap: 10px;
+    color: #fff;
+    border-bottom: 1.5px solid #00A3FF;
+}
+
+.detailParameterBox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    align-self: stretch;
+}
+
+.detailParameterFrame {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    flex: 1 0 0;
+}
+
+.detailDropdown {
+    display: flex;
+    padding-left: 9px;
+    padding-right: 5px;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+    border-radius: 5px;
+    border: 1px solid #343B48;
+    background: #1E1E1E;
+}
+
+.dropdownBox {
+    display: flex;
+    width: 25px;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    align-self: stretch;
+    border-radius: 0px 5px 5px 0px;
+    border: 1px solid #343B48;
+    background: #343B48;
+}
+
+.detailFontCase {
+    display: flex;
+    padding: 5px 0px 5px 0px;
+    align-items: center;
+    color: #ffffff;
+    background-color: #00000000;
+    flex: 1;
+    outline: none;
+    border-width: 0;
+    gap: 5px;
+}
+
+.apiBuilder {
+    display: flex;
+    padding: 10px 0px;
+    justify-content: space-between;
+    align-items: flex-start;
+    align-self: stretch;
+    color: #FFF;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    letter-spacing: 0.72px;
+}
+
+.apiBuilderContainer {
+    display: flex;
+    width: 318px;
+    padding: 0px 10px 10px 10px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+}

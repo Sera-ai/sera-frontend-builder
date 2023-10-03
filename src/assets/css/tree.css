@@ -1,0 +1,146 @@
+ul {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    line-height: 1.5;
+    font-size: 14px;
+
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+
+}
+
+
+ul ul li {
+    position: relative;
+    margin: 0 0 0 0.75em;
+    padding: 0 0 0 1.75em;
+}
+
+ul.deep {
+    padding-bottom: 0.25em;
+}
+
+
+ul ul li ul li {
+    font-weight: normal;
+}
+
+li.minor a {
+    color: #555;
+}
+
+ul ul li::before {
+    content: " ";
+    display: block;
+    background: #ffffff90;
+    border-radius: 0px 0px 0px 0px;
+    width: 1.5em;
+    height: 1px;
+    position: absolute;
+    left: 0;
+    top: calc(0.75em + 0.5px);
+}
+
+ul ul li::after {
+    content: " ";
+    display: block;
+    background: #ffffff90;
+    width: 1px;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+ul ul li:last-child::after {
+    height: calc(0.75em + 1px);
+}
+
+label::before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: "\f0da";
+    display: inline-block;
+    width: 0.75em;
+    text-align: center;
+    line-height: 0.75em;
+    margin-right: 0.5em;
+    margin-left: 0.5em;
+}
+
+input[type=checkbox]:checked+label::before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: "\f0d7";
+}
+
+input[type=checkbox] {
+    visibility: hidden;
+    position: absolute;
+}
+
+input[type=checkbox]~ul {
+    display: none;
+}
+
+input[type=checkbox]:checked~ul {
+    display: block;
+}
+
+
+body a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.fill {
+    display: none;
+    margin-left: -10000px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+    z-index: -1;
+}
+
+.title {
+    position: relative;
+    z-index: 0;
+    cursor: pointer;
+}
+
+.title:hover .fill {
+    display: block;
+    background-color: #272B34;
+    cursor: pointer;
+}
+
+.select {
+    display: block;
+    background-color: #2e4477;
+    cursor: pointer;
+}
+
+.GET-color {
+    color: #4DE36E;
+}
+
+.POST-color {
+    color: #FF9F47;
+}
+
+.PATCH-color {
+    color: #A5A823;
+}
+
+.DELETE-color {
+    color: #FF4747;
+}
+
+.PUT-color {
+    color: #47e3ff;
+}

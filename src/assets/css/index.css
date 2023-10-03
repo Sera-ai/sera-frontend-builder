@@ -1,0 +1,24 @@
+body {
+  margin: 0 !important;
+}
+
+.context-menu {
+  font-size: 12px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #141414;
+  border: 1px solid #FF7A00 !important;
+  border-radius: 5px;
+  box-shadow: 10px 19px 20px rgba(0, 0, 0, 10%);
+  position: absolute;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.context-menu button {
+  border: none;
+  display: block;
+  padding: 0.5em;
+  text-align: left;
+  width: 100%;
+}
+
