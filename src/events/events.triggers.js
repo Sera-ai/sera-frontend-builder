@@ -118,7 +118,7 @@ export const onDrop = async (event, rfw, rfi, handleNodesCreate) => {
 
         const data = { "out": { "__type": "__integer" } }
 
-        const url = "http://192.168.137.212/manage/node/create";
+        const url = "http://manage.test.sera/manage/node/create";
 
         return fetch(url, {
             method: 'POST',
@@ -196,7 +196,7 @@ export const onConnect = (params, setEdges, addEdge) => {
 
 export const fetchData = async (setNodes, setEdges, setOas, setIssue, path) => {
     try {
-        const response = await fetch(`http://192.168.137.212/manage/getEndpoint?path=${encodeURIComponent(path)}`);
+        const response = await fetch(`http://manage.test.sera/manage/getEndpoint?path=${encodeURIComponent(path)}`);
         const jsonData = await response.json();
         if (!jsonData.issue) {
             setNodes(jsonData.builder.nodes);
@@ -256,7 +256,7 @@ function createEndpoint(data, builder_id) {
         builder_id: builder_id
     };
 
-    const url = "http://192.168.137.212/manage/endpoint/create";
+    const url = "http://manage.test.sera/manage/endpoint/create";
 
     return fetch(url, {
         method: 'POST',
@@ -286,7 +286,7 @@ function updateEndpoint(data, builder_id) {
         builder_id: builder_id
     };
 
-    const url = "http://192.168.137.212/manage/endpoint/update";
+    const url = "http://manage.test.sera/manage/endpoint/update";
 
     return fetch(url, {
         method: 'POST',
@@ -315,7 +315,7 @@ function createBuilder(data) {
         method: method
     };
 
-    const url = "http://192.168.137.212/manage/builder/create";
+    const url = "http://manage.test.sera/manage/builder/create";
 
     return fetch(url, {
         method: 'POST',

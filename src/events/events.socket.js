@@ -113,7 +113,7 @@ async function setDetailsUtil(node, setDetails, nodes) {
     console.log(nodeData)
 
     try {
-        const response = await fetch(`http://192.168.137.212/manage/getNode?id=${nodeData.data.node_id}`);
+        const response = await fetch(`http://manage.test.sera/manage/getNode?id=${nodeData.node_id}`);
         const jsonData = await response.json();
         if (!jsonData.issue) {
             nodeData["node_data"] = jsonData

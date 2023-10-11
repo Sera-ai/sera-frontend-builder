@@ -8,15 +8,17 @@ import TagComponent from '../headers/header.tag';
 
 export default memo((node) => {
   const data = node.data
+  console.log(node)
 
   const fieldKey = node.data.headerType == 1 || node.data.headerType == 3 ? "out" : "in"
 
 
   const FieldItems = () => {
-    if (!data.node_data) return
-    return Object.keys(data.node_data.fields[fieldKey]).map((fieldName) => {
+    console.log("data", data)
+    if (!data) return
+    return Object.keys(data.fields[fieldKey]).map((fieldName) => {
       if (!fieldName.includes("__")) {
-        const field = data.node_data.fields[fieldKey][fieldName]
+        const field = data.fields[fieldKey][fieldName]
         return (<FlowComponent
           data={{
             target: { id: `flow-target-${node.id}-${fieldName}`, type: field.type, title: fieldName },
@@ -84,7 +86,8 @@ export default memo((node) => {
             </div>
 
             <div style={{ padding: 5 }} className="outTable">
-              {data.node_data && <FieldItems />}
+              {data
+               && <FieldItems />}
             </div>
           </div>
         )
