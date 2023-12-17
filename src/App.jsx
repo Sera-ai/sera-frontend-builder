@@ -117,7 +117,7 @@ const CustomNodeFlow = () => {
 
 
   useEffect(() => {
-    function onConnectSocket() { setIsConnected(true); socket.emit("getId"); }
+    function onConnectSocket() { setIsConnected(true); console.log("socket connected"); socket.emit("getId"); }
     function onDisconnect() { setIsConnected(false); }
     const gotId = str => setBgColor('#' + [...Array(3)].map((_, i) => ((str.split('').reduce((hash, char) => char.charCodeAt(0) + ((hash << 5) - hash), 0) >> (i * 8)) & 0xff).toString(16).padStart(2, '0')).join(''));
 

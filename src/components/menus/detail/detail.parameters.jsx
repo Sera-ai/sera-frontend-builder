@@ -13,7 +13,8 @@ export default memo(({ nodeDetails, nodes, edges, handleConnectChange }) => {
         console.log((nodes.filter((node) => node.id == nodeId)))
         console.log((nodes.filter((node) => node.id == nodeId))[0])
 
-        const fields = (nodes.filter((node) => node.id == nodeId))[0].data.node_data.fields[input] ?? {}
+
+        const fields = (nodes.filter((node) => node.id == nodeId))[0].data.fields[input] ?? {}
         const returnables = Object.keys(fields).map((field) => {
             if (!field.includes("__")) {
 
@@ -21,7 +22,7 @@ export default memo(({ nodeDetails, nodes, edges, handleConnectChange }) => {
                     .flatMap(node => {
                         console.log(input === "in" ? "out" : "in")
                         console.log(node)
-                        const relevantFields = node.data.node_data.fields[input === "in" ? "out" : "in"] ?? {}
+                        const relevantFields = node.data.fields[input === "in" ? "out" : "in"] ?? {}
                         return Object.keys(relevantFields)
                             .filter(field2 => !field2.includes("__") && relevantFields[field2].type === fields[field].type)
                             .map(field2 => {

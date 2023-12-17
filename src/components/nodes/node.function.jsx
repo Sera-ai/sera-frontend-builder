@@ -7,9 +7,12 @@ import InputFieldComponent from '../fields/field.input';
 
 export default memo((node) => {
     // Default states
+    console.log("node function", node)
     const [functionHeaderData, setFunctionHeaderData] = useState({
         function: node.data.function
     });
+
+    console.log("node", node)
 
 
 

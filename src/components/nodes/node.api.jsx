@@ -8,7 +8,7 @@ import TagComponent from '../headers/header.tag';
 
 export default memo((node) => {
   const data = node.data
-  console.log(node)
+  console.log("node1242", node)
 
   const fieldKey = node.data.headerType == 1 || node.data.headerType == 3 ? "out" : "in"
 

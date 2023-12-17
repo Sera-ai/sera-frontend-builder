@@ -85,6 +85,7 @@ export const handleConnectChangeUtil = (params, fromSocket, onConnect, socket, e
             edge.id = `${params.source}-${params.target}-${params.sourceHandle.split("-")[3]}-${generateRandomString()}`
             edge.animated = sourceColorClass == "nullEdge";
             edge.style = { stroke: lineColor };
+            edge.type = sourceColorClass == "nullEdge" ? "flow" : "param"
             edge.selected = false;
             socket.emit('onConnect', { edge, edges: newEdges });
         } else {
@@ -113,7 +114,7 @@ async function setDetailsUtil(node, setDetails, nodes) {
     console.log(nodeData)
 
     try {
-        const response = await fetch(`http://manage.test.sera/manage/getNode?id=${nodeData.node_id}`);
+        const response = await fetch(`http://localhost:12000/manage/getNode?id=${nodeData.node_id}`);
         const jsonData = await response.json();
         if (!jsonData.issue) {
             nodeData["node_data"] = jsonData

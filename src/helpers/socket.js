@@ -1,2 +1,2 @@
 import { io } from 'socket.io-client';
-export const socket = io("http://socket.test.sera");
+export const socket = io("http://localhost:12000");

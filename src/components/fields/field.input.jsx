@@ -5,8 +5,8 @@ import { Handle, Position, useUpdateNodeInternals } from 'reactflow';
 import { socket } from '../../helpers/socket';
 
 
-export default memo(({ data, id, node }) => {
-
+export default memo(({ data, node, id }) => {
+    console.log("id", id)
     const [inputFieldData, setInputFieldData] = useState({
         target: data.target ?? { id: null, type: null, title: null },
         source: data.source ?? { id: null, type: null, title: null },
@@ -20,10 +20,14 @@ export default memo(({ data, id, node }) => {
 
 
     const updateField = (newData) => {
-        console.log(id)
+        console.log("updateField", id)
         let dataUpdate = data
         dataUpdate.inputData = newData
-        updateNodeInternals(id, { data: parseInt(dataUpdate) })
+        let updateData = inputFieldData
+        updateData.inputData = dataUpdate.inputData
+        setInputFieldData(updateData)
+        console.log("dataUpdate", dataUpdate.inputData)
+        updateNodeInternals(id, { data: data.function == "string" ? dataUpdate : parseInt(dataUpdate) })
         socket.emit("updateField", { id: `inputfor-${id}`, value: newData })
     }
 
@@ -57,7 +61,7 @@ export default memo(({ data, id, node }) => {
             <Handle
                 type="source"
                 position={Position.Right}
-                id={data.source.id}
+                id={"flow-source-" + id + "-" + data.function}
                 className={`ioHandle ${data.function}Edge`}
             />
         )

@@ -116,9 +116,10 @@ export const onDrop = async (event, rfw, rfi, handleNodesCreate) => {
 
     try {
 
-        const data = { "out": { "__type": "__integer" } }
+        const fitType = type.replace("Node", "")
+        const data = { "out": { "__type": `__${fitType}` } }
 
-        const url = "http://manage.test.sera/manage/node/create";
+        const url = "http://localhost:12000/manage/node/create";
 
         return fetch(url, {
             method: 'POST',
@@ -129,8 +130,8 @@ export const onDrop = async (event, rfw, rfi, handleNodesCreate) => {
         })
             .then(response => response.json())  // assuming server responds with json
             .then(data => {
-                const newNode = { id: data._id, type: "functionNode", position, data: newNodeDefault(type, data._id) };
-                console.log(newNode)
+                const newNode = { id: data._id, node_id: data.node_id, type: "functionNode", position, data: newNodeDefault(type, data.node_id) };
+                console.log("newNode", newNode)
                 handleNodesCreate(newNode);
             })
             .catch(error => { console.error('Error:', error); return false });
@@ -183,7 +184,7 @@ export const onConnect = (params, setEdges, addEdge) => {
                 }
             }
 
-            setEdges((eds) => addEdge({ ...params, animated: sourceColorClass ==  "nullEdge", style: { stroke: lineColor } }, eds));
+            setEdges((eds) => addEdge({ ...params, animated: sourceColorClass == "nullEdge", style: { stroke: lineColor } }, eds));
 
         } else {
             console.log("it dont be matchin")
@@ -196,9 +197,10 @@ export const onConnect = (params, setEdges, addEdge) => {
 
 export const fetchData = async (setNodes, setEdges, setOas, setIssue, path) => {
     try {
-        const response = await fetch(`http://manage.test.sera/manage/getEndpoint?path=${encodeURIComponent(path)}`);
+        const response = await fetch(`http://localhost:12000/manage/getEndpoint?path=${encodeURIComponent(path)}`);
         const jsonData = await response.json();
         if (!jsonData.issue) {
+            console.log("nop",jsonData.builder.nodes)
             setNodes(jsonData.builder.nodes);
             setEdges(jsonData.builder.edges);
             socket.emit("builderConnect", jsonData.endpoint.builder_id)
@@ -215,7 +217,11 @@ export const fetchData = async (setNodes, setEdges, setOas, setIssue, path) => {
 
 export const createData = async (data, fetchData, setIssue) => {
     if (data.error == "NoEndpoint") {
+        console.log("ho")
+
         const builder_id = await createBuilder(data)
+        console.log(builder_id)
+
         const created = await createEndpoint(data, builder_id)
         if (created) {
             setIssue(null)
@@ -241,6 +247,7 @@ export const createData = async (data, fetchData, setIssue) => {
 
 
 function createEndpoint(data, builder_id) {
+    console.log("gk")
     const urli = "https:/" + window.location.pathname
     const parsed = new URL(urli)
     const oasUrl = `${parsed.protocol}//${parsed.host}`
@@ -256,8 +263,8 @@ function createEndpoint(data, builder_id) {
         builder_id: builder_id
     };
 
-    const url = "http://manage.test.sera/manage/endpoint/create";
-
+    const url = "http://localhost:12000/manage/endpoint/create";
+    console.log(JSON.stringify(data2))
     return fetch(url, {
         method: 'POST',
         headers: {
@@ -286,7 +293,7 @@ function updateEndpoint(data, builder_id) {
         builder_id: builder_id
     };
 
-    const url = "http://manage.test.sera/manage/endpoint/update";
+    const url = "http://localhost:12000/manage/endpoint/update";
 
     return fetch(url, {
         method: 'POST',
@@ -301,6 +308,7 @@ function updateEndpoint(data, builder_id) {
 }
 
 function createBuilder(data) {
+
     const urli = "https:/" + window.location.pathname
     const parsed = new URL(urli)
     const oasUrl = `${parsed.protocol}//${parsed.host}`
@@ -315,7 +323,7 @@ function createBuilder(data) {
         method: method
     };
 
-    const url = "http://manage.test.sera/manage/builder/create";
+    const url = "http://localhost:12000/manage/builder/create";
 
     return fetch(url, {
         method: 'POST',
