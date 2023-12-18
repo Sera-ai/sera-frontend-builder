@@ -119,7 +119,7 @@ export const onDrop = async (event, rfw, rfi, handleNodesCreate) => {
         const fitType = type.replace("Node", "")
         const data = { "out": { "__type": `__${fitType}` } }
 
-        const url = "http://localhost:12000/manage/node/create";
+        const url = `http://localhost:${process.env.BE_ROUTER_PORT}/manage/node/create`;
 
         return fetch(url, {
             method: 'POST',
@@ -197,7 +197,7 @@ export const onConnect = (params, setEdges, addEdge) => {
 
 export const fetchData = async (setNodes, setEdges, setOas, setIssue, path) => {
     try {
-        const response = await fetch(`http://localhost:12000/manage/getEndpoint?path=${encodeURIComponent(path)}`);
+        const response = await fetch(`http://localhost:${process.env.BE_ROUTER_PORT}/manage/getEndpoint?path=${encodeURIComponent(path)}`);
         const jsonData = await response.json();
         if (!jsonData.issue) {
             console.log("nop",jsonData.builder.nodes)
@@ -263,7 +263,7 @@ function createEndpoint(data, builder_id) {
         builder_id: builder_id
     };
 
-    const url = "http://localhost:12000/manage/endpoint/create";
+    const url = `http://localhost:${process.env.BE_ROUTER_PORT}/manage/endpoint/create`;
     console.log(JSON.stringify(data2))
     return fetch(url, {
         method: 'POST',
@@ -293,7 +293,7 @@ function updateEndpoint(data, builder_id) {
         builder_id: builder_id
     };
 
-    const url = "http://localhost:12000/manage/endpoint/update";
+    const url = `http://localhost:${process.env.BE_ROUTER_PORT}/manage/endpoint/update`;
 
     return fetch(url, {
         method: 'POST',
@@ -323,7 +323,7 @@ function createBuilder(data) {
         method: method
     };
 
-    const url = "http://localhost:12000/manage/builder/create";
+    const url = `http://localhost:${process.env.BE_ROUTER_PORT}/manage/builder/create`;
 
     return fetch(url, {
         method: 'POST',

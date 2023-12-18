@@ -114,7 +114,7 @@ async function setDetailsUtil(node, setDetails, nodes) {
     console.log(nodeData)
 
     try {
-        const response = await fetch(`http://localhost:12000/manage/getNode?id=${nodeData.node_id}`);
+        const response = await fetch(`http://localhost:${process.env.BE_ROUTER_PORT}/manage/getNode?id=${nodeData.node_id}`);
         const jsonData = await response.json();
         if (!jsonData.issue) {
             nodeData["node_data"] = jsonData
