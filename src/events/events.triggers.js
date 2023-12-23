@@ -119,12 +119,13 @@ export const onDrop = async (event, rfw, rfi, handleNodesCreate) => {
         const fitType = type.replace("Node", "")
         const data = { "out": { "__type": `__${fitType}` } }
 
-        const url = `http://${window.location.hostname}:${__BE_ROUTER_PORT__}/manage/node/create`;
+        const url = `/manage/node/create`;
 
         return fetch(url, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'x-sera-service': "be_builder"
             },
             body: JSON.stringify(data)
         })
@@ -197,7 +198,7 @@ export const onConnect = (params, setEdges, addEdge) => {
 
 export const fetchData = async (setNodes, setEdges, setOas, setIssue, path) => {
     try {
-        const response = await fetch(`http://${window.location.hostname}:${__BE_ROUTER_PORT__}/manage/getEndpoint?path=${encodeURIComponent(path)}`);
+        const response = await fetch(`/manage/getEndpoint?path=${encodeURIComponent(path)}`,{headers:{'x-sera-service': "be_builder"}});
         const jsonData = await response.json();
         if (!jsonData.issue) {
             console.log("nop",jsonData.builder.nodes)
@@ -263,12 +264,13 @@ function createEndpoint(data, builder_id) {
         builder_id: builder_id
     };
 
-    const url = `http://${window.location.hostname}:${__BE_ROUTER_PORT__}/manage/endpoint/create`;
+    const url = `/manage/endpoint/create`;
     console.log(JSON.stringify(data2))
     return fetch(url, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'x-sera-service': "be_builder"
         },
         body: JSON.stringify(data2)
     })
@@ -293,12 +295,13 @@ function updateEndpoint(data, builder_id) {
         builder_id: builder_id
     };
 
-    const url = `http://${window.location.hostname}:${__BE_ROUTER_PORT__}/manage/endpoint/update`;
+    const url = `/manage/endpoint/update`;
 
     return fetch(url, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'x-sera-service': "be_builder"
         },
         body: JSON.stringify(data2)
     })
@@ -323,12 +326,13 @@ function createBuilder(data) {
         method: method
     };
 
-    const url = `http://${window.location.hostname}:${__BE_ROUTER_PORT__}/manage/builder/create`;
+    const url = `/manage/builder/create`;
 
     return fetch(url, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'x-sera-service': "be_builder"
         },
         body: JSON.stringify(data2)
     })

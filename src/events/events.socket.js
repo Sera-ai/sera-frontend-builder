@@ -114,7 +114,7 @@ async function setDetailsUtil(node, setDetails, nodes) {
     console.log(nodeData)
 
     try {
-        const response = await fetch(`http://${window.location.hostname}:${__BE_ROUTER_PORT__}/manage/getNode?id=${nodeData.node_id}`);
+        const response = await fetch(`/manage/getNode?id=${nodeData.node_id}`,{headers: {'x-sera-service': "be_builder"}});
         const jsonData = await response.json();
         if (!jsonData.issue) {
             nodeData["node_data"] = jsonData
