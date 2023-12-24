@@ -140,8 +140,6 @@ export const onDrop = async (event, rfw, rfi, handleNodesCreate) => {
     } catch (error) {
         console.error('Error fetching data:', error);
     }
-
-
 };
 
 export const onDragOver = (event) => {
