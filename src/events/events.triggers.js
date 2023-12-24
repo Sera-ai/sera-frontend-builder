@@ -196,7 +196,7 @@ export const onConnect = (params, setEdges, addEdge) => {
 
 export const fetchData = async (setNodes, setEdges, setOas, setIssue, path) => {
     try {
-        const response = await fetch(`/manage/getEndpoint?path=${encodeURIComponent(path)}`,{headers:{'x-sera-service': "be_builder"}});
+        const response = await fetch(`/manage/getEndpoint?path=${encodeURIComponent(path.replace("/builder", ""))}`,{headers:{'x-sera-service': "be_builder"}});
         const jsonData = await response.json();
         if (!jsonData.issue) {
             console.log("nop",jsonData.builder.nodes)
