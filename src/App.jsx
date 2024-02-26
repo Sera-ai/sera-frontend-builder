@@ -15,7 +15,6 @@ import './assets/css/mouse.css';
 import './assets/css/menu/detail.css';
 
 import { socket } from './helpers/socket';
-
 import Modal from './helpers/helper.modal';
 
 
@@ -65,7 +64,7 @@ const nodeTypes = {
   functionNode
 };
 
-const defaultViewport = { x: 0, y: 0, zoom: 1 };
+const defaultViewport = { x: 0, y: 0, zoom: 0.75 };
 
 const CustomNodeFlow = () => {
   // Refs
@@ -141,7 +140,7 @@ const CustomNodeFlow = () => {
 
 
   return (
-    <div className='sera-flow' style={{ height: '100vh', width: '100vw' }}>
+    <div className='sera-flow' style={{ height: '100%', width: '100%' }}>
       <ReactFlowProvider>
 
         {oas && <ItemBar oas={oas} />}

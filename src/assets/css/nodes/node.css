@@ -1,227 +1,256 @@
 .apiNode {
-    font-size: 12px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #1E1E1E;
-    border-radius: 3px;
-    padding: 0px !important;
-    min-width: 100px;
+  font-size: 12px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #282828;
+  border-radius: 3px;
+  padding: 0px !important;
+  min-width: 170px;
 }
 
 .ApiNodeEntry {
-    border-radius: 0px 3px 3px 3px !important;
+  border-radius: 0px 3px 3px 3px !important;
 }
 
 .functionTitle {
-    text-decoration: none !important;
+  text-decoration: none !important;
 }
 
 .nodeHeader {
-    border-radius: 3px 3px 0px 0px;
-    color: #fff;
-    display: flex;
-    padding: 2px 4px;
-    font-size: 10px;
-    flex-direction: column;
-    align-items: flex-start;
+  border-radius: 3px 3px 0px 0px;
+  color: #fff;
+  display: flex;
+  padding: 2px 5px;
+  font-size: 10px;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
-
-.apiNode>table {
-    color: #fff;
-    padding: 5px 10px;
+.apiNode > table {
+  color: #fff;
+  padding: 5px 10px;
 }
 
-
-.nodeHeader>table {
-    color: #fff;
-    padding: 2px 5px;
-    width: "100%";
+.nodeHeader > table {
+  color: #fff;
+  padding: 2px 5px;
+  width: "100%";
 }
 
-.nodeHeader>table>tbody {
-    color: #fff;
-    padding: 2px 10px;
-    width: "100%";
+.nodeHeader > table > tbody {
+  color: #fff;
+  padding: 2px 10px;
+  width: "100%";
 }
 
-.nodeHeader>table>tbody>tr>td {
-    vertical-align: top;
+.nodeHeader > table > tbody > tr > td {
+  vertical-align: top;
 }
 
-.apiNode>table {
-    color: #fff;
-    padding: 2px 5px;
-    width: 100%;
+.apiNode > table {
+  color: #fff;
+  padding: 2px 5px;
+  width: 100%;
 }
 
-.apiNode>table>tbody {
-    color: #fff;
-    padding: 2px 10px;
-    width: 100%;
+.apiNode > table > tbody {
+  color: #fff;
+  padding: 2px 10px;
+  width: 100%;
 }
 
-.apiNode>table>tbody>tr {
-    height: 16px !important;
+.apiNode > table > tbody > tr {
+  height: 16px !important;
 }
 
-.apiNode>table>tr>td>div {
-    align-items: center;
-    flex-direction: "row";
-    display: "flex"
+.apiNode > table > tr > td > div {
+  align-items: center;
+  flex-direction: "row";
+  display: "flex";
 }
 
 .react-flow__handle-left {
-    transform: none;
-    left: 0px
+  transform: none;
+  left: 0px;
+  top: unset !important;
 }
 
 .react-flow__handle-right {
-    transform: none;
-    right: 0px;
+  transform: none;
+  right: 0px;
+  top: unset !important;
 }
 
 .react-flow__handle {
-    height: 8px;
-    width: 8px;
+  height: 8px;
+  width: 8px;
 }
 
 .ioHandle {
-    position: relative !important;
+  position: relative !important;
 }
 
 .outTable {
-    gap: 10px
+  gap: 10px;
 }
 
-.outTable>table>tbody {
-    color: #fff;
-    padding: 2px;
-    width: 100%;
+.outTable > table > tbody {
+  color: #fff;
+  padding: 2px;
+  width: 100%;
 }
 
 .nodeTag {
-    position: absolute;
-    height: 15px;
-    top: -16px;
-    font-size: 10px;
-    padding-left: 5px;
-    padding-right: 5px;
-    padding-top: 0px;
-    background-color: #141414;
-    border-radius: 3px 3px 0px 0px;
-    color: #fff;
+  position: absolute;
+  height: 18px;
+  top: -17px;
+  font-size: 10px;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 0px;
+  background-color: #282828;
+  border-radius: 3px 3px 0px 0px;
+  color: #fff;
 }
 
 .cellSpacer {
-    min-width: 150px !important;
+  min-width: 150px !important;
 }
 
 .cellSpacerHalf {
-    min-width: 73px !important;
+  min-width: 73px !important;
 }
 
 .cellEnd {
-    text-align: end;
+  text-align: end;
 }
 
 /* Colors */
 
-
 .integerBG {
-    background-color: #a456e5;
+  background-color: #a456e5;
 }
 
 .integerEdge {
-    border-color: #a456e5;
-    background-color: #1E1E1E;
+  border-color: #a456e5;
+  background-color: #1e1e1e;
 }
 
 .stringBG {
-    background-color: #2bb74a;
+  background-color: #2bb74a;
 }
 
 .stringEdge {
-    border-color: #2bb74a;
-    background-color: #1E1E1E;
+  border-color: #2bb74a;
+  background-color: #1e1e1e;
 }
 
 .arrayBG {
-    background-color: #f1ee07;
+  background-color: #f1ee07;
 }
 
 .arrayEdge {
-    border-color: #f1ee07;
-    background-color: #1E1E1E;
+  border-color: #f1ee07;
+  background-color: #1e1e1e;
 }
 
 .booleanBG {
-    background-color: #FF4747;
+  background-color: #ff4747;
 }
 
 .booleanEdge {
-    border-color: #FF4747;
-    background-color: #1E1E1E;
+  border-color: #ff4747;
+  background-color: #1e1e1e;
 }
 
-
-
 .context-menu button:hover {
-    background: white;
+  background: white;
 }
 
 .react-flow__node.selectable:focus {
-    outline: #ffffff30 solid 1px;
+  outline: #ffffff30 solid 1px;
 }
 
 .nodeHeaderDetails {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
 }
 
 .nodeHeaderDetailsUnderline {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 .rightAlign {
-    float: right;
+  float: right;
 }
 
 .endpoint {
-    right: 0px;
+  right: 0px;
 }
 
 .entrypoint {
-    left: 0px;
+  left: 0px;
 }
 
 .return {
-    right: 0px;
+  right: 0px;
 }
 
 .response {
-    left: 0px;
+  left: 0px;
 }
 
 .endHandle {
-    align-items: flex-end;
-    display: flex;
-    flex-direction: column;
+  align-items: flex-end;
+  display: flex;
+  flex-direction: column;
 }
 
 .nodeHeaderContent {
-    padding: 5px;
-    margin: 5px;
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 3px;
-    border-color: #ffffff40;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 1.5px;
+  padding-bottom: 1.5px;
+  margin: 3.5px;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 3px;
+  border-color: #ffffff10;
 }
 
 .nodeHeaderContentDetails {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1.5px;
+  padding-bottom: 1.5px;
+  gap: 5px;
+}
+
+.nodeHeaderContentDetailsTag {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 5px;
+  padding-left: 5px;
+  gap: 5px;
+  height: 15px;
+}
+
+.maxi {
+  height: 25px !important;
+}
+
+.divider {
+  display: flex;
+  width: 100%;
+  border-bottom-color: #ffffff10;
+  border-bottom-width: 1px;
+}
+
+.headerHandle {
+  background-color: transparent !important;
+  border-color: transparent !important;
+
 }
