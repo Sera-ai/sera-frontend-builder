@@ -1,4 +1,4 @@
-export const newNodeDefault = (type, node_id) => {
+export const newNodeDefault = (type, id) => {
     const typeMapping = {
         "integerNode": "integer",
         "stringNode": "string",
@@ -15,7 +15,7 @@ export const newNodeDefault = (type, node_id) => {
         source: { id: null, type: null, title: null },
         nodeType: 0,
         inputData: null,
-        node_id: node_id
+        id: id
     };
 };
 

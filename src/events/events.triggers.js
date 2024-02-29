@@ -131,7 +131,7 @@ export const onDrop = async (event, rfw, rfi, handleNodesCreate) => {
         })
             .then(response => response.json())  // assuming server responds with json
             .then(data => {
-                const newNode = { id: data._id, node_id: data.node_id, type: "functionNode", position, data: newNodeDefault(type, data.node_id) };
+                const newNode = { id: data._id, id: data.id, type: "functionNode", position, data: newNodeDefault(type, data.id) };
                 console.log("newNode", newNode)
                 handleNodesCreate(newNode);
             })
