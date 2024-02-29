@@ -196,9 +196,11 @@ export const onConnect = (params, setEdges, addEdge) => {
 
 export const fetchData = async (setNodes, setEdges, setOas, setIssue, path) => {
     try {
-        const response = await fetch(`/manage/getEndpoint?path=${encodeURIComponent(path.replace("/builder", ""))}`,{headers:{'x-sera-service': "be_builder"}});
+        console.log(`/manage/endpoint/get?path=${encodeURIComponent(path.replace("/builder", ""))}`)
+        const response = await fetch(`/manage/endpoint/get?path=${encodeURIComponent(path.replace("/builder", ""))}`,{headers:{'x-sera-service': "be_builder"}});
         const jsonData = await response.json();
         if (!jsonData.issue) {
+            console.log(jsonData)
             console.log("nop",jsonData.builder.nodes)
             setNodes(jsonData.builder.nodes);
             setEdges(jsonData.builder.edges);
@@ -247,7 +249,7 @@ export const createData = async (data, fetchData, setIssue) => {
 
 function createEndpoint(data, builder_id) {
     console.log("gk")
-    const urli = "https:/" + window.location.pathname
+    const urli = "https:/" + window.location.pathname.replace("builder/", "")
     const parsed = new URL(urli)
     const oasUrl = `${parsed.protocol}//${parsed.host}`
 
@@ -310,7 +312,7 @@ function updateEndpoint(data, builder_id) {
 
 function createBuilder(data) {
 
-    const urli = "https:/" + window.location.pathname
+    const urli = "https:/" + window.location.pathname.replace("builder/", "")
     const parsed = new URL(urli)
     const oasUrl = `${parsed.protocol}//${parsed.host}`
 

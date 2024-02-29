@@ -144,6 +144,11 @@
   background-color: #1e1e1e;
 }
 
+.logEdge {
+  border-color: #e76bd3;
+  background-color: #1e1e1e;
+}
+
 .arrayBG {
   background-color: #f1ee07;
 }
@@ -175,6 +180,8 @@
   align-items: center;
   justify-content: center;
   gap: 5px;
+  flex:1;
+  width:100%;
 }
 
 .nodeHeaderDetailsUnderline {
@@ -253,4 +260,15 @@
   background-color: transparent !important;
   border-color: transparent !important;
 
+}
+
+.nodeToggleHeader {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  font-size: 8px;
+  background-color: #ffffff10;
+  border-bottom-width: 1px;
+  border-bottom-color: #1e1e1e50;
 }

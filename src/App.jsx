@@ -126,7 +126,7 @@ const CustomNodeFlow = () => {
     socket.on('gotId', gotId);
     socket.on('mouseMoved', viewPeerPointers);
     socket.on('userDisconnected', handleUserDisconnect);
-    socket.on('nodeUpdate', (node) => { handleNodesChange(node.newNodes, true) });
+    socket.on('nodeUpdate', (node) => { handleNodesChange(node.changedNodes, true) });
     socket.on('nodeCreate', (node) => { handleNodesCreate(node.newNode, true) });
     socket.on('nodeDelete', (node) => { handleNodesDelete(node, true) });
     socket.on('edgeUpdate', (edge) => handleEdgesChange(edge, true));

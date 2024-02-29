@@ -7,40 +7,93 @@ import ApiHeaderComponent from "../headers/header.api";
 import TagComponent from "../headers/header.tag";
 
 export default memo((node) => {
-  const [showHeader, setShowHeader] = useState(true);
-  const [showParameters, setShowParameters] = useState(true);
-
   const data = node.data;
-
   const fieldKey =
     node.data.headerType == 1 || node.data.headerType == 3 ? "out" : "in";
 
+  let properArray = Object.keys(data[fieldKey]);
+  properArray.sort((a, b) => {
+    // Ensure "Status Codes" always comes first
+    if (a === "Status Codes") return -1;
+    if (b === "Status Codes") return 1;
+
+    // Ensure "header" comes after "Status Codes" but before other keys
+    if (a === "header") return -1;
+    if (b === "header") return 1;
+
+    if (a === "headers") return -1;
+    if (b === "headers") return 1;
+
+    // Optional: Sort the rest of the array alphabetically
+    return a.localeCompare(b);
+  });
+
+  const [toggleItems, changeToggle] = useState(properArray);
+  const [toggleLogs, toggleLog] = useState([]);
+
   const FieldItems = ({ collapsed, fieldData }) => {
-    console.log("data", data);
-    if (!data) return;
-    return Object.keys(data.fields[fieldKey]).map((fieldName, int) => {
-      if (!fieldName.includes("__")) {
-        const field = data.fields[fieldKey][fieldName];
-        return (
-          <div style={{ marginTop: !collapsed ? -16 : null }}>
-            <FlowComponent
-              data={{
-                target: {
-                  id: `flow-target-${node.id}-${fieldName}`,
-                  type: field.type,
-                  title: fieldName,
-                },
-                source: {
-                  id: `flow-source-${node.id}-${fieldName}`,
-                  type: field.type,
-                  title: fieldName,
-                },
-                nodeType: data.header.type,
-              }}
-            />
+    console.log("field", fieldData);
+    return fieldData.map((fieldItem, int) => {
+      return (
+        <div style={{ marginTop: !collapsed ? -16 : null }}>
+          <FlowComponent
+            data={{
+              target: {
+                id: `flow-target-${node.id}-(${fieldItem.name})`,
+                type: fieldItem.schema.type,
+                title: fieldItem.name,
+              },
+              source: {
+                id: `flow-source-${node.id}-(${fieldItem.name})`,
+                type: fieldItem.schema.type,
+                title: fieldItem.name,
+              },
+              nodeType: data.header.type,
+            }}
+          />
+        </div>
+      );
+    });
+  };
+
+  const getCategories = () => {
+    return properArray.map((field) => {
+      console.log(field);
+      const category = field;
+      console.log(category);
+      if (data[fieldKey][field].length == 0) return;
+      return (
+        <div>
+          <div
+            className="nodeToggleHeader"
+            onClick={() => {
+              const isCategoryIncluded = toggleItems.includes(category);
+              const newToggleItems = isCategoryIncluded
+                ? toggleItems.filter((item) => item !== category) // Remove category if it's already included
+                : [...toggleItems, category]; // Add category using spread syntax for immutability
+              changeToggle(newToggleItems);
+            }}
+          >
+            {category}
           </div>
-        );
-      }
+
+          <div
+            style={{
+              paddingTop: toggleItems.includes(category) ? 5 : 0,
+              paddingBottom: toggleItems.includes(category) ? 5 : 0,
+              overflow: "hidden",
+              maxHeight: toggleItems.includes(category) ? undefined : 0,
+            }}
+          >
+            {data && (
+              <FieldItems
+                collapsed={toggleItems.includes(category)}
+                fieldData={data[fieldKey][field]}
+              />
+            )}
+          </div>
+        </div>
+      );
     });
   };
 
@@ -72,110 +125,97 @@ export default memo((node) => {
           type: null,
           title: null,
         }}
+        changeToggle={changeToggle}
+        toggleItems={toggleItems}
+        properArray={properArray}
       />
-      {data.headerType != 2 && data.headerType != 4 && (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <FlowComponent
-            top="maxi"
-            data={{
-              target: {
-                id: `flow-target-${node.id}-start`,
-                type: null,
-                title: "Success",
-              },
-              source: {
-                id: `flow-source-${node.id}-end`,
-                type: null,
-                title: "end",
-              },
-              nodeType: data.header.type,
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        {data.headerType != 2 && data.headerType != 4 && (
+          <>
+            <FlowComponent
+              top="maxi"
+              data={{
+                target: {
+                  id: `flow-target-${node.id}-start`,
+                  type: null,
+                  title: "Continue",
+                },
+                source: {
+                  id: `flow-source-${node.id}-end`,
+                  type: null,
+                  title: "end",
+                },
+                nodeType: data.header.type,
+              }}
+            />
+            <div className="divider"></div>
+          </>
+        )}
+
+        <div>
+          <div
+            className="nodeToggleHeader"
+            onClick={() => {
+              const isCategoryIncluded = toggleLogs.includes("logs");
+              const newToggleItems = isCategoryIncluded
+                ? toggleLogs.filter((item) => item !== "logs") // Remove category if it's already included
+                : [...toggleLogs, "logs"]; // Add category using spread syntax for immutability
+              toggleLog(newToggleItems);
             }}
-          />
-          <div className="divider"></div>
-          <FlowComponent
-            top="maxi"
-            data={{
-              target: {
-                id: `fail-flow-target-${node.id}`,
-                type: null,
-                title: "Failure",
-              },
-              source: {
-                id: `fail-flow-source-${node.id}`,
-                type: null,
-                title: "Failure",
-              },
-              nodeType: data.header.type,
+            style={{color:"#ffbcf4"}}
+          >
+            Logging
+          </div>
+
+          <div
+            style={{
+              overflow: "hidden",
+              maxHeight: toggleLogs.includes("logs") ? undefined : 0,
             }}
-          />
+          >
+            <FlowComponent
+              top="maxi"
+              data={{
+                target: {
+                  id: `log-flow-target-${node.id}`,
+                  type: "log",
+                  title: "Success",
+                },
+                source: {
+                  id: `log-flow-source-${node.id}`,
+                  type: "log",
+                  title: "Success",
+                },
+                nodeType: data.header.type,
+              }}
+            />
+            <div className="divider"></div>
+            <FlowComponent
+              top="maxi"
+              data={{
+                target: {
+                  id: `log-flow-target-${node.id}`,
+                  type: "log",
+                  title: "Failure",
+                },
+                source: {
+                  id: `log-flow-source-${node.id}`,
+                  type: "log",
+                  title: "Failure",
+                },
+                nodeType: data.header.type,
+              }}
+            />
+          </div>
         </div>
-      )}
+      </div>
 
-      {
-        <>
-          <div>
-            <div
-              style={{
-                paddingTop: 5,
-                paddingBottom: 5,
-                paddingLeft: 5,
-                paddingRight: 5,
-                fontSize: 8,
-                backgroundColor: "#ffffff10",
-              }}
-              onClick={() => setShowHeader(!showHeader)}
-            >
-              Request Headers
-            </div>
-
-            <div
-              style={{
-                paddingTop: showHeader ? 5 : 0,
-                paddingBottom: showHeader ? 5 : 0,
-                overflow: "hidden",
-                maxHeight: showHeader ? undefined : 0,
-              }}
-            >
-              {data && <FieldItems collapsed={showHeader} fieldData={data}/>}
-            </div>
-          </div>
-        </>
-      }
-      {
-        <>
-          <div>
-            <div
-              style={{
-                paddingTop: 5,
-                paddingBottom: 5,
-                paddingLeft: 5,
-                paddingRight: 5,
-                fontSize: 8,
-                backgroundColor: "#ffffff10",
-              }}
-              onClick={() => setShowParameters(!showParameters)}
-            >
-              Parameters
-            </div>
-
-            <div
-              style={{
-                paddingTop: showParameters ? 5 : 0,
-                paddingBottom: showParameters ? 5 : 0,
-                overflow: "hidden",
-                maxHeight: showParameters ? undefined : 0,
-              }}
-            >
-              {data && <FieldItems collapsed={showParameters} fieldData={data}/>}
-            </div>
-          </div>
-        </>
-      }
+      {getCategories()}
 
       <div
         style={{
