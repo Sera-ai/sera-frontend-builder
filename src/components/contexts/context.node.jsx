@@ -23,7 +23,7 @@ export default function ContextMenu({ onDelete, id, top, left, right, bottom, ..
   }
 
   return (
-    <div style={{ top, left, right, bottom, display: !id ? "none" : "initial" }} className="context-menu" {...props}>
+    <div style={{ top, left, right, bottom, display: !id ? "none" : "initial", width: "150px" }} className="context-menu" {...props}>
       <p style={{ margin: '0.5em' }}>
         <small>node: {id}</small>
       </p>

@@ -32,7 +32,6 @@ export default memo((node) => {
   const [toggleLogs, toggleLog] = useState([]);
 
   const FieldItems = ({ collapsed, fieldData }) => {
-    console.log("field", fieldData);
     return fieldData.map((fieldItem, int) => {
       return (
         <div style={{ marginTop: !collapsed ? -16 : null }}>
@@ -58,9 +57,7 @@ export default memo((node) => {
 
   const getCategories = () => {
     return properArray.map((field) => {
-      console.log(field);
       const category = field;
-      console.log(category);
       if (data[fieldKey][field].length == 0) return;
       return (
         <div>

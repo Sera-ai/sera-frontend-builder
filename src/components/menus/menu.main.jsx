@@ -83,6 +83,15 @@ export default memo(({ oas }) => {
                 <div className='nodeSubtitle'>Boolean component to define a static boolean</div>
               </div>
             </div>
+            <div className="dndnode" onDragStart={(event) => onDragStart(event, 'scriptNode')} draggable>
+              <div>
+                <img src={booleanLogo} />
+              </div>
+              <div>
+                <div className='nodeTitle'>Create Script</div>
+                <div className='nodeSubtitle'>Add Custom Script to your builder</div>
+              </div>
+            </div>
           </div>
         </Collapsible>
         <Collapsible

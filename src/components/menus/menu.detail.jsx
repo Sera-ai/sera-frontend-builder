@@ -31,11 +31,11 @@ export default memo(({ nodeDetails, nodes, edges, handleConnectChange }) => {
       <div className='detailsOverview'>
         <div className='detailsOverviewHeader'>
           <div>
-            <img src={nodeData.logo} />
+            <img src={nodeData?.logo} />
           </div>
           <div style={{ flex: 1 }} className='functionText'>
-            <div className='nodeTitle'>{nodeData.header[0]}</div>
-            <div className='nodeSubtitle'>{nodeData.header[1]}</div>
+            <div className='nodeTitle'>{nodeData?.header[0]}</div>
+            <div className='nodeSubtitle'>{nodeData?.header[1]}</div>
           </div>
           <div className='debugButtonContainer'>
             <div className='nodeSubtitle'>Debug</div>

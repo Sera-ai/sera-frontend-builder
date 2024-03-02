@@ -22,3 +22,8 @@ body {
   width: 100%;
 }
 
+
+.context-menu button:hover {
+  background-color: black;
+}
+
