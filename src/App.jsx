@@ -43,14 +43,17 @@ import {
   onNodeContextMenu as onNodeContextMenuUtil,
   onConnectEnd as onConnectEndUtil,
   onConnectStart as onConnectStartUtil,
-  onPaneContextMenu as onPaneContextMenuUtil,
   onDrop as onDropUtil,
   onDragOver as onDragOverUtil,
   onPaneClick as onPaneClickUtil,
   onConnect as onConnectUtil,
+} from "./events/events.triggers";
+
+import {
   fetchData as fetchDataUtil,
   createData as createDataUtil,
-} from "./events/events.triggers";
+  createNode
+} from "./events/events.backend";
 
 const initBgColor = "#141414";
 const snapGrid = [10, 10];
@@ -62,7 +65,7 @@ const nodeTypes = {
 
 const defaultViewport = { x: 0, y: 0, zoom: 0.75 };
 
-const CustomNodeFlow = () => {
+const nodeBuilder = () => {
   // Refs
   const rfw = useRef(null);
   const ref = useRef(null);
@@ -84,33 +87,15 @@ const CustomNodeFlow = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
-  /* Socket.IO Emitters */
-  const handleTest = (data) => {
-    console.log(data);
-  };
-  const handleEdgesChange = (newEdges, fromSocket = false) =>
-    handleEdgesChangeUtil(newEdges, fromSocket, edges, onEdgesChange, socket);
-  const handleConnectChange = (params, fromSocket = false) =>
-    handleConnectChangeUtil(
-      params,
-      fromSocket,
-      onConnect,
-      edges,
-      setEdges,
-      nodes
-    );
-
   /* On Event Handlers */
   const onDragOver = (event) => onDragOverUtil(event);
   const onConnect = (params) => onConnectUtil(params, setEdges, addEdge);
   const onDrop = (event) =>
-    onDropUtil(event, rfw, rfi, handleNodesCreateUtil, setNodes);
+    onDropUtil(event, rfw, rfi, handleNodesCreateUtil, setNodes, createNode);
   const onConnectStart = (event) =>
     onConnectStartUtil(event, setConnecting, setConnectionLineColor);
   const onMouseMove = (event) =>
     onMouseMoveUtil(ref, rfi, socket, bgColor, event);
-  const onPaneContextMenu = (event) =>
-    onPaneContextMenuUtil(event, ref, setPaneMenu);
   const onConnectEnd = (event, node) =>
     onConnectEndUtil(event, node, ref, setPaneMenu);
   const onPaneClick = () =>
@@ -142,38 +127,28 @@ const CustomNodeFlow = () => {
     function onConnectSocket() {
       setIsConnected(true);
       console.log("socket connected");
-      socket.emit("getId");
+      const hash = socket.id
+        .split("")
+        .reduce((hash, char) => char.charCodeAt(0) + ((hash << 5) - hash), 0);
+
+      // Convert hash to a 6-character hexadecimal color code
+      const color = Array.from({ length: 3 }, (_, i) =>
+        ((hash >> (i * 8)) & 0xff).toString(16).padStart(2, "0")
+      )
+        .reverse()
+        .join(""); // Reverse to maintain the original order if needed
+
+      setBgColor("#" + color);
     }
     function onDisconnect() {
       setIsConnected(false);
     }
-    const gotId = (str) =>
-      setBgColor(
-        "#" +
-          [...Array(3)]
-            .map((_, i) =>
-              (
-                (str
-                  .split("")
-                  .reduce(
-                    (hash, char) => char.charCodeAt(0) + ((hash << 5) - hash),
-                    0
-                  ) >>
-                  (i * 8)) &
-                0xff
-              )
-                .toString(16)
-                .padStart(2, "0")
-            )
-            .join("")
-      );
-
     socket.on("connect", onConnectSocket);
     socket.on("disconnect", onDisconnect);
-
-    socket.on("gotId", gotId);
-    socket.on("mouseMoved", viewPeerPointers);
     socket.on("userDisconnected", handleUserDisconnect);
+
+    socket.on("mouseMoved", viewPeerPointers);
+
     socket.on("nodeUpdate", (node) => {
       handleNodesChangeUtil({
         changedNodes: node.changedNodes,
@@ -188,7 +163,6 @@ const CustomNodeFlow = () => {
       handleNodesCreateUtil({
         newNode: node.newNode,
         setNodes,
-        fromSocket: true,
       });
     });
     socket.on("nodeDelete", (node) => {
@@ -199,9 +173,23 @@ const CustomNodeFlow = () => {
         setEdges,
       });
     });
-    socket.on("edgeUpdate", (edge) => handleEdgesChange(edge, true));
+    socket.on("edgeUpdate", (edge) => {
+      handleEdgesChangeUtil({
+        edge,
+        fromSocket: true,
+        edges,
+        onEdgesChange,
+      });
+    });
     socket.on("onConnect", (edge) => {
-      handleConnectChange(edge, true);
+      handleConnectChangeUtil({
+        edge,
+        fromSocket: true,
+        onConnect,
+        edges,
+        setEdges,
+        nodes,
+      });
     });
     socket.on("updateField", (data) => {
       let paramName = data?.edge ? "targets" : "inputData";
@@ -248,7 +236,6 @@ const CustomNodeFlow = () => {
             fitView
             attributionPosition="bottom-left"
             onNodeContextMenu={onNodeContextMenu}
-            //onPaneContextMenu={onPaneContextMenu}
             onNodesChange={(changedNodes) =>
               handleNodesChangeUtil({
                 changedNodes,
@@ -258,8 +245,23 @@ const CustomNodeFlow = () => {
                 setDetails,
               })
             }
-            onEdgesChange={handleEdgesChange}
-            onConnect={handleConnectChange}
+            onEdgesChange={(edge) => {
+              handleEdgesChangeUtil({
+                edge,
+                edges,
+                onEdgesChange,
+              });
+            }}
+            onConnect={(edge) => {
+              handleConnectChangeUtil({
+                edge,
+                fromSocket: true,
+                onConnect,
+                edges,
+                setEdges,
+                nodes,
+              });
+            }}
             onConnectStart={onConnectStart}
             onConnectEnd={onConnectEnd}
             onNodesDelete={(node) => {
@@ -297,7 +299,16 @@ const CustomNodeFlow = () => {
         </div>
         {nodeDetails && (
           <DetailsBar
-            handleConnectChange={handleConnectChange}
+            handleConnectChange={(edge) => {
+              handleConnectChangeUtil({
+                edge,
+                fromSocket: true,
+                onConnect,
+                edges,
+                setEdges,
+                nodes,
+              });
+            }}
             nodeDetails={nodeDetails}
             nodes={nodes}
             edges={edges}
@@ -308,4 +319,4 @@ const CustomNodeFlow = () => {
   );
 };
 
-export default CustomNodeFlow;
+export default nodeBuilder;

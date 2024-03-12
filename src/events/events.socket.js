@@ -39,32 +39,30 @@ export const handleNodesChangeUtil = ({
 
 export const handleNodesCreateUtil = ({
   newNode,
-  fromSocket = false,
   setNodes,
+  createNode = null,
 }) => {
   console.log(newNode);
-  if (newNode?.id)
+  if (newNode?._id)
     setNodes((nds) =>
       nds.some((node) => node.id === newNode.id) ? nds : nds.concat(newNode)
     );
-  if (fromSocket) return;
   if (newNode.length === 0) return;
 
-  socket.emit("nodeCreate", newNode);
+  if (createNode) createNode(newNode);
 };
 
-export const handleEdgesChangeUtil = (
-  newEdges,
+export const handleEdgesChangeUtil = ({
+  edge,
   fromSocket,
   edges,
   onEdgesChange,
-  socket
-) => {
-  onEdgesChange(newEdges);
+}) => {
+  onEdgesChange(edge);
 
   if (fromSocket) return;
 
-  socket.emit("edgeUpdate", { newEdges, edges });
+  socket.emit("edgeUpdate", { edge, edges });
 };
 
 export const handleNodesDeleteUtil = ({
@@ -83,21 +81,19 @@ export const handleNodesDeleteUtil = ({
   socket.emit("nodeDelete", deletedNode);
 };
 
-export const handleConnectChangeUtil = (
-  params,
-  fromSocket,
+export const handleConnectChangeUtil = ({
+  edge,
+  fromSocket = false,
   onConnect,
   edges,
   setEdges,
-  nodes
-) => {
-  console.log("params", params);
-
+  nodes,
+}) => {
   const sourceDiv = document.querySelector(
-    `div[data-handleid="${params.sourceHandle}"]`
+    `div[data-handleid="${edge.sourceHandle}"]`
   );
   const targetDiv = document.querySelector(
-    `div[data-handleid="${params.targetHandle}"]`
+    `div[data-handleid="${edge.targetHandle}"]`
   );
 
   if (sourceDiv && targetDiv) {
@@ -116,12 +112,12 @@ export const handleConnectChangeUtil = (
     if (sourceColorClass === targetColorClass) {
       if (targetColorClass != "nullEdge")
         setEdges((edges) =>
-          edges.filter((edge) => edge.targetHandle !== params.targetHandle)
+          edges.filter((edge) => edge.targetHandle !== edge.targetHandle)
         );
-      onConnect(params);
+      onConnect(edge);
 
       const newEdges = edges.filter(
-        (edge) => edge.targetHandle !== params.targetHandle
+        (edge) => edge.targetHandle !== edge.targetHandle
       );
       console.log(newEdges);
       let lineColor = "#fff";
@@ -135,20 +131,20 @@ export const handleConnectChangeUtil = (
 
       console.log("sourceColorClass", sourceColorClass);
       if (fromSocket) return;
-      let edge = params;
-      edge.id = `${params.source}-${params.target}-${
-        params.sourceHandle.split("-")[3]
+      let edge = edge;
+      edge.id = `${edge.source}-${edge.target}-${
+        edge.sourceHandle.split("-")[3]
       }-${generateRandomString()}`;
       edge.animated = sourceColorClass == "nullEdge";
       edge.style = { stroke: lineColor };
       edge.type = sourceColorClass == "nullEdge" ? "flow" : "param";
       edge.selected = false;
-      socket.emit("onConnect", { edge, edges: newEdges , nodes});
+      socket.emit("onConnect", { edge, edges: newEdges, nodes });
     } else if (targetColorClass == "anyEdge") {
-      onConnect(params);
+      onConnect(edge);
 
       const newEdges = edges.filter(
-        (edge) => edge.targetHandle !== params.targetHandle
+        (edge) => edge.targetHandle !== edge.targetHandle
       );
       console.log(newEdges);
       let lineColor = "#fff";
@@ -162,9 +158,9 @@ export const handleConnectChangeUtil = (
 
       console.log("sourceColorClass", sourceColorClass);
       if (fromSocket) return;
-      let edge = params;
-      edge.id = `${params.source}-${params.target}-${
-        params.sourceHandle.split("-")[3]
+      let edge = edge;
+      edge.id = `${edge.source}-${edge.target}-${
+        edge.sourceHandle.split("-")[3]
       }-${generateRandomString()}`;
       edge.animated = sourceColorClass == "nullEdge";
       edge.style = { stroke: lineColor };

@@ -1,5 +1,5 @@
 import React, { useState, memo, useEffect } from "react";
-import { Handle, Position, useUpdateNodeInternals } from "reactflow";
+import { Handle, Position } from "reactflow";
 import { getConnectedEdges } from "reactflow";
 
 import FunctionHeaderComponent from "../headers/header.function";
@@ -13,38 +13,6 @@ export default memo(({ data, id }) => {
   const [functionHeaderData, setFunctionHeaderData] = useState({
     function: data.function,
   });
-
-  const [script, updateScript] = useState(data.inputData ?? defaultScript);
-  const [lines, updateLines] = useState([
-    data.targets.map((target, int) => {
-      return int + 1;
-    }),
-  ]);
-  const updateNodeInternals = useUpdateNodeInternals();
-
-  useEffect(() => {
-    console.log([
-      data.targets.map((target, int) => {
-        return int + 1;
-      }),
-    ]);
-    console.log("change");
-    console.log(data);
-    const targets = [];
-    let newScript = ``;
-    data.targets.map((target) => {
-      if (!targets.includes(target)) {
-        newScript =
-          newScript +
-          `let ${target}
-`;
-        targets.push(target);
-      }
-    });
-    newScript = newScript + data.inputData;
-    updateScript(newScript);
-  }, [data]);
-
   const defaultScript = `function customScript(){
     //write your code here
 
@@ -52,6 +20,41 @@ export default memo(({ data, id }) => {
     //return your variables below
     return []
 }`;
+  const [script, updateScript] = useState(data.inputData ?? defaultScript);
+  const [lines, updateLines] = useState([
+    data.targets.map((target, int) => {
+      return int + 1;
+    }),
+  ]);
+
+  useEffect(() => {
+    if (data?.targets?.length > 0) {
+      console.log([
+        data.targets.map((target, int) => {
+          return int + 1;
+        }),
+      ]);
+      console.log("change");
+      console.log(data);
+      const targets = [];
+      let newScript = ``;
+      data.targets.map((target) => {
+        if (!targets.includes(target)) {
+          newScript =
+            newScript +
+            `let ${target}
+`;
+          targets.push(target);
+        }
+      });
+      newScript = newScript + data.inputData;
+      updateScript(newScript);
+    }
+
+    if (data.inputData != script) {
+      updateScript(data.inputData);
+    }
+  }, [data]);
 
   const dynamicHandlesLeft = () => {
     return data?.targets?.map((target) => {
