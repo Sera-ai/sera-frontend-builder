@@ -4,7 +4,7 @@ import { getConnectedEdges } from "reactflow";
 
 import FunctionHeaderComponent from "../headers/header.function";
 import TagComponent from "../headers/header.tag";
-import JsonViewerFull from "../../../../pages/subpages/issues/partials/Partials.Issues.JsonViewerFull";
+import JsonViewerFull from "../../../../../src/pages/subpages/issues/partials/Partials.Issues.JsonViewerFull";
 
 import { socket } from "../../helpers/socket";
 
