@@ -227,7 +227,7 @@ const nodeBuilder = () => {
             ref={ref}
             nodes={nodes}
             edges={edges}
-            style={{ background: initBgColor }}
+            // style={{ background: initBgColor }}
             nodeTypes={nodeTypes}
             connectionLineStyle={{ stroke: connectionLineColor }}
             snapToGrid={true}
