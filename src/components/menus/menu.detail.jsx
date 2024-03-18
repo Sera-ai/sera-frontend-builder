@@ -11,7 +11,7 @@ import booleanLogo from '../../assets/icons/radix-icons_component-boolean.png';
 
 import DetailParameters from './detail/detail.parameters';
 
-export default memo(({ nodeDetails, nodes, edges, handleConnectChange }) => {
+export default memo(({ nodeDetails, nodes, edges }) => {
 
   const [selectedHeader, setHeader] = useState(0);
   const nodeData = getData(nodeDetails)
@@ -20,7 +20,7 @@ export default memo(({ nodeDetails, nodes, edges, handleConnectChange }) => {
   const getDetailMenuItem = () => {
     switch (selectedHeader) {
       case 0: return null;
-      case 1: return <DetailParameters nodeDetails={nodeDetails} handleConnectChange={handleConnectChange} nodes={nodes} edges={edges} />;
+      case 1: return <DetailParameters nodeDetails={nodeDetails} nodes={nodes} edges={edges} />;
       case 2: return null;
       case 3: return null;
     }

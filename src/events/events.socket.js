@@ -1,208 +1,143 @@
-import { applyNodeChanges, useUpdateNodeInternals } from "reactflow";
+import { applyEdgeChanges, applyNodeChanges } from "reactflow";
 import { generateRandomString } from "../helpers/helper.node";
 import { socket } from "../helpers/socket";
+import { backendEvents } from "./events.backend";
 
-export const handleNodesChangeUtil = ({
-  changedNodes,
-  fromSocket = false,
-  nodes,
-  onNodesChange,
-  onSelection,
-  setDetails,
-}) => {
-  onNodesChange(changedNodes);
+export const socketEvents = (builderContext) => {
+  const {
+    setIssue,
+    nodes,
+    setNodes,
+    onNodesChange,
+    nodeDetails,
+    edges,
+    setEdges,
+    setNodeDetails,
+    onEdgesChange,
+    _source = null,
+  } = builderContext;
 
-  if (fromSocket) return;
-  if (changedNodes.length === 0) return;
-  if (changedNodes[0].type === "remove") return;
-  if (changedNodes[0].type === "select") {
-    const selectedNode = changedNodes.filter((nod) => nod.selected == true);
-    const hasSelectedItem = selectedNode.length > 0;
-    onSelection(hasSelectedItem ? selectedNode[0] : null);
-    hasSelectedItem
-      ? setDetailsUtil(selectedNode[0], setDetails, nodes)
-      : setDetails(null);
-    return;
-  }
-  // Filter out unchanged nodes based on your criteria, e.g., position, data changes, etc.
-  // This is a basic example; you might need a more complex comparison based on your needs.
-  const changedNodes2 = changedNodes.filter((newNode) => {
-    const oldNode = nodes.find((n) => n.id === newNode.id);
-    if (JSON.stringify(oldNode.position) !== JSON.stringify(newNode.position)) {
-      return changedNodes.find((n) => n.id == newNode.id);
+  const backendEventClass = backendEvents({
+    ...builderContext,
+    _source: "component",
+  });
+  // Function to compare two nodes shallowly
+  const handleNodesChange = (changedNodes) => {
+    if (changedNodes.length == 0) return;
+    if (changedNodes[0].type == "dimensions") return;
+    if (changedNodes[0].type == "remove") return;
+    if (changedNodes[0].type == "select") return;
+
+    let sendUpdate = true;
+    if (changedNodes[0].type == "position")
+      sendUpdate = changedNodes[0].dragging;
+    if (!sendUpdate) return;
+    console.log(changedNodes);
+
+    if (_source == "socket") {
+      setNodes((oldEdges) => applyNodeChanges(changedNodes, oldEdges));
+      return;
     }
-  });
-
-  if (changedNodes2.length == 0) return;
-  socket.emit("nodeUpdate", { changedNodes, nodes });
-};
-
-export const handleNodesCreateUtil = ({
-  newNode,
-  setNodes,
-  createNode = null,
-}) => {
-  console.log(newNode);
-  if (newNode?._id)
-    setNodes((nds) =>
-      nds.some((node) => node.id === newNode.id) ? nds : nds.concat(newNode)
-    );
-  if (newNode.length === 0) return;
-
-  if (createNode) createNode(newNode);
-};
-
-export const handleEdgesChangeUtil = ({
-  edge,
-  fromSocket,
-  edges,
-  onEdgesChange,
-}) => {
-  onEdgesChange(edge);
-
-  if (fromSocket) return;
-
-  socket.emit("edgeUpdate", { edge, edges });
-};
-
-export const handleNodesDeleteUtil = ({
-  deletedNode,
-  fromSocket = false,
-  setNodes,
-  setEdges,
-}) => {
-  console.log("deletedNode", deletedNode);
-  deletedNode.map((dnode) => {
-    setNodes((nodes) => nodes.filter((node) => node.id !== dnode.id));
-    setEdges((edges) => edges.filter((edge) => edge.source !== dnode.id));
-  });
-  if (fromSocket) return;
-
-  socket.emit("nodeDelete", deletedNode);
-};
-
-export const handleConnectChangeUtil = ({
-  edge,
-  fromSocket = false,
-  onConnect,
-  edges,
-  setEdges,
-  nodes,
-}) => {
-  const sourceDiv = document.querySelector(
-    `div[data-handleid="${edge.sourceHandle}"]`
-  );
-  const targetDiv = document.querySelector(
-    `div[data-handleid="${edge.targetHandle}"]`
-  );
-
-  if (sourceDiv && targetDiv) {
-    let sourceColorClass = null;
-    Object.keys(sourceDiv.classList).map((key) => {
-      if (sourceDiv.classList[key].includes("Edge"))
-        sourceColorClass = sourceDiv.classList[key];
-    });
-
-    let targetColorClass = null;
-    Object.keys(targetDiv.classList).map((key) => {
-      if (targetDiv.classList[key].includes("Edge"))
-        targetColorClass = targetDiv.classList[key];
-    });
-
-    if (sourceColorClass === targetColorClass) {
-      if (targetColorClass != "nullEdge")
-        setEdges((edges) =>
-          edges.filter((edge) => edge.targetHandle !== edge.targetHandle)
-        );
-      onConnect(edge);
-
-      const newEdges = edges.filter(
-        (edge) => edge.targetHandle !== edge.targetHandle
-      );
-      console.log(newEdges);
-      let lineColor = "#fff";
-      if (targetColorClass) {
-        const element = document.querySelector(`.${targetColorClass}`);
-        if (element) {
-          const computedStyle = window.getComputedStyle(element);
-          lineColor = rgbToHex(computedStyle.borderColor);
-        }
+    // Filter out unchanged nodes based on your criteria, e.g., position, data changes, etc.
+    // This is a basic example; you might need a more complex comparison based on your needs.
+    const changedNodes2 = changedNodes.filter((newNode) => {
+      const oldNode = nodes.find((n) => n.id === newNode.id);
+      if (
+        JSON.stringify(oldNode.position) !== JSON.stringify(newNode.position)
+      ) {
+        return changedNodes.find((n) => n.id == newNode.id);
       }
-
-      console.log("sourceColorClass", sourceColorClass);
-      if (fromSocket) return;
-      let edge = edge;
-      edge.id = `${edge.source}-${edge.target}-${
-        edge.sourceHandle.split("-")[3]
-      }-${generateRandomString()}`;
-      edge.animated = sourceColorClass == "nullEdge";
-      edge.style = { stroke: lineColor };
-      edge.type = sourceColorClass == "nullEdge" ? "flow" : "param";
-      edge.selected = false;
-      socket.emit("onConnect", { edge, edges: newEdges, nodes });
-    } else if (targetColorClass == "anyEdge") {
-      onConnect(edge);
-
-      const newEdges = edges.filter(
-        (edge) => edge.targetHandle !== edge.targetHandle
-      );
-      console.log(newEdges);
-      let lineColor = "#fff";
-      if (targetColorClass) {
-        const element = document.querySelector(`.${sourceColorClass}`);
-        if (element) {
-          const computedStyle = window.getComputedStyle(element);
-          lineColor = rgbToHex(computedStyle.borderColor);
-        }
-      }
-
-      console.log("sourceColorClass", sourceColorClass);
-      if (fromSocket) return;
-      let edge = edge;
-      edge.id = `${edge.source}-${edge.target}-${
-        edge.sourceHandle.split("-")[3]
-      }-${generateRandomString()}`;
-      edge.animated = sourceColorClass == "nullEdge";
-      edge.style = { stroke: lineColor };
-      edge.type = sourceColorClass == "nullEdge" ? "flow" : "param";
-      edge.selected = false;
-      socket.emit("onConnect", { edge, edges: newEdges, nodes });
-    } else {
-      console.log(
-        "it dont be matchin2",
-        `${targetColorClass} ${sourceColorClass}`
-      );
-    }
-  } else {
-    console.log("Div not found");
-  }
-};
-
-async function setDetailsUtil(node, setDetails, nodes) {
-  let nodeData;
-
-  nodes.map((nodeItem) => {
-    if (nodeItem.id == node.id) nodeData = nodeItem;
-  });
-  console.log(nodeData);
-
-  try {
-    const response = await fetch(`/manage/getNode?id=${nodeData._id}`, {
-      headers: { "x-sera-service": "be_builder" },
     });
-    const jsonData = await response.json();
-    if (!jsonData.issue) {
-      nodeData["node_data"] = jsonData;
-      setDetails(nodeData);
-    } else {
-      setIssue(jsonData.issue);
-      console.log("something went wrong");
-    }
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
-}
+    setNodes((oldEdges) => applyNodeChanges(changedNodes, oldEdges));
+    if (changedNodes2.length == 0) return;
+    socket.emit("nodeUpdate", changedNodes);
+  };
 
+  const handleNodesCreate = (newNode) => {
+    console.log(newNode);
+    if (newNode?._id)
+      setNodes((nds) =>
+        nds.some((node) => node.id === newNode.id) ? nds : nds.concat(newNode)
+      );
+    if (_source == "socket") return;
+    if (newNode.length === 0) return;
+    backendEventClass.createNode(newNode);
+  };
+
+  const handleEdgesDelete = (changes) => {
+    console.log(changes);
+    setEdges((oldEdges) => applyEdgeChanges(changes, oldEdges));
+  };
+
+  const handleEdgesCreate = (newEdge) => {
+    setEdges((eds) => [...eds, newEdge]);
+  };
+
+  const handleEdgesChange = (edge) => {
+    if (_source == "socket") {
+      console.log("updating edge");
+      setEdges((eds) => eds.map((edg) => (edg.id === edge.id ? edge : edg)));
+    }
+    if (_source == "socket") return;
+    if (edge[0].type == "remove") {
+      backendEventClass.removeEdge(edge);
+    } else {
+      //backendEventClass.updateEdge(edge);
+    }
+  };
+
+  const handleNodesDelete = (deletedNode) => {
+    console.log("deletedNode", deletedNode);
+    deletedNode.map((dnode) => {
+      setNodes((nodes) => nodes.filter((node) => node.id !== dnode.id));
+      setEdges((edges) => edges.filter((edge) => edge.source !== dnode.id));
+    });
+    if (_source == "socket") return;
+    backendEventClass.deleteNode(deletedNode);
+  };
+
+  const handleConnectChange = (edge) => {
+    if (_source == "socket") {
+      setEdges((eds) => eds.filter((edg) => (edg.id == edge.id ? edge : edg)));
+    }
+    if (_source == "socket") return;
+    backendEventClass.updateEdge(edge);
+  };
+
+  const handleNodeClick = (event, node) => {
+    if (node?._id != nodeDetails?._id) setDetails(node);
+  };
+
+  async function setDetails(nodeData) {
+    if (!nodeData) return;
+    try {
+      const response = await fetch(`/manage/getNode?id=${nodeData._id}`, {
+        headers: { "x-sera-service": "be_builder" },
+      });
+      const jsonData = await response.json();
+      if (!jsonData.issue) {
+        nodeData["node_data"] = jsonData;
+        setNodeDetails(nodeData);
+      } else {
+        setIssue(jsonData.issue);
+        console.log("something went wrong");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+
+  return {
+    handleConnectChange,
+    handleNodesDelete,
+    handleNodeClick,
+    handleEdgesChange,
+    handleEdgesCreate,
+    handleNodesChange,
+    handleNodesCreate,
+    handleEdgesDelete,
+  };
+};
 function rgbToHex(rgb) {
   // Ensure the input string is in the correct format (e.g., "rgb(255, 0, 0)")
   const regex = /rgb\((\d+), (\d+), (\d+)\)/;

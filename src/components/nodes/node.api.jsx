@@ -164,7 +164,7 @@ export default memo((node) => {
                 : [...toggleLogs, "logs"]; // Add category using spread syntax for immutability
               toggleLog(newToggleItems);
             }}
-            style={{color:"#ffbcf4"}}
+            style={{ color: "#ffbcf4" }}
           >
             Logging
           </div>
@@ -188,7 +188,7 @@ export default memo((node) => {
                   type: "log",
                   title: "Success",
                 },
-                nodeType: data.header.type,
+                nodeType: 0,
               }}
             />
             <div className="divider"></div>
@@ -205,7 +205,7 @@ export default memo((node) => {
                   type: "log",
                   title: "Failure",
                 },
-                nodeType: data.header.type,
+                nodeType: 0,
               }}
             />
           </div>

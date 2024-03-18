@@ -1,173 +1,235 @@
 // customFunctions.js
 import { socket } from "../helpers/socket";
 
-export const fetchData = async (setNodes, setEdges, setOas, setIssue, path) => {
-  try {
-    const response = await fetch(
-      `/manage/endpoint/?path=${encodeURIComponent(
-        path.replace("/builder", "")
-      )}`,
-      { headers: { "x-sera-service": "be_builder" } }
-    );
-    const jsonData = await response.json();
-    if (!jsonData.issue) {
-      setNodes(jsonData.builder.nodes);
-      setEdges(jsonData.builder.edges);
-      socket.emit("builderConnect", jsonData.builderId);
-      socket.builder = jsonData.builderId;
-      setOas(jsonData.oas);
-    } else {
-      setIssue(jsonData.issue);
-      console.log("something went wrong");
+export const backendEvents = (builderContext) => {
+  const { setOas, setIssue, setNodes, setEdges } = builderContext;
+  const fetchData = async () => {
+    try {
+      const response = await fetch(
+        `/manage/endpoint/?path=${encodeURIComponent(
+          window.location.pathname.replace("/builder", "")
+        )}`,
+        { headers: { "x-sera-service": "be_builder" } }
+      );
+      const jsonData = await response.json();
+      if (!jsonData.issue) {
+        setNodes(jsonData.builder.nodes);
+        setEdges(jsonData.builder.edges);
+        socket.emit("builderConnect", jsonData.builderId);
+        socket.builder = jsonData.builderId;
+        setOas(jsonData.oas);
+      } else {
+        setIssue(jsonData.issue);
+        console.log("something went wrong");
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
     }
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
-};
-
-export const createData = async (data, fetchData, setIssue) => {
-  if (data.error == "NoEndpoint") {
-    const builder_id = await createBuilder(data);
-    const created = await createEndpoint(data, builder_id);
-
-    if (created) {
-      setIssue(null);
-      fetchData(window.location.pathname);
-    } else {
-      alert("something went wrong");
-    }
-  }
-
-  if (data.error == "NoBuilder") {
-    const builder_id = await createBuilder(data);
-    const created = await updateEndpoint(data, builder_id);
-    if (created) {
-      setIssue(null);
-      fetchData(window.location.pathname);
-    } else {
-      alert("something went wrong");
-    }
-  }
-};
-
-function createEndpoint(data, builder_id) {
-  const urli = "https:/" + window.location.pathname.replace("builder/", "");
-  const parsed = new URL(urli);
-
-  const lastSlashIndex = parsed.pathname.lastIndexOf("/");
-  const path = parsed.pathname.substring(0, lastSlashIndex); // "boop/boop"
-  const method = parsed.pathname.substring(lastSlashIndex + 1).toUpperCase(); // "boop"
-
-  const data2 = {
-    hostname: parsed.host.split(":")[0],
-    endpoint: path,
-    method: method,
-    builder_id: builder_id,
   };
 
-  const url = `/manage/endpoint/create`;
-  console.log(JSON.stringify(data2));
-  return fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-sera-service": "be_builder",
-    },
-    body: JSON.stringify(data2),
-  })
-    .then((response) => response.json()) // assuming server responds with json
-    .then((data) => {
-      return true;
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-      return false;
-    });
-}
+  const createData = async (data) => {
+    if (data.error == "NoEndpoint") {
+      const builder_id = await createBuilder(data);
+      const created = await createEndpoint(builder_id);
 
-function updateEndpoint(data, builder_id) {
-  const urli = "https:/" + window.location.pathname;
-  const parsed = new URL(urli);
+      if (created) {
+        setIssue(null);
+        fetchData(window.location.pathname);
+      } else {
+        alert("something went wrong2");
+      }
+    }
 
-  const lastSlashIndex = parsed.pathname.lastIndexOf("/");
-  const path = parsed.pathname.substring(0, lastSlashIndex); // "boop/boop"
-  const method = parsed.pathname.substring(lastSlashIndex + 1).toUpperCase(); // "boop"
-
-  const data2 = {
-    hostname: parsed.host.split(":")[0],
-    endpoint: path,
-    method: method,
-    builder_id: builder_id,
+    if (data.error == "NoBuilder") {
+      const builder_id = await createBuilder(data);
+      const created = await updateEndpoint(builder_id);
+      if (created) {
+        setIssue(null);
+        fetchData();
+      } else {
+        alert("something went wrong1");
+      }
+    }
   };
 
-  const url = `/manage/endpoint/update`;
+  function createEndpoint(builder_id) {
+    const urli = "https:/" + window.location.pathname.replace("builder/", "");
+    const parsed = new URL(urli);
 
-  return fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-sera-service": "be_builder",
-    },
-    body: JSON.stringify(data2),
-  })
-    .then((response) => response.json()) // assuming server responds with json
-    .then((data) => {
-      return true;
+    const lastSlashIndex = parsed.pathname.lastIndexOf("/");
+    const path = parsed.pathname.substring(0, lastSlashIndex); // "boop/boop"
+    const method = parsed.pathname.substring(lastSlashIndex + 1).toUpperCase(); // "boop"
+
+    const data2 = {
+      hostname: parsed.host.split(":")[0],
+      endpoint: path,
+      method: method,
+      builder_id
+    };
+
+    const url = `/manage/endpoint/create`;
+    console.log(JSON.stringify(data2));
+    return fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-sera-service": "be_builder",
+      },
+      body: JSON.stringify(data2),
     })
-    .catch((error) => {
-      console.error("Error:", error);
-      return false;
-    });
-}
+      .then((response) => response.json()) // assuming server responds with json
+      .then((data) => {
+        return true;
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        return false;
+      });
+  }
 
-function createBuilder(data) {
-  const urli = "https:/" + window.location.pathname.replace("builder/", "");
-  const parsed = new URL(urli);
+  function updateEndpoint(builderId) {
+    const urli = "https:/" + window.location.pathname.replace("builder/", "");
+    const parsed = new URL(urli);
 
-  const lastSlashIndex = parsed.pathname.lastIndexOf("/");
-  const path = parsed.pathname.substring(0, lastSlashIndex); // "boop/boop"
-  const method = parsed.pathname.substring(lastSlashIndex + 1).toUpperCase(); // "boop"
+    const lastSlashIndex = parsed.pathname.lastIndexOf("/");
+    const path = parsed.pathname.substring(0, lastSlashIndex); // "boop/boop"
+    const method = parsed.pathname.substring(lastSlashIndex + 1).toUpperCase(); // "boop"
 
-  const data2 = {
-    hostname: parsed.host.split(":")[0],
-    path: path,
-    method: method,
+    const data2 = {
+      hostname: parsed.host.split(":")[0],
+      endpoint: path,
+      method: method,
+      builder_id: builderId
+    };
+
+    const url = `/manage/endpoint/update`;
+
+    return fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-sera-service": "be_builder",
+      },
+      body: JSON.stringify(data2),
+    })
+      .then((response) => response.json()) // assuming server responds with json
+      .then((data) => {
+        return true;
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        return false;
+      });
+  }
+
+  function createBuilder() {
+    const urli = "https:/" + window.location.pathname.replace("builder/", "");
+    const parsed = new URL(urli);
+
+    const lastSlashIndex = parsed.pathname.lastIndexOf("/");
+    const path = parsed.pathname.substring(0, lastSlashIndex); // "boop/boop"
+    const method = parsed.pathname.substring(lastSlashIndex + 1).toUpperCase(); // "boop"
+
+    const data2 = {
+      hostname: parsed.host.split(":")[0],
+      path: path,
+      method: method,
+    };
+
+    const url = `/manage/builder/create`;
+
+    return fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-sera-service": "be_builder",
+      },
+      body: JSON.stringify(data2),
+    })
+      .then((response) => response.json()) // assuming server responds with json
+      .then((data) => {
+        return data._id;
+      })
+      .catch((error) => console.error("Error:", error));
+  }
+
+  const createNode = (data) => {
+    const url = `/manage/endpoint/node`;
+
+    return fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-sera-service": "be_builder",
+        "x-sera-builder": socket.builder,
+      },
+      body: JSON.stringify(data),
+    }).catch((error) => console.error("Error:", error));
   };
 
-  const url = `/manage/builder/create`;
+  const deleteNode = (data) => {
+    const url = `/manage/endpoint/node`;
 
-  return fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-sera-service": "be_builder",
-    },
-    body: JSON.stringify(data2),
-  })
-    .then((response) => response.json()) // assuming server responds with json
-    .then((data) => {
-      return data._id;
-    })
-    .catch((error) => console.error("Error:", error));
-}
+    return fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "x-sera-service": "be_builder",
+        "x-sera-builder": socket.builder,
+      },
+      body: JSON.stringify(data),
+    }).catch((error) => console.error("Error:", error));
+  };
 
-export const createNode = (data) => {
-  const urli = "https:/" + window.location.pathname.replace("builder/", "");
-  const parsed = new URL(urli);
+  const createEdge = (data) => {
+    const url = `/manage/endpoint/edge`;
 
-  const lastSlashIndex = parsed.pathname.lastIndexOf("/");
-  const path = parsed.pathname.substring(0, lastSlashIndex); // "boop/boop"
-  const method = parsed.pathname.substring(lastSlashIndex + 1).toUpperCase(); // "boop"
+    return fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-sera-service": "be_builder",
+        "x-sera-builder": socket.builder,
+      },
+      body: JSON.stringify(data),
+    }).catch((error) => console.error("Error:", error));
+  };
 
-  const url = `/manage/endpoint/node/create`;
+  const removeEdge = (data) => {
+    const url = `/manage/endpoint/edge`;
 
-  return fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-sera-service": "be_builder",
-      "x-sera-builder": socket.builder,
-    },
-    body: JSON.stringify(data),
-  }).catch((error) => console.error("Error:", error));
+    return fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "x-sera-service": "be_builder",
+        "x-sera-builder": socket.builder,
+      },
+      body: JSON.stringify(data),
+    }).catch((error) => console.error("Error:", error));
+  };
+
+  const updateEdge = (data) => {
+    const url = `/manage/endpoint/edge`;
+
+    return fetch(url, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "x-sera-service": "be_builder",
+        "x-sera-builder": socket.builder,
+      },
+      body: JSON.stringify(data),
+    }).catch((error) => console.error("Error:", error));
+  };
+
+  return {
+    createData,
+    deleteNode,
+    createNode,
+    fetchData,
+    createEdge,
+    removeEdge,
+    updateEdge,
+  };
 };

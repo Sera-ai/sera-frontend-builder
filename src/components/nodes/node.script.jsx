@@ -20,12 +20,27 @@ export default memo(({ data, id }) => {
     //return your variables below
     return []
 }`;
-  const [script, updateScript] = useState(data.inputData ?? defaultScript);
+  const initVar =
+    data?.targets?.length > 0
+      ? "//Connect nodes to create variables\n" + data.targets.join("\n")
+      : "//Connect nodes to create variables";
+
+  const [script, updateScript] = useState(
+    data.inputData == null ||
+      data.inputData == undefined ||
+      data.inputData == ""
+      ? defaultScript
+      : data.inputData
+  );
+  const [variables, updateVariables] = useState(initVar);
   const [lines, updateLines] = useState([
     data.targets.map((target, int) => {
       return int + 1;
     }),
   ]);
+
+  console.log(script);
+  console.log(variables);
 
   useEffect(() => {
     if (data?.targets?.length > 0) {
@@ -47,14 +62,15 @@ export default memo(({ data, id }) => {
           targets.push(target);
         }
       });
-      newScript = newScript + data.inputData;
-      updateScript(newScript);
+      updateVariables(newScript);
     }
+  }, [data.targets]);
 
-    if (data.inputData != script) {
+  useEffect(() => {
+    if (data.inputData != script && data.inputData != null) {
       updateScript(data.inputData);
     }
-  }, [data]);
+  }, [data.inputData]);
 
   const dynamicHandlesLeft = () => {
     return data?.targets?.map((target) => {
@@ -82,7 +98,7 @@ export default memo(({ data, id }) => {
       <TagComponent data={0} />
       <FunctionHeaderComponent data={functionHeaderData} />
       <div className="flex flex-grow flex-row">
-        <div className="flex max-w-[15px] flex-grow">
+        <div className="flex max-w-[15px]">
           <Handle
             type="target"
             position={Position.Left}
@@ -90,7 +106,13 @@ export default memo(({ data, id }) => {
             className={`scriptHandle anyEdge flex flex-grow`}
           />
         </div>
-        <div className="flex flex-grow">
+        <div className="flex-grow">
+          <JsonViewerFull
+            oas={variables}
+            main={true}
+            height={100}
+            editable={false}
+          />
           <JsonViewerFull
             oas={script}
             main={true}
