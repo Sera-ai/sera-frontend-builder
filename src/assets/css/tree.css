@@ -59,7 +59,7 @@ ul ul li:last-child::after {
     height: calc(0.75em + 1px);
 }
 
-label::before {
+.doesnotexist label::before {
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
     content: "\f0da";
