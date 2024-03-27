@@ -44,6 +44,14 @@ const FlowComponent = () => {
     []
   );
 
+  const edgeTypes = useMemo(
+    () => ({
+      flow: "default",
+      param: "default",
+    }),
+    []
+  );
+
   useEffect(() => {
     const containers = Array.from(
       document.getElementsByClassName("react-flow__attribution")
@@ -69,7 +77,7 @@ const FlowComponent = () => {
           />
         </SideBarComponent>
       )}
-      <FlowSetup nodeTypes={nodeTypes} />
+      <FlowSetup nodeTypes={nodeTypes} edgeTypes={edgeTypes} />
       {builderContext.nodeDetails && (
         <DetailsBarComponent nodeDetails={builderContext.nodeDetails} />
       )}
@@ -86,7 +94,7 @@ const DetailsBarComponent = memo(({ nodeDetails }) => {
   return <DetailsBar nodeDetails={nodeDetails} nodes={nodes} edges={edges} />;
 });
 
-const FlowSetup = memo(({ nodeTypes }) => {
+const FlowSetup = memo(({ nodeTypes, edgeTypes }) => {
   const {
     nodes,
     edges,
@@ -109,6 +117,7 @@ const FlowSetup = memo(({ nodeTypes }) => {
         nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
         connectionLineStyle={{ stroke: connectionLineColor }}
         snapToGrid={true}
         snapGrid={[10, 10]}
@@ -127,7 +136,7 @@ const FlowSetup = memo(({ nodeTypes }) => {
         onConnectEnd={triggerEventClass.onConnectEnd}
         onPaneClick={triggerEventClass.onPaneClick}
         onPaneMouseMove={triggerEventClass.onMouseMove}
-        onError={(err) => console.log(err)}
+        onError={(code, error) => console.log(code, error)}
       >
         <Controls />
         {paneMenu && <PaneMenu {...paneMenu} />}

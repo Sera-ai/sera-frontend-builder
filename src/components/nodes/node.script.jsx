@@ -1,5 +1,5 @@
-import React, { useState, memo, useEffect } from "react";
-import { Handle, Position } from "reactflow";
+import React, { useState, memo, useEffect, useMemo } from "react";
+import { Handle, Position, useUpdateNodeInternals } from "reactflow";
 import { getConnectedEdges } from "reactflow";
 
 import FunctionHeaderComponent from "../headers/header.function";
@@ -11,6 +11,8 @@ import { useAppContext } from "../../AppContext";
 
 export default memo(({ data, id }) => {
   // Default states
+  const updateNodeInternals = useUpdateNodeInternals();
+
   const [functionHeaderData, setFunctionHeaderData] = useState({
     function: data.function,
   });
@@ -40,7 +42,6 @@ export default memo(({ data, id }) => {
       (edge) => edge.targetHandle == "scriptHandle"
     );
 
-    console.warn(ReleventEdges2);
     let newScript2 = `//Connect nodes to create variables\n`;
 
     ReleventEdges2.map((edge) => {
@@ -48,21 +49,23 @@ export default memo(({ data, id }) => {
     });
     updateVariables(newScript2);
 
-    setOutParams(parseReturnStatement(script));
+    //React flow bug, when dynamically placing the handles the listener event doesn't trigger but with a no delay timeout it works...
+    setTimeout(() => {
+      setOutParams(parseReturnStatement(script));
+      updateNodeInternals(id);
+    }, 0);
   }, []);
 
   useEffect(() => {
     const ReleventEdges = edges.filter(
       (edge) => edge.targetHandle == "scriptHandle"
     );
-    console.warn(ReleventEdges);
 
     let newScript = `//Connect nodes to create variables\n`;
     ReleventEdges.map((edge) => {
       newScript = newScript + `let ${normalizeVarName(edge.sourceHandle)}\n`;
     });
 
-    console.log(newScript);
     updateVariables(newScript);
   }, [edges]);
 
@@ -70,17 +73,40 @@ export default memo(({ data, id }) => {
     if (data.inputData != script && data.inputData != null) {
       updateScript(data.inputData);
       setOutParams(parseReturnStatement(data.inputData));
+      updateNodeInternals(id);
     }
   }, [data.inputData]);
 
   const updateField = (newData) => {
     setOutParams(parseReturnStatement(newData));
+    updateNodeInternals(id);
+
     socket.emit("updateField", {
       id: id,
       data: newData,
       field: "data.inputData",
     });
   };
+
+  const targetHandles = useMemo(
+    () =>
+      outParam.map((param, index) => {
+        return (
+          <div key={index} className={`nodeHeaderContentDetailsTag ${"maxi"}`}>
+            <div style={{ fontSize: 10, color: "#ffffff70", flex: 1 }}></div>
+
+            <div style={{ fontSize: 10, color: "#fff" }}>{param}</div>
+            <Handle
+              type="target"
+              position={Position.Right}
+              id={"scriptOut-" + param}
+              className={`anyEdge ioHandle`}
+            />
+          </div>
+        );
+      }),
+    [outParam]
+  );
 
   return (
     <div className="scriptNode flex flex-col">
@@ -109,20 +135,8 @@ export default memo(({ data, id }) => {
             updateField={updateField}
           />
         </div>
-        <div className="flex flex-col">
-          {outParam.map((param) => (
-            <div className={`nodeHeaderContentDetailsTag ${"maxi"}`}>
-              <div style={{ fontSize: 10, color: "#ffffff70", flex: 1 }}></div>
-
-              <div style={{ fontSize: 10, color: "#fff" }}>{param}</div>
-              <Handle
-                type="target"
-                position={Position.Right}
-                id={"scriptOut-" + param}
-                className={`anyEdge ioHandle`}
-              />
-            </div>
-          ))}
+        <div className="flex flex-col" key={outParam.join("-")}>
+          {targetHandles}
         </div>
       </div>
     </div>

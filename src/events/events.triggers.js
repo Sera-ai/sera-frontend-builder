@@ -58,9 +58,9 @@ export const triggerEvents = (builderContext) => {
 
   const onMouseMove = (event) => {
     const bounds = builderContext.flowRef.current.getBoundingClientRect();
-    const position = builderContext.rfi.project({
-      x: event.clientX - bounds.left,
-      y: event.clientY - bounds.top,
+    const position = builderContext.rfi.screenToFlowPosition({
+      x: event.clientX,
+      y: event.clientY,
     });
     socket.emit("mouseMove", {
       x: position.x,
@@ -198,12 +198,23 @@ export const triggerEvents = (builderContext) => {
         });
       } else if (targetColorClass == "anyEdge") {
         let lineColor = "#fff";
-        if (targetColorClass) {
-          const element = document.querySelector(`.${sourceColorClass}`);
-          if (element) {
-            const computedStyle = window.getComputedStyle(element);
-            lineColor = rgbToHex(computedStyle.borderColor);
-          }
+        const element = document.querySelector(`.${sourceColorClass}`);
+        if (element) {
+          const computedStyle = window.getComputedStyle(element);
+          lineColor = rgbToHex(computedStyle.borderColor);
+        }
+
+        backendEventClass.createEdge({
+          ...params,
+          animated: sourceColorClass == "nullEdge",
+          style: { stroke: lineColor },
+        });
+      } else if (sourceColorClass == "anyEdge") {
+        let lineColor = "#fff";
+        const element = document.querySelector(`.${targetColorClass}`);
+        if (element) {
+          const computedStyle = window.getComputedStyle(element);
+          lineColor = rgbToHex(computedStyle.borderColor);
         }
 
         backendEventClass.createEdge({
@@ -236,19 +247,25 @@ export const triggerEvents = (builderContext) => {
 };
 
 function rgbToHex(rgb) {
-  // Ensure the input string is in the correct format (e.g., "rgb(255, 0, 0)")
-  console.log(rgb);
-  const regex = /rgb\((\d+), (\d+), (\d+)\)/;
+  // Extend the regex to optionally match the alpha component
+  const regex = /rgba?\((\d+), (\d+), (\d+)(?:, [\d.]+)?\)/;
   const match = rgb.match(regex);
 
   if (!match) {
-    throw new Error("Invalid RGB color format");
+    throw new Error("Invalid RGB(A) color format");
   }
 
   // Extract the Red, Green, and Blue components
-  const red = parseInt(match[1]);
-  const green = parseInt(match[2]);
-  const blue = parseInt(match[3]);
+  let red = parseInt(match[1]);
+  let green = parseInt(match[2]);
+  let blue = parseInt(match[3]);
+
+  // Check if the color is black, and adjust to white if it is
+  if (red === 0 && green === 0 && blue === 0) {
+    red = 255;
+    green = 255;
+    blue = 255;
+  }
 
   // Convert each component to hexadecimal and pad with zeros if needed
   const redHex = red.toString(16).padStart(2, "0");
