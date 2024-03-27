@@ -23,11 +23,37 @@ export const triggerEvents = (builderContext) => {
     if (childElement) {
       childElement.style.left = data.x + "px";
       childElement.style.top = data.y + "px";
+      const svgPath = childElement.querySelector("svg path");
+      if (svgPath) {
+        svgPath.setAttribute("fill", `${data.color}80`); // Assuming you want to keep the opacity
+        svgPath.setAttribute("stroke", data.color);
+      }
     } else {
       const newDiv = document.createElement("div");
-      const iElem = document.createElement("i");
-      iElem.className = "fa fa-mouse-pointer";
-      newDiv.appendChild(iElem);
+      var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("width", "16");
+      svg.setAttribute("height", "16");
+      svg.setAttribute("viewBox", "0 0 16 16");
+      svg.setAttribute("fill", "none");
+      svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+      svg.style.minWidth = "16px";
+
+      // Create the path element
+      var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      path.setAttribute(
+        "d",
+        "M2.66663 2.66675L7.37996 14.0001L9.05329 9.07341L14 7.38008L2.66663 2.66675Z"
+      );
+      path.setAttribute("fill", `${data.color}80`);
+      path.setAttribute("stroke", data.color);
+      path.setAttribute("stroke-width", "1.33333");
+      path.setAttribute("stroke-linecap", "round");
+      path.setAttribute("stroke-linejoin", "round");
+
+      // Append the path to the SVG
+      svg.appendChild(path);
+
+      newDiv.appendChild(svg);
 
       const toolTip = document.createElement("div");
       toolTip.innerText = data.id;

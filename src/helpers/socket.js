@@ -29,7 +29,7 @@ export const useSocket = (builderContext) => {
     builderContext.setBgColor("#" + color);
   }
 
-  socket.on("connect", onConnectSocket);
+  socket.on("connectSuccessful", onConnectSocket);
 
   socket.on("userDisconnected", triggerEventClass.handleUserDisconnect);
   socket.on("mouseMoved", triggerEventClass.viewPeerPointers);
