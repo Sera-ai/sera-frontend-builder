@@ -70,7 +70,7 @@ export const triggerEvents = (builderContext) => {
   };
 
   const loadRFI = async (instance) => {
-    backendEventClass.fetchData(window.location.pathname);
+    backendEventClass.fetchData();
     builderContext.setReactFlowInstance(instance);
   };
 

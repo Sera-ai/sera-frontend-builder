@@ -212,6 +212,10 @@
   background-color: #a456e5;
 }
 
+.eventNodeBG {
+  background-color: #ff4747;
+}
+
 .integerEdge {
   border-color: #a456e5;
   background-color: #1e1e1e;

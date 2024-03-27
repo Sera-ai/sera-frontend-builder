@@ -1,9 +1,11 @@
-export const newNodeDefault = (type) => {
+export const newNodeDefault = (input) => {
+  const type = JSON.parse(input);
   const typeMapping = {
     integerNode: "integer",
     stringNode: "string",
     arrayNode: "array",
     scriptNode: "script",
+    eventNode: "event",
   };
 
   const ntype = {
@@ -11,19 +13,17 @@ export const newNodeDefault = (type) => {
     stringNode: "functionNode",
     arrayNode: "functionNode",
     scriptNode: "scriptNode",
+    eventNode: "eventNode",
   };
 
-  const functionType = typeMapping[type];
+  const functionType = typeMapping[type.type];
 
   if (!functionType) return;
 
-  const targetName = type == "scriptNode" ? "targets" : "target";
-  const sourceName = type == "scriptNode" ? "sources" : "source";
+  const targetName = type.type == "scriptNode" ? "targets" : "target";
+  const sourceName = type.type == "scriptNode" ? "sources" : "source";
 
-  const target =
-    type == "scriptNode"
-      ? []
-      : {};
+  const target = type.type == "scriptNode" ? [] : {};
 
   return {
     data: {
@@ -32,10 +32,10 @@ export const newNodeDefault = (type) => {
       [sourceName]: target,
       nodeType: 0,
       headerType: 0,
-      inputData: null,
+      inputData: type.name || null,
     },
     id: generateRandomString(),
-    type: ntype[type],
+    type: ntype[type.type],
     width: 108,
     height: 52,
     className: "apiNode Server",

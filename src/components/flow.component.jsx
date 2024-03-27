@@ -10,20 +10,36 @@ import DetailsBar from "./menus/menu.detail";
 import apiNode from "./nodes/node.api";
 import functionNode from "./nodes/node.function";
 import scriptNode from "./nodes/node.script";
+import eventNode from "./nodes/node.event";
 
 import { triggerEvents } from "../events/events.triggers";
 import { backendEvents } from "../events/events.backend";
 import { socketEvents } from "../events/events.socket";
 import { useAppContext } from "../AppContext";
+import { ContentBar } from "../../../../src/components/standard/Standard.ContentBar";
+import { EventBar } from "../../../../src/components/standard/Standard.EventBar";
 
 const FlowComponent = () => {
   const builderContext = useAppContext();
+
+  // Determine which sidebar component to render based on the builderContext.builderType
+  const SideBarComponent = useMemo(() => {
+    switch (builderContext.builderType) {
+      case "builder":
+        return ContentBar;
+      case "event":
+        return EventBar;
+      default:
+        return null; // Or a default component if you have one
+    }
+  }, [builderContext.builderType]);
 
   const nodeTypes = useMemo(
     () => ({
       apiNode,
       functionNode,
       scriptNode,
+      eventNode,
     }),
     []
   );
@@ -37,28 +53,37 @@ const FlowComponent = () => {
 
   return (
     <ReactFlowProvider>
-      {builderContext.oas && <ItemBarComponent oas={builderContext.oas} />}
+      {builderContext.oas && (
+        <SideBarComponent
+          // You might need to adjust these props based on which component is being rendered
+          showHost={builderContext.builderType === "builder"}
+          endpoint="inventory/api.sample.com/pets/__post"
+          host={"http://sample.com"}
+          selectedEndpoint={"selectedEndpoint"}
+          showBlock={false}
+          setSelectedEndpoint={() => {}}
+        >
+          <ItemBarComponent
+            oas={builderContext.oas}
+            type={builderContext.builderType}
+          />
+        </SideBarComponent>
+      )}
       <FlowSetup nodeTypes={nodeTypes} />
       {builderContext.nodeDetails && (
-        <DetailsBarComponent
-          nodeDetails={builderContext.nodeDetails}
-        />
+        <DetailsBarComponent nodeDetails={builderContext.nodeDetails} />
       )}
     </ReactFlowProvider>
   );
 };
 
-const ItemBarComponent = memo(({ oas }) => <ItemBar oas={oas} />);
+const ItemBarComponent = memo(({ oas, type }) => (
+  <ItemBar oas={oas} type={type} />
+));
 
 const DetailsBarComponent = memo(({ nodeDetails }) => {
   const { nodes, edges } = useAppContext();
-  return (
-    <DetailsBar
-      nodeDetails={nodeDetails}
-      nodes={nodes}
-      edges={edges}
-    />
-  );
+  return <DetailsBar nodeDetails={nodeDetails} nodes={nodes} edges={edges} />;
 });
 
 const FlowSetup = memo(({ nodeTypes }) => {

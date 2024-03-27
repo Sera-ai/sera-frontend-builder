@@ -7,23 +7,15 @@ import TagComponent from "../headers/header.tag";
 import JsonViewerFull from "../../../../../src/pages/subpages/events/partials/Partials.Events.JsonViewerFull";
 
 import { socket } from "../../helpers/socket";
+import { useAppContext } from "../../AppContext";
 
 export default memo(({ data, id }) => {
   // Default states
   const [functionHeaderData, setFunctionHeaderData] = useState({
     function: data.function,
   });
-  const defaultScript = `function customScript(){
-    //write your code here
-
-
-    //return your variables below
-    return []
-}`;
-  const initVar =
-    data?.targets?.length > 0
-      ? "//Connect nodes to create variables\n" + data.targets.join("\n")
-      : "//Connect nodes to create variables";
+  const { edges } = useAppContext();
+  const defaultScript = `function main(){\n//write your code here\n\n//return your variables below\nreturn []\n}\n\n//execute the script\nmain();`;
 
   const [script, updateScript] = useState(
     data.inputData == null ||
@@ -32,60 +24,57 @@ export default memo(({ data, id }) => {
       ? defaultScript
       : data.inputData
   );
-  const [variables, updateVariables] = useState(initVar);
+  const [variables, updateVariables] = useState(
+    "//Connect nodes to create variables"
+  );
+  const [outParam, setOutParams] = useState([]);
+
   const [lines, updateLines] = useState([
     data.targets.map((target, int) => {
       return int + 1;
     }),
   ]);
 
-  console.log(script);
-  console.log(variables);
+  useEffect(() => {
+    const ReleventEdges2 = edges.filter(
+      (edge) => edge.targetHandle == "scriptHandle"
+    );
+
+    console.warn(ReleventEdges2);
+    let newScript2 = `//Connect nodes to create variables\n`;
+
+    ReleventEdges2.map((edge) => {
+      newScript2 = newScript2 + `let ${normalizeVarName(edge.sourceHandle)}\n`;
+    });
+    updateVariables(newScript2);
+
+    setOutParams(parseReturnStatement(script));
+  }, []);
 
   useEffect(() => {
-    if (data?.targets?.length > 0) {
-      console.log([
-        data.targets.map((target, int) => {
-          return int + 1;
-        }),
-      ]);
-      console.log("change");
-      console.log(data);
-      const targets = [];
-      let newScript = ``;
-      data.targets.map((target) => {
-        if (!targets.includes(target)) {
-          newScript =
-            newScript +
-            `let ${target}
-`;
-          targets.push(target);
-        }
-      });
-      updateVariables(newScript);
-    }
-  }, [data.targets]);
+    const ReleventEdges = edges.filter(
+      (edge) => edge.targetHandle == "scriptHandle"
+    );
+    console.warn(ReleventEdges);
+
+    let newScript = `//Connect nodes to create variables\n`;
+    ReleventEdges.map((edge) => {
+      newScript = newScript + `let ${normalizeVarName(edge.sourceHandle)}\n`;
+    });
+
+    console.log(newScript);
+    updateVariables(newScript);
+  }, [edges]);
 
   useEffect(() => {
     if (data.inputData != script && data.inputData != null) {
       updateScript(data.inputData);
+      setOutParams(parseReturnStatement(data.inputData));
     }
   }, [data.inputData]);
 
-  const dynamicHandlesLeft = () => {
-    return data?.targets?.map((target) => {
-      return (
-        <Handle
-          type="target"
-          position={Position.Left}
-          id={target}
-          className={`ioHandle anyEdge`}
-        />
-      );
-    });
-  };
-
   const updateField = (newData) => {
+    setOutParams(parseReturnStatement(newData));
     socket.emit("updateField", {
       id: id,
       data: newData,
@@ -98,7 +87,7 @@ export default memo(({ data, id }) => {
       <TagComponent data={0} />
       <FunctionHeaderComponent data={functionHeaderData} />
       <div className="flex flex-grow flex-row">
-        <div className="flex max-w-[15px]">
+        <div className="flex w-[15px]">
           <Handle
             type="target"
             position={Position.Left}
@@ -120,7 +109,63 @@ export default memo(({ data, id }) => {
             updateField={updateField}
           />
         </div>
+        <div className="flex flex-col">
+          {outParam.map((param) => (
+            <div className={`nodeHeaderContentDetailsTag ${"maxi"}`}>
+              <div style={{ fontSize: 10, color: "#ffffff70", flex: 1 }}></div>
+
+              <div style={{ fontSize: 10, color: "#fff" }}>{param}</div>
+              <Handle
+                type="target"
+                position={Position.Right}
+                id={"scriptOut-" + param}
+                className={`anyEdge ioHandle`}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
 });
+
+function normalizeVarName(name) {
+  // Replace invalid characters with underscores and remove parentheses
+  let normalized = name.replace(/-/g, "_").replace(/[()]/g, "");
+
+  // Ensure the name starts with a valid character
+  if (!/^[a-zA-Z_$]/.test(normalized[0])) {
+    normalized = "_" + normalized;
+  }
+
+  // Replace any sequence of characters that are not letters, numbers, or underscores with an underscore
+  normalized = normalized.replace(/[^a-zA-Z0-9_$]/g, "_");
+
+  return normalized;
+}
+
+function parseReturnStatement(code) {
+  // Extract the last return statement from the main function
+  const returnPattern =
+    /function main\(\) \{[\s\S]*return \[([^\]]*)\];?[\s\S]*\}/;
+  const match = code.match(returnPattern);
+  if (!match) return [];
+
+  // Extract elements from the return statement
+  const returnContents = match[1];
+  const elementsPattern = /"([^"]*)"|'([^']*)'|([a-zA-Z_]\w*)|(\d+(\.\d+)?)/g;
+  let elementsMatch;
+  const elements = [];
+
+  while ((elementsMatch = elementsPattern.exec(returnContents)) !== null) {
+    // Add the matched string, number, or variable name to the elements array
+    const element =
+      elementsMatch[1] ||
+      elementsMatch[2] ||
+      elementsMatch[3] ||
+      elementsMatch[4];
+    elements.push(element);
+  }
+
+  return elements;
+}

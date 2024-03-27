@@ -70,13 +70,30 @@ export const socketEvents = (builderContext) => {
   };
 
   const handleEdgesCreate = (newEdge) => {
-    setEdges((eds) => [...eds, newEdge]);
+    
+    setEdges((eds) => {
+      // Check if the edge with the same ID already exists
+      const edgeIndex = eds.findIndex(edge => edge._id === newEdge._id);
+  
+      if (edgeIndex !== -1) {
+        // Edge exists, update it
+        return eds.map((edge, index) => {
+          if (index === edgeIndex) {
+            return { ...edge, ...newEdge }; // Update the existing edge with new properties
+          }
+          return edge; // Return all other edges unchanged
+        });
+      } else {
+        // Edge doesn't exist, add the new edge
+        return [...eds, newEdge];
+      }
+    });
   };
+  
 
   const handleEdgesChange = (edge) => {
     if (_source == "socket") {
-      console.log("updating edge");
-      setEdges((eds) => eds.map((edg) => (edg.id === edge.id ? edge : edg)));
+      setEdges((eds) => eds.map((edg) => (edg._id === edge._id ? edge : edg)));
     }
     if (_source == "socket") return;
     if (edge[0].type == "remove") {
@@ -98,7 +115,7 @@ export const socketEvents = (builderContext) => {
 
   const handleConnectChange = (edge) => {
     if (_source == "socket") {
-      setEdges((eds) => eds.filter((edg) => (edg.id == edge.id ? edge : edg)));
+      setEdges((eds) => eds.filter((edg) => (edg._id == edge._id ? edge : edg)));
     }
     if (_source == "socket") return;
     backendEventClass.updateEdge(edge);

@@ -10,6 +10,7 @@ import "./assets/css/index.css";
 import { useSocket } from "./helpers/socket";
 import { AppProvider, useAppContext } from "./AppContext";
 import FlowComponent from "./components/flow.component";
+import "@fortawesome/fontawesome-svg-core/styles.css";
 
 const Core = () => {
   const builderContext = useAppContext(); // Access context
@@ -23,9 +24,16 @@ const Core = () => {
   );
 };
 
-const App = () => {
+const App = ({ type = "builder", nodes, edges, oas, builderId, getNodeStruc }) => {
   return (
-    <AppProvider>
+    <AppProvider
+      type={type}
+      initialEdges={edges}
+      initialNodes={nodes}
+      initialOas={oas}
+      builderId={builderId}
+      getNodeStruc={getNodeStruc}
+    >
       <Core />
     </AppProvider>
   );

@@ -4,23 +4,33 @@ import ReactFlow, { useNodesState, useEdgesState, addEdge } from "reactflow";
 const AppContext = createContext();
 
 // Provider component that wraps your app and makes the state available to any child component
-export const AppProvider = ({ children }) => {
+export const AppProvider = ({
+  type = "builder",
+  initialNodes = [],
+  initialEdges = [],
+  initialOas = {},
+  builderId = null,
+  children,
+  getNodeStruc = () => {},
+}) => {
   const [bgColor, setBgColor] = useState("#000");
   const [rfi, setReactFlowInstance] = useState(null);
+  const [builderType, setBuilderType] = useState(type);
 
   const [connecting, setConnecting] = useState(false);
   const [connectionLineColor, setConnectionLineColor] = useState("#fff");
 
-  const [oas, setOas] = useState(null);
+  const [oas, setOas] = useState(initialOas);
   const [issue, setIssue] = useState(null);
 
   // Complex States (custom hooks)
-  const [nodes, setNodes, onNodesChange] = useNodesState([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   // Add other states and setters here
   const [nodeDetails, setNodeDetails] = useState(null);
   const [menu, setMenu] = useState(null);
   const [paneMenu, setPaneMenu] = useState(null);
+  const [builder, setBuilder] = useState(builderId);
 
   const flowRef = useRef(null);
   const wrapperRef = useRef(null);
@@ -54,6 +64,9 @@ export const AppProvider = ({ children }) => {
         setConnectionLineColor,
         connecting,
         setConnecting,
+        builderType,
+        builder,
+        getNodeStruc,
       }}
     >
       {children}

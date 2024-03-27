@@ -1,30 +1,35 @@
 // customFunctions.js
 import { socket } from "../helpers/socket";
 
-export const backendEvents = (builderContext) => {
-  const { setOas, setIssue, setNodes, setEdges } = builderContext;
-  const fetchData = async () => {
-    try {
-      const response = await fetch(
-        `/manage/endpoint/?path=${encodeURIComponent(
-          window.location.pathname.replace("/builder", "")
-        )}`,
-        { headers: { "x-sera-service": "be_builder" } }
-      );
-      const jsonData = await response.json();
-      if (!jsonData.issue) {
-        setNodes(jsonData.builder.nodes);
-        setEdges(jsonData.builder.edges);
-        socket.emit("builderConnect", jsonData.builderId);
-        socket.builder = jsonData.builderId;
-        setOas(jsonData.oas);
-      } else {
-        setIssue(jsonData.issue);
-        console.log("something went wrong");
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
+export const backendEvents = (builderContext = {}) => {
+  const { setOas, setIssue, setNodes, setEdges, builder, builderType } =
+    builderContext;
+  const fetchData = async (path = window.location.pathname) => {
+    // try {
+    //   const response = await fetch(
+    //     `/manage/endpoint/?path=${encodeURIComponent(
+    //       path.replace("/builder", "")
+    //     )}`,
+    //     { headers: { "x-sera-service": "be_builder" } }
+    //   );
+    //   const jsonData = await response.json();
+    //   if (!jsonData.issue) {
+    //     //setNodes(jsonData.builder.nodes);
+    //     //setEdges(jsonData.builder.edges);
+
+    //     //setOas(jsonData.oas);
+    //   } else {
+    //     setIssue(jsonData.issue);
+    //     console.log("something went wrong");
+    //   }
+    //   return jsonData
+
+    // } catch (error) {
+    //   console.error("Error fetching data:", error);
+    // }
+
+    socket.emit("builderConnect", builder);
+    socket.builder = builder;
   };
 
   const createData = async (data) => {
@@ -64,7 +69,7 @@ export const backendEvents = (builderContext) => {
       hostname: parsed.host.split(":")[0],
       endpoint: path,
       method: method,
-      builder_id
+      builder_id,
     };
 
     const url = `/manage/endpoint/create`;
@@ -99,7 +104,7 @@ export const backendEvents = (builderContext) => {
       hostname: parsed.host.split(":")[0],
       endpoint: path,
       method: method,
-      builder_id: builderId
+      builder_id: builderId,
     };
 
     const url = `/manage/endpoint/update`;
@@ -154,56 +159,56 @@ export const backendEvents = (builderContext) => {
   }
 
   const createNode = (data) => {
-    const url = `/manage/endpoint/node`;
+    const url = `/manage/endpoint/node?type=${builderType}`;
 
     return fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "x-sera-service": "be_builder",
-        "x-sera-builder": socket.builder,
+        "x-sera-builder": builder,
       },
       body: JSON.stringify(data),
     }).catch((error) => console.error("Error:", error));
   };
 
   const deleteNode = (data) => {
-    const url = `/manage/endpoint/node`;
+    const url = `/manage/endpoint/node?type=${builderType}`;
 
     return fetch(url, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         "x-sera-service": "be_builder",
-        "x-sera-builder": socket.builder,
+        "x-sera-builder": builder,
       },
       body: JSON.stringify(data),
     }).catch((error) => console.error("Error:", error));
   };
 
   const createEdge = (data) => {
-    const url = `/manage/endpoint/edge`;
+    const url = `/manage/endpoint/edge?type=${builderType}`;
 
     return fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "x-sera-service": "be_builder",
-        "x-sera-builder": socket.builder,
+        "x-sera-builder": builder,
       },
       body: JSON.stringify(data),
     }).catch((error) => console.error("Error:", error));
   };
 
   const removeEdge = (data) => {
-    const url = `/manage/endpoint/edge`;
+    const url = `/manage/endpoint/edge?type=${builderType}`;
 
     return fetch(url, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         "x-sera-service": "be_builder",
-        "x-sera-builder": socket.builder,
+        "x-sera-builder": builder,
       },
       body: JSON.stringify(data),
     }).catch((error) => console.error("Error:", error));
@@ -217,7 +222,7 @@ export const backendEvents = (builderContext) => {
       headers: {
         "Content-Type": "application/json",
         "x-sera-service": "be_builder",
-        "x-sera-builder": socket.builder,
+        "x-sera-builder": builder,
       },
       body: JSON.stringify(data),
     }).catch((error) => console.error("Error:", error));

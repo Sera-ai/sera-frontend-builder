@@ -9,7 +9,7 @@
 }
 
 .sera-flow aside {
-    padding: 15px 0px;
+    padding: 0px;
     font-size: 12px;
     border-radius: 5px;
     background: #242431;
@@ -21,12 +21,11 @@
 
 .sera-flow .dndnode {
     display: flex;
-    padding: 10px 15px;
+    padding: 5px 15px;
     align-items: center;
     gap: 15px;
     align-self: stretch;
-    border-radius: 5px;
-    border: 1px solid #343B48;
+    border-bottom: 1px solid #343B48;
     cursor: grab;
 }
 
@@ -71,10 +70,6 @@
     .sera-flow {
         flex-direction: row;
     }
-
-    .sera-flow aside {
-        width: 320px;
-    }
 }
 
 .nodeCategoryContainer {
@@ -105,20 +100,10 @@
     margin: 0px;
 }
 
-.Collapsible__trigger:after {
-    font-family: 'FontAwesome';
-    content: '\f107';
-    position: absolute;
-    font-size: 16px;
-    right: 10px;
-    top: 3px;
-    display: block;
-    transition: transform 300ms;
-}
 
-.Collapsible__trigger.is-open:after {
-    transform: rotateZ(180deg);
-}
+  
+
+
 
 .Collapsible__trigger.is-disabled {
     opacity: 0.5;
@@ -127,13 +112,11 @@
 
 .scrollContainer {
     display: flex;
-    padding: 15px;
+    padding: 0px;
     flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
     flex: 1 0 0;
     align-self: stretch;
-    height: 250px;
     background-color: #1E1E1E;
     overflow-y: scroll;
     /* Internet Explorer 10+ */
