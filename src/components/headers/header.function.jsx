@@ -4,8 +4,9 @@ import stringLogo from "../../assets/icons/tabler_text-recognition.svg";
 import arrayLogo from "../../assets/icons/tabler_brackets-contain.svg";
 import booleanLogo from "../../assets/icons/radix-icons_component-boolean.png";
 import { EventIcon } from "../../../../../src/assets/assets.svg";
+import { Handle, Position } from "reactflow";
 
-export default memo(({ data, name = null, isConnectable }) => {
+export default memo(({ data, name = null, id }) => {
   const apiLogo = {
     integerLogo: integerLogo,
     stringLogo: stringLogo,
@@ -26,7 +27,17 @@ export default memo(({ data, name = null, isConnectable }) => {
     <div className={`nodeHeader ${data.function}BG`}>
       <div>
         <div className="nodeHeaderDetails">
-          {data.function ? <EventIcon size={"16"}/> : <img style={{ height: 16 }} src={apiLogo[data.function + "Logo"]} />}
+          <Handle
+            type="target"
+            position={Position.Left}
+            id={id+"flow"}
+            className={`ioHandle nullEdge`}
+          />
+          {data.function ? (
+            <EventIcon size={"16"} />
+          ) : (
+            <img style={{ height: 16 }} src={apiLogo[data.function + "Logo"]} />
+          )}
           <div className="functionTitle">{headerText(data.function)}</div>
         </div>
       </div>

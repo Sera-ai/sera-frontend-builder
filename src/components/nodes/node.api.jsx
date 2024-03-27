@@ -140,12 +140,12 @@ export default memo((node) => {
                 target: {
                   id: `flow-target-${node.id}-start`,
                   type: null,
-                  title: "Continue",
+                  title: "start",
                 },
                 source: {
                   id: `flow-source-${node.id}-end`,
                   type: null,
-                  title: "end",
+                  title: "Continue",
                 },
                 nodeType: data.header.type,
               }}

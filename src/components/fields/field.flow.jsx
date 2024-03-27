@@ -30,13 +30,13 @@ export default memo(({ data, top = ""}) => {
     <div className={`nodeHeaderContentDetailsTag ${top}`}>
       {(data.nodeType == 1 || data.nodeType == 2) && <LeftHandle />}
       {data.nodeType == 2 && (
-        <div style={{ fontSize: 10, color: "#fff" }}>{data.source.title}</div>
+        <div style={{ fontSize: 10, color: "#fff" }}>{data.target.title}</div>
       )}
 
       <div style={{ fontSize: 10, color: "#ffffff70", flex: 1 }}></div>
 
       {data.nodeType == 0 && (
-        <div style={{ fontSize: 10, color: "#fff" }}>{data.target.title}</div>
+        <div style={{ fontSize: 10, color: "#fff" }}>{data.source.title}</div>
       )}
       {(data.nodeType == 1 || data.nodeType == 0) && <RightHandle />}
     </div>

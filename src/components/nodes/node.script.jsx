@@ -1,6 +1,8 @@
 import React, { useState, memo, useEffect, useMemo } from "react";
 import { Handle, Position, useUpdateNodeInternals } from "reactflow";
 import { getConnectedEdges } from "reactflow";
+import FieldFlow from "../fields/field.flow";
+
 
 import FunctionHeaderComponent from "../headers/header.function";
 import TagComponent from "../headers/header.tag";
@@ -97,7 +99,7 @@ export default memo(({ data, id }) => {
 
             <div style={{ fontSize: 10, color: "#fff" }}>{param}</div>
             <Handle
-              type="target"
+              type="source"
               position={Position.Right}
               id={"scriptOut-" + param}
               className={`anyEdge ioHandle`}
@@ -110,8 +112,11 @@ export default memo(({ data, id }) => {
 
   return (
     <div className="scriptNode flex flex-col">
-      <TagComponent data={0} />
-      <FunctionHeaderComponent data={functionHeaderData} />
+      <FunctionHeaderComponent
+        id={id}
+        data={functionHeaderData}
+        fullFlow={true}
+      />
       <div className="flex flex-grow flex-row">
         <div className="flex w-[15px]">
           <Handle
@@ -136,6 +141,41 @@ export default memo(({ data, id }) => {
           />
         </div>
         <div className="flex flex-col" key={outParam.join("-")}>
+          <>
+          <FieldFlow
+              top="maxi"
+              data={{
+                target: {
+                  id: `flow-target-${id}-start`,
+                  type: null,
+                  title: "Start",
+                },
+                source: {
+                  id: `flow-source-${id}-continue`,
+                  type: null,
+                  title: "Continue",
+                },
+                nodeType: 0,
+              }}
+            />
+            <FieldFlow
+              top="maxi"
+              data={{
+                target: {
+                  id: `flow-target-${id}-start`,
+                  type: null,
+                  title: "start",
+                },
+                source: {
+                  id: `flow-source-${id}-reject`,
+                  type: null,
+                  title: "Failure",
+                },
+                nodeType: 0,
+              }}
+            />
+            <div className="divider"></div>
+          </>
           {targetHandles}
         </div>
       </div>

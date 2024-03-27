@@ -74,20 +74,20 @@ export default memo((node) => {
               <path
                 d="M8.00004 14.6666C11.6819 14.6666 14.6667 11.6818 14.6667 7.99992C14.6667 4.31802 11.6819 1.33325 8.00004 1.33325C4.31814 1.33325 1.33337 4.31802 1.33337 7.99992C1.33337 11.6818 4.31814 14.6666 8.00004 14.6666Z"
                 stroke="#ffffff80"
-                stroke-width="1.33333"
+                strokeWidth="1.33333"
               />
               <path
                 d="M8 4.6665H8.00667"
                 stroke="#ffffff80"
-                stroke-width="1.33333"
-                stroke-linecap="round"
+                strokeWidth="1.33333"
+                strokeLinecap="round"
               />
               <path
                 d="M6.66675 7.33325H8.00008V10.6666M6.66675 10.6666H9.33341"
                 stroke="#ffffff80"
-                stroke-width="1.33333"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="1.33333"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </g>
             <defs>

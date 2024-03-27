@@ -46,9 +46,9 @@ export const triggerEvents = (builderContext) => {
       );
       path.setAttribute("fill", `${data.color}80`);
       path.setAttribute("stroke", data.color);
-      path.setAttribute("stroke-width", "1.33333");
-      path.setAttribute("stroke-linecap", "round");
-      path.setAttribute("stroke-linejoin", "round");
+      path.setAttribute("strokeWidth", "1.33333");
+      path.setAttribute("strokeLinecap", "round");
+      path.setAttribute("strokeLinejoin", "round");
 
       // Append the path to the SVG
       svg.appendChild(path);
@@ -222,7 +222,7 @@ export const triggerEvents = (builderContext) => {
           animated: sourceColorClass == "nullEdge",
           style: { stroke: lineColor },
         });
-      } else if (targetColorClass == "anyEdge") {
+      } else if (targetColorClass == "anyEdge" && sourceColorClass != "nullEdge") {
         let lineColor = "#fff";
         const element = document.querySelector(`.${sourceColorClass}`);
         if (element) {
@@ -235,7 +235,7 @@ export const triggerEvents = (builderContext) => {
           animated: sourceColorClass == "nullEdge",
           style: { stroke: lineColor },
         });
-      } else if (sourceColorClass == "anyEdge") {
+      } else if (sourceColorClass == "anyEdge"&& targetColorClass != "nullEdge") {
         let lineColor = "#fff";
         const element = document.querySelector(`.${targetColorClass}`);
         if (element) {
@@ -248,6 +248,9 @@ export const triggerEvents = (builderContext) => {
           animated: sourceColorClass == "nullEdge",
           style: { stroke: lineColor },
         });
+
+        console.log("anyedge be matchin", params);
+
       } else {
         console.log("it dont be matchin");
       }
