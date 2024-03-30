@@ -18,6 +18,7 @@ import { socketEvents } from "../events/events.socket";
 import { useAppContext } from "../AppContext";
 import { ContentBar } from "../../../../src/components/standard/Standard.ContentBar";
 import { EventBar } from "../../../../src/components/standard/Standard.EventBar";
+import { useNavigate } from "react-router-dom";
 
 const FlowComponent = () => {
   const builderContext = useAppContext();
@@ -59,6 +60,19 @@ const FlowComponent = () => {
     containers.forEach((container) => container.remove());
   }, [builderContext.flowRef]);
 
+  const navigate = useNavigate();
+
+  const navigateBuilder = (data) => {
+    const newUrl = `/builder/${data
+      .replace("__", "")
+      .replace("https://", "")
+      .replace("http://", "")}`;
+
+    console.log(data);
+
+    navigate(newUrl);
+  };
+
   return (
     <ReactFlowProvider>
       {builderContext.oas && (
@@ -69,7 +83,8 @@ const FlowComponent = () => {
           host={"http://sample.com"}
           selectedEndpoint={"selectedEndpoint"}
           showBlock={false}
-          setSelectedEndpoint={() => {}}
+          setSelectedEndpoint={navigateBuilder}
+          builder
         >
           <ItemBarComponent
             oas={builderContext.oas}
