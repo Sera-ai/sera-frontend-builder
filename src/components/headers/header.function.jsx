@@ -6,7 +6,7 @@ import booleanLogo from "../../assets/icons/radix-icons_component-boolean.png";
 import { EventIcon } from "../../../../../src/assets/assets.svg";
 import { Handle, Position } from "reactflow";
 
-export default memo(({ data, name = null, id }) => {
+export default memo(({ data, name = null, id, left = false }) => {
   const apiLogo = {
     integerLogo: integerLogo,
     stringLogo: stringLogo,
@@ -19,27 +19,38 @@ export default memo(({ data, name = null, id }) => {
     switch (varfunction) {
       case "eventNode":
         return "Event Start";
+      case "boolean":
+        return data.title || varfunction;
       default:
         return varfunction;
     }
   };
   return (
     <div className={`nodeHeader ${data.function}BG`}>
-      <div>
-        <div className="nodeHeaderDetails">
+      <div className="nodeHeaderDetails">
+        {left && (
           <Handle
             type="target"
             position={Position.Left}
-            id={id+"flow"}
+            id={"flow-target-" + id + "-Start"}
             className={`ioHandle nullEdge`}
           />
-          {data.function ? (
-            <EventIcon size={"16"} />
-          ) : (
-            <img style={{ height: 16 }} src={apiLogo[data.function + "Logo"]} />
-          )}
-          <div className="functionTitle">{headerText(data.function)}</div>
-        </div>
+        )}
+        {data.function ? (
+          <EventIcon size={"16"} />
+        ) : (
+          <img style={{ height: 16 }} src={apiLogo[data.function + "Logo"]} />
+        )}
+        <div className="functionTitle">{headerText(data.function)}</div>
+        <div className="flex flex-grow" />
+        {!left && (
+          <Handle
+            type="source"
+            position={Position.Right}
+            id={"flow-source-" + id + "-End"}
+            className={`ioHandle nullEdge`}
+          />
+        )}
       </div>
     </div>
   );

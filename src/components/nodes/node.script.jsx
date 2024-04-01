@@ -3,7 +3,6 @@ import { Handle, Position, useUpdateNodeInternals } from "reactflow";
 import { getConnectedEdges } from "reactflow";
 import FieldFlow from "../fields/field.flow";
 
-
 import FunctionHeaderComponent from "../headers/header.function";
 import TagComponent from "../headers/header.tag";
 import JsonViewerFull from "../../../../../src/pages/subpages/events/partials/Partials.Events.JsonViewerFull";
@@ -41,7 +40,7 @@ export default memo(({ data, id }) => {
 
   useEffect(() => {
     const ReleventEdges2 = edges.filter(
-      (edge) => edge.targetHandle == "scriptHandle"
+      (edge) => edge.targetHandle == `flow-target-${id}-scriptAccept`
     );
 
     let newScript2 = `//Connect nodes to create variables\n`;
@@ -60,7 +59,7 @@ export default memo(({ data, id }) => {
 
   useEffect(() => {
     const ReleventEdges = edges.filter(
-      (edge) => edge.targetHandle == "scriptHandle"
+      (edge) => edge.targetHandle == `flow-target-${id}-scriptAccept`
     );
 
     let newScript = `//Connect nodes to create variables\n`;
@@ -101,7 +100,7 @@ export default memo(({ data, id }) => {
             <Handle
               type="source"
               position={Position.Right}
-              id={"scriptOut-" + param}
+              id={`flow-source-${id}-${param}`}
               className={`anyEdge ioHandle`}
             />
           </div>
@@ -116,13 +115,14 @@ export default memo(({ data, id }) => {
         id={id}
         data={functionHeaderData}
         fullFlow={true}
+        left={true}
       />
       <div className="flex flex-grow flex-row">
         <div className="flex w-[15px]">
           <Handle
             type="target"
             position={Position.Left}
-            id={"scriptHandle"}
+            id={`flow-target-${id}-scriptAccept`}
             className={`scriptHandle anyEdge flex flex-grow`}
           />
         </div>
@@ -142,7 +142,7 @@ export default memo(({ data, id }) => {
         </div>
         <div className="flex flex-col" key={outParam.join("-")}>
           <>
-          <FieldFlow
+            <FieldFlow
               top="maxi"
               data={{
                 target: {

@@ -167,12 +167,15 @@ const changeData = (e, handleConnectChange, nodeId, input, edge) => {
 
 function flattenObject(obj) {
   const result = [];
-  const objKeys = Object.keys(obj);
-  objKeys.map((key) => {
-    obj[key].map((field) => {
-      result.push(field);
-    });
-  });
+  if (obj) {
+    const objKeys = Object.keys(obj);
+    if (objKeys)
+      objKeys.map((key) => {
+        obj[key].map((field) => {
+          result.push(field);
+        });
+      });
+  }
 
   return result;
 }

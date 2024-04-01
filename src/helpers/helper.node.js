@@ -6,6 +6,7 @@ export const newNodeDefault = (input) => {
     arrayNode: "array",
     scriptNode: "script",
     eventNode: "event",
+    sendEventNode: "event",
   };
 
   const ntype = {
@@ -14,6 +15,7 @@ export const newNodeDefault = (input) => {
     arrayNode: "functionNode",
     scriptNode: "scriptNode",
     eventNode: "eventNode",
+    sendEventNode: "sendEventNode",
   };
 
   const functionType = typeMapping[type.type];

@@ -100,6 +100,19 @@ const GenericNodes = ({ onDragStart }) => {
             <div className="nodeSubtitle">Node for custom script</div>
           </div>
         </div>
+        <div
+          className="dndnode"
+          onDragStart={(event) => onDragStart(event, { type: "sendEventNode" })}
+          draggable
+        >
+          <div>
+            <img src={booleanLogo} />
+          </div>
+          <div>
+            <div className="nodeTitle">Create Event</div>
+            <div className="nodeSubtitle">Node for event logs</div>
+          </div>
+        </div>
       </div>
     </Collapsible>
   );

@@ -10,6 +10,7 @@ import DetailsBar from "./menus/menu.detail";
 import apiNode from "./nodes/node.api";
 import functionNode from "./nodes/node.function";
 import scriptNode from "./nodes/node.script";
+import sendEventNode from "./nodes/node.sendEvent";
 import eventNode from "./nodes/node.event";
 
 import { triggerEvents } from "../events/events.triggers";
@@ -40,6 +41,7 @@ const FlowComponent = () => {
       apiNode,
       functionNode,
       scriptNode,
+      sendEventNode,
       eventNode,
     }),
     []
