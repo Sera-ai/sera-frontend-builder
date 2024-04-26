@@ -32,7 +32,7 @@ export default memo(({ data, name = null, id, left = false }) => {
           <Handle
             type="target"
             position={Position.Left}
-            id={"flow-target-" + id + "-Start"}
+            id={`sera_start`}
             className={`ioHandle nullEdge`}
           />
         )}
@@ -47,7 +47,7 @@ export default memo(({ data, name = null, id, left = false }) => {
           <Handle
             type="source"
             position={Position.Right}
-            id={"flow-source-" + id + "-End"}
+            id={`sera_end`}
             className={`ioHandle nullEdge`}
           />
         )}

@@ -15,7 +15,7 @@ export default memo(({ nodeDetails, nodes, edges }) => {
 
   const [selectedHeader, setHeader] = useState(0);
   const nodeData = getData(nodeDetails)
-  const navItems = ['Details', 'Parameters', 'Test', 'Plugins'];
+  const navItems = ['Details', 'Parameters'];
 
   const getDetailMenuItem = () => {
     switch (selectedHeader) {

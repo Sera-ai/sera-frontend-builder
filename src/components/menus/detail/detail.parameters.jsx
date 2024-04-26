@@ -28,8 +28,7 @@ export default memo(({ nodeDetails, nodes, edges }) => {
                   id: node.id,
                 };
               });
-          })
-          .sort();
+          });
 
         return (
           <Detail
@@ -38,6 +37,7 @@ export default memo(({ nodeDetails, nodes, edges }) => {
             edges={edges}
             nodeId={nodeId}
             input={input}
+            nodeDetails={nodeDetails}
           />
         );
       }) ?? [];
@@ -78,10 +78,10 @@ function getHex(type) {
   }
 }
 
-const Detail = ({ field, options = [], edges, nodeId, input }) => {
+const Detail = ({ field, options = [], edges, nodeId, input, nodeDetails }) => {
   const type = field ? field.schema.type : null;
-  const io = input == "in" ? "target" : "source";
-  const revio = input == "in" ? "source" : "target";
+  const isInput = input == "in" ? "target" : "source";
+  const isntInput = input == "in" ? "source" : "target";
   const socketEventClass = socketEvents({
     ...useAppContext(),
     _source: "detail",
@@ -89,14 +89,15 @@ const Detail = ({ field, options = [], edges, nodeId, input }) => {
 
   const edges2 = edges.filter(
     (edge) =>
-      edge[io] === nodeId &&
+      edge[isInput] === nodeId &&
       (edge.sourceHandle.includes(field.name) ||
         edge.targetHandle.includes(field.name))
   );
 
-  console.log(edges2);
-  console.log(type);
   const edge = edges2[0];
+
+  console.log(field.name, edge);
+  console.log(field.name, edges2);
 
   return (
     <div className={`detailParameterBox`}>
@@ -110,16 +111,20 @@ const Detail = ({ field, options = [], edges, nodeId, input }) => {
         <div className="detailDropdown">
           <select
             className="detailFont detailFontCase"
-            value={edge ? `${field.name}-${type}-${edge[revio]}` : "none"}
+            value={
+              edge ? `${edge.sourceHandle}-${type}-${edge[isntInput]}` : "none"
+            }
             disabled={type == null}
             onChange={(e) =>
-              changeData(
+              changeData({
                 e,
-                socketEventClass.handleConnectChange,
+                handleConnectChange: socketEventClass.handleConnectChange,
                 nodeId,
                 input,
-                edge
-              )
+                edge,
+                fieldName: field.name,
+                hex: getHex(type),
+              })
             }
           >
             <GetOptions data={[...options, { name: "none" }]} edges={edges} />
@@ -143,23 +148,44 @@ const GetOptions = ({ data }) => {
   });
 };
 
-const changeData = (e, handleConnectChange, nodeId, input, edge) => {
+const changeData = ({
+  e,
+  handleConnectChange,
+  nodeId,
+  input,
+  edge,
+  fieldName,
+  hex,
+}) => {
   if (e.target.value != "none") {
+    console.log(e.target.value);
+    console.log(edge);
     const targetData = e.target.value.split("-");
-    const type = targetData[0];
-    const source = input == "in" ? targetData[2] : nodeId;
-    const target = input == "in" ? nodeId : targetData[2];
 
-    let updateEdge = edge;
-    updateEdge.id = edge.id;
+    const lastElement = targetData.splice(-1, 1)[0];
+    const secondOfLast = targetData.splice(-1, 1)[0]; // splice returns an array of removed elements
+    const dropDownFieldName = targetData.join("-");
+
+    console.log(lastElement);
+
+    const source = input == "in" ? lastElement : nodeId;
+    const sourceHandle = input == "in" ? dropDownFieldName : fieldName;
+    const target = input == "in" ? nodeId : lastElement;
+    const targetHandle = input == "in" ? fieldName : dropDownFieldName;
+
+    let updateEdge = {};
+    if (edge) updateEdge = edge;
+    if (edge) updateEdge.id = edge.id;
+    if (!edge) updateEdge.animated = false;
+    if (!edge) updateEdge.style = { stroke: hex };
     updateEdge.source = source;
-    updateEdge.sourceHandle = `flow-source-${source}-(${type})`;
+    updateEdge.sourceHandle = sourceHandle;
     updateEdge.target = target;
-    updateEdge.targetHandle = `flow-target-${target}-(${type})`;
+    updateEdge.targetHandle = targetHandle;
 
-    console.log(updateEdge);
+    console.log("updateEdge", updateEdge);
 
-    handleConnectChange(updateEdge);
+    handleConnectChange(updateEdge, edge == undefined);
   } else {
     console.log("boop");
   }

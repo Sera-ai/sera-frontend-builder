@@ -65,16 +65,16 @@ export const socketEvents = (builderContext) => {
   };
 
   const handleEdgesDelete = (changes) => {
-    console.log(changes);
+    console.log("changes", changes);
     setEdges((oldEdges) => applyEdgeChanges(changes, oldEdges));
   };
 
   const handleEdgesCreate = (newEdge) => {
-    
+    console.log("hmm");
     setEdges((eds) => {
       // Check if the edge with the same ID already exists
-      const edgeIndex = eds.findIndex(edge => edge._id === newEdge._id);
-  
+      const edgeIndex = eds.findIndex((edge) => edge._id === newEdge._id);
+
       if (edgeIndex !== -1) {
         // Edge exists, update it
         return eds.map((edge, index) => {
@@ -89,7 +89,6 @@ export const socketEvents = (builderContext) => {
       }
     });
   };
-  
 
   const handleEdgesChange = (edge) => {
     if (_source == "socket") {
@@ -113,12 +112,18 @@ export const socketEvents = (builderContext) => {
     backendEventClass.deleteNode(deletedNode);
   };
 
-  const handleConnectChange = (edge) => {
+  const handleConnectChange = (edge, create = false) => {
     if (_source == "socket") {
-      setEdges((eds) => eds.filter((edg) => (edg._id == edge._id ? edge : edg)));
+      setEdges((eds) =>
+        eds.filter((edg) => (edg._id == edge._id ? edge : edg))
+      );
     }
     if (_source == "socket") return;
-    backendEventClass.updateEdge(edge);
+    if (create) {
+      backendEventClass.createEdge(edge);
+    } else {
+      backendEventClass.updateEdge(edge);
+    }
   };
 
   const handleNodeClick = (event, node) => {

@@ -25,6 +25,7 @@ const Core = () => {
 };
 
 const App = ({ type = "builder", nodes, edges, oas, builderId, getNodeStruc }) => {
+  console.warn(edges)
   return (
     <AppProvider
       type={type}

@@ -40,7 +40,7 @@ export default memo(({ data, id }) => {
 
   useEffect(() => {
     const ReleventEdges2 = edges.filter(
-      (edge) => edge.targetHandle == `flow-target-${id}-scriptAccept`
+      (edge) => edge.targetHandle == `scriptAccept`
     );
 
     let newScript2 = `//Connect nodes to create variables\n`;
@@ -59,7 +59,7 @@ export default memo(({ data, id }) => {
 
   useEffect(() => {
     const ReleventEdges = edges.filter(
-      (edge) => edge.targetHandle == `flow-target-${id}-scriptAccept`
+      (edge) => edge.targetHandle == `scriptAccept`
     );
 
     let newScript = `//Connect nodes to create variables\n`;

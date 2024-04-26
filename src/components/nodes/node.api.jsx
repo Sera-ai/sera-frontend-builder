@@ -38,12 +38,12 @@ export default memo((node) => {
           <FlowComponent
             data={{
               target: {
-                id: `flow-target-${node.id}-(${fieldItem.name})`,
+                id: fieldItem.name,
                 type: fieldItem.schema.type,
                 title: fieldItem.name,
               },
               source: {
-                id: `flow-source-${node.id}-(${fieldItem.name})`,
+                id: fieldItem.name,
                 type: fieldItem.schema.type,
                 title: fieldItem.name,
               },
@@ -118,7 +118,7 @@ export default memo((node) => {
         }}
         handleData={{
           headerType: data.headerType,
-          id: `flow-target-${node.id}-start`,
+          id:`sera_start`,
           type: null,
           title: null,
         }}
@@ -138,12 +138,12 @@ export default memo((node) => {
               top="maxi"
               data={{
                 target: {
-                  id: `flow-target-${node.id}-start`,
+                  id:`sera_start`,
                   type: null,
                   title: "start",
                 },
                 source: {
-                  id: `flow-source-${node.id}-end`,
+                  id:`sera_end`,
                   type: null,
                   title: "Continue",
                 },
