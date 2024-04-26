@@ -253,6 +253,15 @@
   background-color: #1e1e1e;
 }
 
+.eventBG {
+  background-color: #ff4747;
+}
+
+.eventEdge {
+  border-color: #ff4747;
+  background-color: #1e1e1e;
+}
+
 .context-menu button:hover {
   background: white;
 }

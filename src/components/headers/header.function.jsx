@@ -6,7 +6,7 @@ import booleanLogo from "../../assets/icons/radix-icons_component-boolean.png";
 import { EventIcon } from "../../../../../src/assets/assets.svg";
 import { Handle, Position } from "reactflow";
 
-export default memo(({ data, name = null, id, left = false }) => {
+export default memo(({ data, left = false }) => {
   const apiLogo = {
     integerLogo: integerLogo,
     stringLogo: stringLogo,
@@ -20,6 +20,8 @@ export default memo(({ data, name = null, id, left = false }) => {
       case "eventNode":
         return "Event Start";
       case "boolean":
+        return data.title || varfunction;
+      case "event":
         return data.title || varfunction;
       default:
         return varfunction;
@@ -43,7 +45,7 @@ export default memo(({ data, name = null, id, left = false }) => {
         )}
         <div className="functionTitle">{headerText(data.function)}</div>
         <div className="flex flex-grow" />
-        {!left && (
+        {left == false && (
           <Handle
             type="source"
             position={Position.Right}

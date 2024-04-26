@@ -1,12 +1,32 @@
-import React, { memo } from "react";
+import React, { memo, useState, useEffect } from "react";
 import Collapsible from "react-collapsible";
 import stringLogo from "../../assets/icons/tabler_text-recognition.svg";
 import booleanLogo from "../../assets/icons/radix-icons_component-boolean.png";
 import integerLogo from "../../assets/icons/tabler_decimal.svg";
 import arrayLogo from "../../assets/icons/tabler_brackets-contain.svg";
 import { EventIcon } from "../../../../../src/assets/assets.svg";
+import { useAppContext } from "../../AppContext";
 
-export default memo(({ oas, type }) => {
+
+export default memo(({ type, playbook }) => {
+  const { getNodeStruc, playbookId } = useAppContext();
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    async function getStruc() {
+      try {
+        const res = await getNodeStruc(playbookId);
+        console.log(res);
+        setItems(res);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    if (type == "event") {
+      getStruc();
+    }
+  }, []);
+
   const onDragStart = (event, nodeType) => {
     event.dataTransfer.setData(
       "application/reactflow",
@@ -17,7 +37,9 @@ export default memo(({ oas, type }) => {
 
   return (
     <aside>
-      {type == "event" && <EventNodes onDragStart={onDragStart} />}
+      {type == "event" && (
+        <EventNodes onDragStart={onDragStart} eventNodeList={items} />
+      )}
       <GenericNodes onDragStart={onDragStart} />
     </aside>
   );
@@ -118,147 +140,45 @@ const GenericNodes = ({ onDragStart }) => {
   );
 };
 
-const EventNodes = ({ onDragStart }) => {
+const EventNodes = ({ onDragStart, eventNodeList }) => {
   return (
     <Collapsible
       contentOuterClassName="nodeCategoryContainer"
       contentInnerClassName="nodeCategoryInner"
       triggerClassName="text-xs uppercase px-4"
       triggerOpenedClassName="text-xs uppercase px-4"
-      trigger="Event Nodes"
+      trigger="Event Start Nodes"
       open
       transitionTime={100}
     >
       <div className="scrollContainer" style={{ maxHeight: 240 }}>
-        <div
-          className="dndnode"
-          onDragStart={(event) =>
-            onDragStart(event, { type: "eventNode", name: "seraStart" })
-          }
-          draggable
-        >
-          <div>
-            <EventIcon size={"16"} />
-          </div>
-          <div>
-            <div className="nodeTitle">Sera Start</div>
-            <div className="nodeSubtitle">Event for when Sera launches</div>
-          </div>
-        </div>
-        <div
-          className="dndnode"
-          onDragStart={(event) =>
-            onDragStart(event, {
-              type: "eventNode",
-              name: "seraUserInteraction",
-            })
-          }
-          draggable
-        >
-          <div>
-            <EventIcon size={"16"} />
-          </div>
-          <div>
-            <div className="nodeTitle">User Interaction</div>
-            <div className="nodeSubtitle">
-              Event for user interacting in Sera
-            </div>
-          </div>
-        </div>
-        <div
-          className="dndnode"
-          onDragStart={(event) =>
-            onDragStart(event, {
-              type: "eventNode",
-              name: "seraPlatformResource",
-            })
-          }
-          draggable
-        >
-          <div>
-            <EventIcon size={"16"} />
-          </div>
-          <div>
-            <div className="nodeTitle">Platform Resource</div>
-            <div className="nodeSubtitle">Event for Sera host resource</div>
-          </div>
-        </div>
-        <div
-          className="dndnode"
-          onDragStart={(event) =>
-            onDragStart(event, { type: "eventNode", name: "seraRoundTripTime" })
-          }
-          draggable
-        >
-          <div>
-            <EventIcon size={"16"} />
-          </div>
-          <div>
-            <div className="nodeTitle">Round-trip Time</div>
-            <div className="nodeSubtitle">Event for proxy speeds</div>
-          </div>
-        </div>
-        <div
-          className="dndnode"
-          onDragStart={(event) =>
-            onDragStart(event, { type: "eventNode", name: "seraOasCreate" })
-          }
-          draggable
-        >
-          <div>
-            <EventIcon size={"16"} />
-          </div>
-          <div>
-            <div className="nodeTitle">OAS Create</div>
-            <div className="nodeSubtitle">Event for creating OAS</div>
-          </div>
-        </div>
-        <div
-          className="dndnode"
-          onDragStart={(event) =>
-            onDragStart(event, { type: "eventNode", name: "seraOasManualChange" })
-          }
-          draggable
-        >
-          <div>
-            <EventIcon size={"16"} />
-          </div>
-          <div>
-            <div className="nodeTitle">OAS Manual Change</div>
-            <div className="nodeSubtitle">Event for user changed OAS</div>
-          </div>
-        </div>
-        <div
-          className="dndnode"
-          onDragStart={(event) =>
-            onDragStart(event, { type: "eventNode", name: "seraOasLearnedChange" })
-          }
-          draggable
-        >
-          <div>
-            <EventIcon size={"16"} />
-          </div>
-          <div>
-            <div className="nodeTitle">OAS Learn Change</div>
-            <div className="nodeSubtitle">Event for learning mode change</div>
-          </div>
-        </div>
-        <div
-          className="dndnode"
-          onDragStart={(event) =>
-            onDragStart(event, { type: "eventNode", name: "seraOasDelete" })
-          }
-          draggable
-        >
-          <div>
-            <EventIcon size={"16"} />
-          </div>
-          <div>
-            <div className="nodeTitle">OAS Delete</div>
-            <div className="nodeSubtitle">Event for deleting OAS</div>
-          </div>
-        </div>
+        <GetEventNodeList
+          onDragStart={onDragStart}
+          eventNodeList={eventNodeList}
+        />
       </div>
     </Collapsible>
   );
+};
+
+const GetEventNodeList = ({ onDragStart, eventNodeList }) => {
+  return eventNodeList.map((eventNode) => {
+    return (
+      <div
+        className="dndnode"
+        onDragStart={(event) =>
+          onDragStart(event, { type: "eventNode", name: eventNode.type })
+        }
+        draggable
+      >
+        <div>
+          <EventIcon size={"16"} />
+        </div>
+        <div>
+          <div className="nodeTitle">{eventNode.type}</div>
+          <div className="nodeSubtitle">{eventNode.description}</div>
+        </div>
+      </div>
+    );
+  });
 };

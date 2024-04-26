@@ -223,6 +223,7 @@ export const triggerEvents = (builderContext) => {
           style: { stroke: lineColor },
         });
       } else if (targetColorClass == "anyEdge" && sourceColorClass != "nullEdge") {
+        console.log("target edge")
         let lineColor = "#fff";
         const element = document.querySelector(`.${sourceColorClass}`);
         if (element) {

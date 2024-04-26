@@ -24,7 +24,7 @@ const Core = () => {
   );
 };
 
-const App = ({ type = "builder", nodes, edges, oas, builderId, getNodeStruc }) => {
+const App = ({ type = "builder", nodes, edges, oas, builderId, getNodeStruc, playbook }) => {
   console.warn(edges)
   return (
     <AppProvider
@@ -34,6 +34,7 @@ const App = ({ type = "builder", nodes, edges, oas, builderId, getNodeStruc }) =
       initialOas={oas}
       builderId={builderId}
       getNodeStruc={getNodeStruc}
+      playbook={playbook}
     >
       <Core />
     </AppProvider>

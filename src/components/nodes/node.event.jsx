@@ -10,7 +10,7 @@ import { useAppContext } from "../../AppContext";
 import { useEffect } from "react";
 
 export default memo((node) => {
-  const { getNodeStruc } = useAppContext();
+  const { getNodeStruc, playbookId } = useAppContext();
   // Default states
   const [functionHeaderData, setFunctionHeaderData] = useState({
     function: node.type,
@@ -22,7 +22,7 @@ export default memo((node) => {
   useEffect(() => {
     async function getStruc() {
       try {
-        const res = await getNodeStruc("sera-default", node.data?.inputData);
+        const res = await getNodeStruc(playbookId, node.data?.inputData);
         setItems(res.data);
       } catch (e) {
         console.log(e);
@@ -38,12 +38,12 @@ export default memo((node) => {
           <FlowComponent
             data={{
               target: {
-                id: `flow-target-${node.id}-(${fieldItem})`,
+                id: fieldItem,
                 type: items[fieldItem],
                 title: fieldItem,
               },
               source: {
-                id: `flow-source-${node.id}-(${fieldItem})`,
+                id: fieldItem,
                 type: items[fieldItem],
                 title: fieldItem,
               },

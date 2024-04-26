@@ -88,8 +88,7 @@ const FlowComponent = () => {
           setSelectedEndpoint={navigateBuilder}
           builder
         >
-          <ItemBarComponent
-            oas={builderContext.oas}
+          <ItemBar
             type={builderContext.builderType}
           />
         </SideBarComponent>
@@ -101,10 +100,6 @@ const FlowComponent = () => {
     </ReactFlowProvider>
   );
 };
-
-const ItemBarComponent = memo(({ oas, type }) => (
-  <ItemBar oas={oas} type={type} />
-));
 
 const DetailsBarComponent = memo(({ nodeDetails }) => {
   const { nodes, edges } = useAppContext();

@@ -26,10 +26,8 @@ export default memo(
       updateData.inputData = dataUpdate.inputData;
       setInputFieldData(updateData);
       console.log("dataUpdate", dataUpdate.inputData);
-      updateNodeInternals(id, {
-        data: data.function == "string" ? dataUpdate : parseInt(dataUpdate),
-      });
-      socket.emit("updateField", { id: `inputfor-${id}`, value: newData });
+      updateNodeInternals(id, { data: dataUpdate });
+      socket.emit("updateField", { id: id, value: newData, node: node });
     };
 
     const NodeFieldTitle = () => {
@@ -52,7 +50,10 @@ export default memo(
         <Handle
           type="target"
           position={Position.Left}
-          id={"flow-target-" + id + "-" + data.function}
+          id={
+            "seraFunction" +
+            data.function.replace(/^./, (str) => str.toUpperCase())
+          }
           className={`ioHandle anyEdge`}
         />
       );
@@ -63,7 +64,10 @@ export default memo(
         <Handle
           type="source"
           position={Position.Right}
-          id={"flow-source-" + id + "-" + data.function}
+          id={
+            "seraFunction" +
+            data.function.replace(/^./, (str) => str.toUpperCase())
+          }
           className={`ioHandle ${data.function}Edge`}
         />
       );

@@ -10,6 +10,7 @@ export const AppProvider = ({
   initialEdges = [],
   initialOas = {},
   builderId = null,
+  playbook = null,
   children,
   getNodeStruc = () => {},
 }) => {
@@ -31,6 +32,7 @@ export const AppProvider = ({
   const [menu, setMenu] = useState(null);
   const [paneMenu, setPaneMenu] = useState(null);
   const [builder, setBuilder] = useState(builderId);
+  const [playbookId, setPlaybook] = useState(playbook);
 
   const flowRef = useRef(null);
   const wrapperRef = useRef(null);
@@ -67,6 +69,7 @@ export const AppProvider = ({
         builderType,
         builder,
         getNodeStruc,
+        playbookId
       }}
     >
       {children}
