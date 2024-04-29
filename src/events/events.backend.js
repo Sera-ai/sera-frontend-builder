@@ -160,7 +160,7 @@ export const backendEvents = (builderContext = {}) => {
 
   const createNode = (data) => {
     const url = `/manage/endpoint/node?type=${builderType}`;
-
+    console.log("creatnode", data);
     return fetch(url, {
       method: "POST",
       headers: {

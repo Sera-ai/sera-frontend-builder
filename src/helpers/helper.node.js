@@ -4,8 +4,10 @@ export const newNodeDefault = (input) => {
     integerNode: "integer",
     stringNode: "string",
     arrayNode: "array",
+    booleanNode: "boolean",
     scriptNode: "script",
     eventNode: "event",
+    toastNode: "toast",
     sendEventNode: "event",
   };
 
@@ -13,8 +15,10 @@ export const newNodeDefault = (input) => {
     integerNode: "functionNode",
     stringNode: "functionNode",
     arrayNode: "functionNode",
+    booleanNode: "booleanNode",
     scriptNode: "scriptNode",
     eventNode: "eventNode",
+    toastNode: "toastNode",
     sendEventNode: "sendEventNode",
   };
 

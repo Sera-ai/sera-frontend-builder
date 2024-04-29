@@ -12,6 +12,7 @@ import functionNode from "./nodes/node.function";
 import scriptNode from "./nodes/node.script";
 import sendEventNode from "./nodes/node.sendEvent";
 import eventNode from "./nodes/node.event";
+import toastNode from "./nodes/node.toast";
 
 import { triggerEvents } from "../events/events.triggers";
 import { backendEvents } from "../events/events.backend";
@@ -43,6 +44,7 @@ const FlowComponent = () => {
       scriptNode,
       sendEventNode,
       eventNode,
+      toastNode,
     }),
     []
   );
@@ -88,9 +90,7 @@ const FlowComponent = () => {
           setSelectedEndpoint={navigateBuilder}
           builder
         >
-          <ItemBar
-            type={builderContext.builderType}
-          />
+          <ItemBar type={builderContext.builderType} />
         </SideBarComponent>
       )}
       <FlowSetup nodeTypes={nodeTypes} edgeTypes={edgeTypes} />

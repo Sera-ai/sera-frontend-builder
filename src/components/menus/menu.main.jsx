@@ -4,9 +4,8 @@ import stringLogo from "../../assets/icons/tabler_text-recognition.svg";
 import booleanLogo from "../../assets/icons/radix-icons_component-boolean.png";
 import integerLogo from "../../assets/icons/tabler_decimal.svg";
 import arrayLogo from "../../assets/icons/tabler_brackets-contain.svg";
-import { EventIcon } from "../../../../../src/assets/assets.svg";
+import { EventIcon, ToastIcon } from "../../../../../src/assets/assets.svg";
 import { useAppContext } from "../../AppContext";
-
 
 export default memo(({ type, playbook }) => {
   const { getNodeStruc, playbookId } = useAppContext();
@@ -40,6 +39,7 @@ export default memo(({ type, playbook }) => {
       {type == "event" && (
         <EventNodes onDragStart={onDragStart} eventNodeList={items} />
       )}
+      {type == "event" && <EventFunctionNodes onDragStart={onDragStart} />}
       <GenericNodes onDragStart={onDragStart} />
     </aside>
   );
@@ -133,6 +133,36 @@ const GenericNodes = ({ onDragStart }) => {
           <div>
             <div className="nodeTitle">Create Event</div>
             <div className="nodeSubtitle">Node for event logs</div>
+          </div>
+        </div>
+      </div>
+    </Collapsible>
+  );
+};
+
+const EventFunctionNodes = ({ onDragStart }) => {
+  return (
+    <Collapsible
+      contentOuterClassName="nodeCategoryContainer"
+      contentInnerClassName="nodeCategoryInner"
+      triggerClassName="text-xs uppercase px-4"
+      triggerOpenedClassName="text-xs uppercase px-4"
+      trigger="Event Function Nodes"
+      open
+      transitionTime={100}
+    >
+      <div className="scrollContainer" style={{ maxHeight: 240 }}>
+        <div
+          className="dndnode"
+          onDragStart={(event) => onDragStart(event, { type: "toastNode" })}
+          draggable
+        >
+          <div>
+            <ToastIcon />
+          </div>
+          <div className="functionText">
+            <div className="nodeTitle">Create Toast</div>
+            <div className="nodeSubtitle">Create popup notification</div>
           </div>
         </div>
       </div>

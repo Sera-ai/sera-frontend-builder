@@ -46,7 +46,7 @@ export default memo(({ data, id }) => {
     let newScript2 = `//Connect nodes to create variables\n`;
 
     ReleventEdges2.map((edge) => {
-      newScript2 = newScript2 + `let ${normalizeVarName(edge.sourceHandle)}\n`;
+      newScript2 = newScript2 + `let ${edge.source}_${normalizeVarName(edge.sourceHandle)}\n`;
     });
     updateVariables(newScript2);
 
@@ -64,7 +64,7 @@ export default memo(({ data, id }) => {
 
     let newScript = `//Connect nodes to create variables\n`;
     ReleventEdges.map((edge) => {
-      newScript = newScript + `let ${normalizeVarName(edge.sourceHandle)}\n`;
+      newScript = newScript + `let ${edge.source}_${normalizeVarName(edge.sourceHandle)}\n`;
     });
 
     updateVariables(newScript);
@@ -100,7 +100,7 @@ export default memo(({ data, id }) => {
             <Handle
               type="source"
               position={Position.Right}
-              id={`flow-source-${id}-${param}`}
+              id={`${param}`}
               className={`anyEdge ioHandle`}
             />
           </div>
@@ -122,7 +122,7 @@ export default memo(({ data, id }) => {
           <Handle
             type="target"
             position={Position.Left}
-            id={`flow-target-${id}-scriptAccept`}
+            id={"scriptAccept"}
             className={`scriptHandle anyEdge flex flex-grow`}
           />
         </div>
@@ -146,12 +146,12 @@ export default memo(({ data, id }) => {
               top="maxi"
               data={{
                 target: {
-                  id: `flow-target-${id}-start`,
+                  id: `sera_start`,
                   type: null,
                   title: "Start",
                 },
                 source: {
-                  id: `flow-source-${id}-continue`,
+                  id: `sera_end`,
                   type: null,
                   title: "Continue",
                 },
@@ -162,12 +162,12 @@ export default memo(({ data, id }) => {
               top="maxi"
               data={{
                 target: {
-                  id: `flow-target-${id}-start`,
+                  id: `sera_start`,
                   type: null,
                   title: "start",
                 },
                 source: {
-                  id: `flow-source-${id}-reject`,
+                  id: `sera_reject`,
                   type: null,
                   title: "Failure",
                 },

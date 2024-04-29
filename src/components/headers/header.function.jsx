@@ -3,7 +3,7 @@ import integerLogo from "../../assets/icons/tabler_decimal.svg";
 import stringLogo from "../../assets/icons/tabler_text-recognition.svg";
 import arrayLogo from "../../assets/icons/tabler_brackets-contain.svg";
 import booleanLogo from "../../assets/icons/radix-icons_component-boolean.png";
-import { EventIcon } from "../../../../../src/assets/assets.svg";
+import { EventIcon, ToastIcon } from "../../../../../src/assets/assets.svg";
 import { Handle, Position } from "reactflow";
 
 export default memo(({ data, left = false }) => {
@@ -19,12 +19,21 @@ export default memo(({ data, left = false }) => {
     switch (varfunction) {
       case "eventNode":
         return "Event Start";
-      case "boolean":
-        return data.title || varfunction;
-      case "event":
-        return data.title || varfunction;
       default:
-        return varfunction;
+        return data.title || varfunction;
+    }
+  };
+
+  const getIcon = () => {
+    switch (data.function) {
+      case "eventNode":
+        return <EventIcon size={"16"} />;
+      case "toast":
+        return <ToastIcon />;
+      default:
+        return (
+          <img style={{ height: 16 }} src={apiLogo[data.function + "Logo"]} />
+        );
     }
   };
   return (
@@ -38,11 +47,7 @@ export default memo(({ data, left = false }) => {
             className={`ioHandle nullEdge`}
           />
         )}
-        {data.function ? (
-          <EventIcon size={"16"} />
-        ) : (
-          <img style={{ height: 16 }} src={apiLogo[data.function + "Logo"]} />
-        )}
+        {getIcon()}
         <div className="functionTitle">{headerText(data.function)}</div>
         <div className="flex flex-grow" />
         {left == false && (
