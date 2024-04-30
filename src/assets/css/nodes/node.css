@@ -212,14 +212,25 @@
   background-color: #a456e5;
 }
 
-.eventNodeBG {
-  background-color: #ff4747;
-}
-
 .integerEdge {
   border-color: #a456e5;
   background-color: #1e1e1e;
 }
+
+.numberBG {
+  background-color: #a456e5;
+}
+
+.numberEdge {
+  border-color: #a456e5;
+  background-color: #1e1e1e;
+}
+
+.eventNodeBG {
+  background-color: #ff4747;
+}
+
+
 
 .stringBG {
   background-color: #2bb74a;

@@ -69,6 +69,8 @@ function getHex(type) {
   switch (type) {
     case "integer":
       return "#a456e5";
+    case "number":
+      return "#a456e5";
     case "flow":
       return "#ffffff";
     case "string":
