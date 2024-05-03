@@ -1,5 +1,5 @@
 import { io } from "socket.io-client";
-export const socket = io(`wss://${window.location.hostname}`);
+export const socket = io(`wss://${window.location.hostname}::${window.location.port}`);
 import { triggerEvents } from "../events/events.triggers";
 import { socketEvents } from "../events/events.socket";
 
