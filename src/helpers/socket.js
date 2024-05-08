@@ -1,9 +1,14 @@
 import { io } from "socket.io-client";
-export const socket = io(`wss://${window.location.hostname}::${window.location.port}`);
+export const socket = io(
+  `wss://${window.location.hostname}:${__BE_ROUTER_PORT__}`
+);
 import { triggerEvents } from "../events/events.triggers";
 import { socketEvents } from "../events/events.socket";
+import { toast } from "react-toastify";
 
 export const useSocket = (builderContext) => {
+  const notify = (str) => toast(str);
+
   const socketEventClass = socketEvents({
     ...builderContext,
     _source: "socket",
@@ -13,8 +18,10 @@ export const useSocket = (builderContext) => {
     _source: "socket",
   });
 
-  function onConnectSocket() {
-    console.log("socket connected");
+  if(socket?.id){
+    notify(`Builder Socket Connected`);
+
+    console.log("Builder Socket Connected");
     const hash = socket.id
       .split("")
       .reduce((hash, char) => char.charCodeAt(0) + ((hash << 5) - hash), 0);
@@ -29,7 +36,6 @@ export const useSocket = (builderContext) => {
     builderContext.setBgColor("#" + color);
   }
 
-  socket.on("connectSuccessful", onConnectSocket);
 
   socket.on("userDisconnected", triggerEventClass.handleUserDisconnect);
   socket.on("mouseMoved", triggerEventClass.viewPeerPointers);

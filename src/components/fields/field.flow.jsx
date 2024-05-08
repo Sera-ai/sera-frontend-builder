@@ -3,7 +3,7 @@ import { Handle, Position } from "reactflow";
 
 //<input className="nodrag" type="color" onChange={data.onChange} defaultValue={data.color} />
 
-export default memo(({ data, top = ""}) => {
+export default memo(({ data, top = "" }) => {
   const LeftHandle = () => {
     return (
       <Handle
@@ -27,18 +27,30 @@ export default memo(({ data, top = ""}) => {
   };
 
   return (
-    <div className={`nodeHeaderContentDetailsTag ${top}`}>
-      {(data.nodeType == 1 || data.nodeType == 2) && <LeftHandle />}
+    <div className={`nodeHeaderContentDetailsTag nodeContentField ${top}`}>
+      {(data.nodeType == 1 || data.nodeType == 2) && (
+        <div
+          className={`nodeHeaderHandle handleLeft ${data.target.type}Border`}
+        >
+          <LeftHandle />
+        </div>
+      )}
       {data.nodeType == 2 && (
-        <div style={{ fontSize: 10, color: "#fff" }}>{data.target.title}</div>
+        <div className="nodeFieldText">{data.target.title}</div>
       )}
-
-      <div style={{ fontSize: 10, color: "#ffffff70", flex: 1 }}></div>
-
       {data.nodeType == 0 && (
-        <div style={{ fontSize: 10, color: "#fff" }}>{data.source.title}</div>
+        <div className="nodeFieldText">{data.source.title}</div>
       )}
-      {(data.nodeType == 1 || data.nodeType == 0) && <RightHandle />}
+
+      <div style={{ color: "#ffffff70", flex: 1 }}></div>
+
+      {(data.nodeType == 1 || data.nodeType == 0) && (
+        <div
+          className={`nodeHeaderHandle handleRight ${data.source.type}Border`}
+        >
+          <RightHandle />
+        </div>
+      )}
     </div>
   );
 });

@@ -32,33 +32,53 @@ export default memo(({ data, left = false }) => {
         return <ToastIcon />;
       default:
         return (
-          <img style={{ height: 16 }} src={apiLogo[data.function + "Logo"]} />
+          <img
+            style={{ height: 12 }}
+            className="pl-2"
+            src={apiLogo[data.function + "Logo"]}
+          />
         );
     }
   };
   return (
-    <div className={`nodeHeader ${data.function}BG`}>
-      <div className="nodeHeaderDetails">
-        {left && (
+    <div
+      className={`nodeHeader ${data.function}BG`}
+      style={{
+        backgroundColor: `#ffffff10`,
+        borderWidth: 1,
+        borderRadius: 4,
+        borderColor: `#ffffff80`,
+      }}
+    >
+      {left && (
+        <div
+          className="nodeHeaderHandle"
+          style={{ borderColor: "#ffffff50", borderRightWidth: 1 }}
+        >
           <Handle
             type="target"
             position={Position.Left}
             id={`sera_start`}
             className={`ioHandle nullEdge`}
           />
-        )}
-        {getIcon()}
-        <div className="functionTitle">{headerText(data.function)}</div>
-        <div className="flex flex-grow" />
-        {left == false && (
+        </div>
+      )}
+      {getIcon()}
+      <div className="functionTitle">{headerText(data.function)}</div>
+      <div className="flex flex-grow" />
+      {left == false && (
+        <div
+          className="nodeHeaderHandle"
+          style={{ borderColor: "#ffffff50", borderLeftWidth: 1 }}
+        >
           <Handle
             type="source"
             position={Position.Right}
             id={`sera_end`}
             className={`ioHandle nullEdge`}
           />
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 });

@@ -72,7 +72,7 @@ export const backendEvents = (builderContext = {}) => {
       builder_id,
     };
 
-    const url = `/manage/endpoint/create`;
+    const url = `https://${window.location.hostname}:${__BE_ROUTER_PORT__}/manage/endpoint/create`;
     console.log(JSON.stringify(data2));
     return fetch(url, {
       method: "POST",
@@ -107,7 +107,7 @@ export const backendEvents = (builderContext = {}) => {
       builder_id: builderId,
     };
 
-    const url = `/manage/endpoint/update`;
+    const url = `https://${window.location.hostname}:${__BE_ROUTER_PORT__}/manage/endpoint/update`;
 
     return fetch(url, {
       method: "POST",
@@ -141,7 +141,7 @@ export const backendEvents = (builderContext = {}) => {
       method: method,
     };
 
-    const url = `/manage/builder/create`;
+    const url = `https://${window.location.hostname}:${__BE_ROUTER_PORT__}/manage/builder/create`;
 
     return fetch(url, {
       method: "POST",
@@ -159,7 +159,7 @@ export const backendEvents = (builderContext = {}) => {
   }
 
   const createNode = (data) => {
-    const url = `/manage/endpoint/node?type=${builderType}`;
+    const url = `https://${window.location.hostname}:${__BE_ROUTER_PORT__}/manage/endpoint/node?type=${builderType}`;
     console.log("creatnode", data);
     return fetch(url, {
       method: "POST",
@@ -173,7 +173,7 @@ export const backendEvents = (builderContext = {}) => {
   };
 
   const deleteNode = (data) => {
-    const url = `/manage/endpoint/node?type=${builderType}`;
+    const url = `https://${window.location.hostname}:${__BE_ROUTER_PORT__}/manage/endpoint/node?type=${builderType}`;
 
     return fetch(url, {
       method: "DELETE",
@@ -187,7 +187,7 @@ export const backendEvents = (builderContext = {}) => {
   };
 
   const createEdge = (data) => {
-    const url = `/manage/endpoint/edge?type=${builderType}`;
+    const url = `https://${window.location.hostname}:${__BE_ROUTER_PORT__}/manage/endpoint/edge?type=${builderType}`;
 
     return fetch(url, {
       method: "POST",
@@ -201,7 +201,7 @@ export const backendEvents = (builderContext = {}) => {
   };
 
   const removeEdge = (data) => {
-    const url = `/manage/endpoint/edge?type=${builderType}`;
+    const url = `https://${window.location.hostname}:${__BE_ROUTER_PORT__}/manage/endpoint/edge?type=${builderType}`;
 
     return fetch(url, {
       method: "DELETE",
@@ -215,7 +215,7 @@ export const backendEvents = (builderContext = {}) => {
   };
 
   const updateEdge = (data) => {
-    const url = `/manage/endpoint/edge`;
+    const url = `https://${window.location.hostname}:${__BE_ROUTER_PORT__}/manage/endpoint/edge`;
 
     return fetch(url, {
       method: "PATCH",

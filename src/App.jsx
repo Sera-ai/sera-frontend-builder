@@ -6,17 +6,22 @@ import "./assets/css/sidebar.css";
 import "./assets/css/mouse.css";
 import "./assets/css/menu/detail.css";
 import "./assets/css/index.css";
+import "@fontsource/ibm-plex-mono"; // Defaults to weight 400
 
 import { useSocket } from "./helpers/socket";
 import { AppProvider, useAppContext } from "./AppContext";
 import FlowComponent from "./components/flow.component";
 import "@fortawesome/fontawesome-svg-core/styles.css";
+import { useEffect } from "react";
 
 const Core = () => {
   const builderContext = useAppContext(); // Access context
 
   // Refs
-  useSocket(builderContext);
+  useEffect(() => {
+    useSocket(builderContext);
+  }, []);
+
   return (
     <div className="sera-flow" style={{ height: "100%", width: "100%" }}>
       <FlowComponent />
@@ -24,8 +29,16 @@ const Core = () => {
   );
 };
 
-const App = ({ type = "builder", nodes, edges, oas, builderId, getNodeStruc, playbook }) => {
-  console.warn(edges)
+const App = ({
+  type = "builder",
+  nodes,
+  edges,
+  oas,
+  builderId,
+  getNodeStruc,
+  playbook,
+}) => {
+  console.warn(edges);
   return (
     <AppProvider
       type={type}

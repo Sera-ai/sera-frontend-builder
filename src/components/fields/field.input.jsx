@@ -72,26 +72,24 @@ export default memo(
         />
       );
     };
-
-    <tr>
-      <td>
-        {(data.nodeType == 1 || data.nodeType == 2) && <LeftHandle />}
-        {data.nodeType == 0 && <NodeFieldTitle node={data.source} />}
-      </td>
-      <td className={(data.nodeType == 1 || data.nodeType == 0) && "endHandle"}>
-        {(data.nodeType == 1 || data.nodeType == 0) && <RightHandle />}
-        {data.nodeType == 2 && <NodeFieldTitle node={data.target} />}
-      </td>
-    </tr>;
-
     return (
-      <div className="nodeHeaderContentDetails">
-        {left && <LeftHandle />}
+      <div className="nodeHeaderContentDetailsTag nodeContentField">
+        {left && (
+          <div
+            className={`nodeHeaderHandle handleLeft`}
+          >
+            <LeftHandle />
+          </div>
+        )}
         {data.nodeType == 0 && <NodeFieldTitle node={data.target} />}
 
         <div style={{ fontSize: 10, color: "#ffffff70", flex: 1 }}></div>
 
-        {(data.nodeType == 1 || data.nodeType == 0) && !left && <RightHandle />}
+        {(data.nodeType == 1 || data.nodeType == 0) && !left && (
+          <div className={`nodeHeaderHandle handleRight`}>
+            <RightHandle />
+          </div>
+        )}
       </div>
     );
   }

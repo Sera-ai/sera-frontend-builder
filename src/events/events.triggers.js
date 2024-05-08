@@ -83,16 +83,17 @@ export const triggerEvents = (builderContext) => {
   };
 
   const onMouseMove = (event) => {
-    const bounds = builderContext.flowRef.current.getBoundingClientRect();
-    const position = builderContext.rfi.screenToFlowPosition({
-      x: event.clientX,
-      y: event.clientY,
-    });
-    socket.emit("mouseMove", {
-      x: position.x,
-      y: position.y,
-      color: builderContext.bgColor,
-    });
+    if (builderContext?.rfi?.screenToFlowPosition) {
+      const position = builderContext.rfi.screenToFlowPosition({
+        x: event.clientX,
+        y: event.clientY,
+      });
+      socket.emit("mouseMove", {
+        x: position.x,
+        y: position.y,
+        color: builderContext.bgColor,
+      });
+    }
   };
 
   const loadRFI = async (instance) => {
@@ -222,8 +223,11 @@ export const triggerEvents = (builderContext) => {
           animated: sourceColorClass == "nullEdge",
           style: { stroke: lineColor },
         });
-      } else if (targetColorClass == "anyEdge" && sourceColorClass != "nullEdge") {
-        console.log("target edge")
+      } else if (
+        targetColorClass == "anyEdge" &&
+        sourceColorClass != "nullEdge"
+      ) {
+        console.log("target edge");
         let lineColor = "#fff";
         const element = document.querySelector(`.${sourceColorClass}`);
         if (element) {
@@ -236,7 +240,10 @@ export const triggerEvents = (builderContext) => {
           animated: sourceColorClass == "nullEdge",
           style: { stroke: lineColor },
         });
-      } else if (sourceColorClass == "anyEdge"&& targetColorClass != "nullEdge") {
+      } else if (
+        sourceColorClass == "anyEdge" &&
+        targetColorClass != "nullEdge"
+      ) {
         let lineColor = "#fff";
         const element = document.querySelector(`.${targetColorClass}`);
         if (element) {
@@ -251,7 +258,6 @@ export const triggerEvents = (builderContext) => {
         });
 
         console.log("anyedge be matchin", params);
-
       } else {
         console.log("it dont be matchin");
       }

@@ -31,26 +31,24 @@ export default memo((node) => {
     getStruc();
   }, []);
 
-  const FieldItems = ({ collapsed = true }) => {
+  const FieldItems = () => {
     return Object.keys(items).map((fieldItem, int) => {
       return (
-        <div style={{ marginTop: !collapsed ? -16 : null }}>
-          <FlowComponent
-            data={{
-              target: {
-                id: fieldItem,
-                type: items[fieldItem],
-                title: fieldItem,
-              },
-              source: {
-                id: fieldItem,
-                type: items[fieldItem],
-                title: fieldItem,
-              },
-              nodeType: 0,
-            }}
-          />
-        </div>
+        <FlowComponent
+          data={{
+            target: {
+              id: fieldItem,
+              type: items[fieldItem],
+              title: fieldItem,
+            },
+            source: {
+              id: fieldItem,
+              type: items[fieldItem],
+              title: fieldItem,
+            },
+            nodeType: 0,
+          }}
+        />
       );
     });
   };
@@ -99,44 +97,20 @@ export default memo((node) => {
         </div>
       </div>
       <div>
-        <div
-          className="nodeToggleHeader"
-          onClick={() => {
-            const isCategoryIncluded = toggleItems.includes("Event Data");
-            const newToggleItems = isCategoryIncluded
-              ? toggleItems.filter((item) => item !== "Event Data") // Remove category if it's already included
-              : [...toggleItems, "Event Data"]; // Add category using spread syntax for immutability
-            changeToggle(newToggleItems);
-          }}
-        >
-          {"Event Data"}
-        </div>
+        <div className="nodeToggleHeader">{"Event Data"}</div>
 
         <div
           style={{
-            paddingTop: toggleItems.includes("Event Data") ? 5 : 0,
-            paddingBottom: toggleItems.includes("Event Data") ? 5 : 0,
+            paddingTop: 5,
+            paddingBottom: 5,
             overflow: "hidden",
-            maxHeight: toggleItems.includes("Event Data") ? undefined : 0,
+            gap: 5,
+            display: "flex",
+            flexDirection: "column",
           }}
         >
-          <FieldItems collapsed={toggleItems.includes("Event Data")} />
+          <FieldItems />
         </div>
-      </div>
-      <div
-        style={{
-          paddingTop: 1,
-          paddingBottom: 1,
-          textAlign: "center",
-          fontSize: 7,
-          borderTopWidth: 1,
-          borderTopColor: "#141414",
-          borderTopStyle: "solid",
-          backgroundColor: "#00000030",
-          cursor: "pointer",
-        }}
-      >
-        Edit Event Structure
       </div>
     </div>
   );

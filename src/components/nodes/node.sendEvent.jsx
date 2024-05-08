@@ -13,19 +13,13 @@ export default memo((node) => {
         left={null}
         data={{ function: "event", title: "Create Event" }}
       />
-      <div className="p-1">
-        <table className="outTable ">
-          <tbody>
-            <InputFieldComponent
-              data={node.data}
-              left
-              node={node}
-              id={node.id}
-              placeholder={"Event Name"}
-            />
-          </tbody>
-        </table>
-      </div>
+      <InputFieldComponent
+        data={node.data}
+        left
+        node={node}
+        id={node.id}
+        placeholder={"Event Name"}
+      />
     </div>
   );
 });

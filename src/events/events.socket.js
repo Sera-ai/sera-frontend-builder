@@ -133,7 +133,7 @@ export const socketEvents = (builderContext) => {
   async function setDetails(nodeData) {
     if (!nodeData) return;
     try {
-      const response = await fetch(`/manage/getNode?id=${nodeData._id}`, {
+      const response = await fetch(`https://${window.location.hostname}:${__BE_ROUTER_PORT__}/manage/getNode?id=${nodeData._id}`, {
         headers: { "x-sera-service": "be_builder" },
       });
       const jsonData = await response.json();

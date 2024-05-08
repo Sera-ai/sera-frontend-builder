@@ -5,6 +5,11 @@ import { Handle, Position } from "reactflow";
 import FlowComponent from "../fields/field.flow";
 import ApiHeaderComponent from "../headers/header.api";
 import TagComponent from "../headers/header.tag";
+import {
+  BuilderIcon,
+  CaratIcon,
+  InventoryIcon,
+} from "../../../../../src/assets/assets.svg";
 
 export default memo((node) => {
   const data = node.data;
@@ -34,23 +39,21 @@ export default memo((node) => {
   const FieldItems = ({ collapsed, fieldData }) => {
     return fieldData.map((fieldItem, int) => {
       return (
-        <div style={{ marginTop: !collapsed ? -16 : null }}>
-          <FlowComponent
-            data={{
-              target: {
-                id: fieldItem.name,
-                type: fieldItem.schema.type,
-                title: fieldItem.name,
-              },
-              source: {
-                id: fieldItem.name,
-                type: fieldItem.schema.type,
-                title: fieldItem.name,
-              },
-              nodeType: data.header.type,
-            }}
-          />
-        </div>
+        <FlowComponent
+          data={{
+            target: {
+              id: fieldItem.name,
+              type: fieldItem.schema.type,
+              title: fieldItem.name,
+            },
+            source: {
+              id: fieldItem.name,
+              type: fieldItem.schema.type,
+              title: fieldItem.name,
+            },
+            nodeType: data.header.type,
+          }}
+        />
       );
     });
   };
@@ -60,7 +63,10 @@ export default memo((node) => {
       const category = field;
       if (data[fieldKey][field].length == 0) return;
       return (
-        <div>
+        <div
+          className="nodeContentParent"
+          style={{ maxHeight: toggleItems.includes(category) ? undefined : 24 }}
+        >
           <div
             className="nodeToggleHeader"
             onClick={() => {
@@ -71,16 +77,18 @@ export default memo((node) => {
               changeToggle(newToggleItems);
             }}
           >
+            <CaratIcon open={toggleItems.includes(category)} />
             {category}
+            <div style={{ color: "#ffffff70", flex: 1 }}></div>
+            {!toggleItems.includes(category) && (
+              <div className="nodeHeaderHandle noBG handleRight">
+                {<BuilderIcon size="12" color="#ffffff80" />}
+              </div>
+            )}
           </div>
 
           <div
-            style={{
-              paddingTop: toggleItems.includes(category) ? 5 : 0,
-              paddingBottom: toggleItems.includes(category) ? 5 : 0,
-              overflow: "hidden",
-              maxHeight: toggleItems.includes(category) ? undefined : 0,
-            }}
+            className={`flowComponentHolder ${toggleItems.includes(category) ? "" : "nodeStackedItems"}`}
           >
             {data && (
               <FieldItems
@@ -104,11 +112,7 @@ export default memo((node) => {
   };
 
   return (
-    <>
-      <TagComponent
-        data={data.headerType}
-        color={getColor(data.header.method)}
-      />
+    <div className="nodeContainer">
       <ApiHeaderComponent
         data={{
           method: data.header.method,
@@ -117,44 +121,37 @@ export default memo((node) => {
           color: getColor(data.header.method),
         }}
         handleData={{
+          target: {
+            id: `sera_start`,
+            type: null,
+            title: "start",
+          },
+          source: {
+            id: `sera_end`,
+            type: null,
+            title: "Continue",
+          },
           headerType: data.headerType,
-          id:`sera_start`,
-          type: null,
-          title: null,
         }}
-        changeToggle={changeToggle}
         toggleItems={toggleItems}
         properArray={properArray}
       />
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        {data.headerType != 2 && data.headerType != 4 && (
-          <>
-            <FlowComponent
-              top="maxi"
-              data={{
-                target: {
-                  id:`sera_start`,
-                  type: null,
-                  title: "start",
-                },
-                source: {
-                  id:`sera_end`,
-                  type: null,
-                  title: "Continue",
-                },
-                nodeType: data.header.type,
-              }}
-            />
-            <div className="divider"></div>
-          </>
-        )}
 
-        <div>
+      {/*<img
+            onClick={() => {
+              toggleItems.length == 0
+                ? changeToggle(properArray)
+                : changeToggle([]);
+            }}
+            style={{ height: 11, cursor: "pointer" }}
+            src={toggleItems.length != 0 ? remove : add}
+          />*/}
+
+      <div className="nodeContentContainer">
+        <div
+          className="nodeContentParent"
+          style={{ maxHeight: toggleLogs.includes("logs") ? undefined : 24 }}
+        >
           <div
             className="nodeToggleHeader"
             onClick={() => {
@@ -164,19 +161,23 @@ export default memo((node) => {
                 : [...toggleLogs, "logs"]; // Add category using spread syntax for immutability
               toggleLog(newToggleItems);
             }}
-            style={{ color: "#ffbcf4" }}
+            style={{
+              color: "#ffbcf4",
+            }}
           >
+            <CaratIcon open={toggleLogs.includes("logs")} />
             Logging
           </div>
 
           <div
+            className="flowComponentHolder"
             style={{
               overflow: "hidden",
               maxHeight: toggleLogs.includes("logs") ? undefined : 0,
+              position: toggleLogs.includes("logs") ? "initial" : "absolute",
             }}
           >
             <FlowComponent
-              top="maxi"
               data={{
                 target: {
                   id: `log-flow-target-${node.id}`,
@@ -191,9 +192,7 @@ export default memo((node) => {
                 nodeType: 0,
               }}
             />
-            <div className="divider"></div>
             <FlowComponent
-              top="maxi"
               data={{
                 target: {
                   id: `log-flow-target-${node.id}`,
@@ -210,25 +209,9 @@ export default memo((node) => {
             />
           </div>
         </div>
-      </div>
 
-      {getCategories()}
-
-      <div
-        style={{
-          paddingTop: 1,
-          paddingBottom: 1,
-          textAlign: "center",
-          fontSize: 7,
-          borderTopWidth: 1,
-          borderTopColor: "#141414",
-          borderTopStyle: "solid",
-          backgroundColor: "#ffffff30",
-          cursor: "pointer",
-        }}
-      >
-        Edit Endpoint
+        {getCategories()}
       </div>
-    </>
+    </div>
   );
 });

@@ -4,7 +4,11 @@ import stringLogo from "../../assets/icons/tabler_text-recognition.svg";
 import booleanLogo from "../../assets/icons/radix-icons_component-boolean.png";
 import integerLogo from "../../assets/icons/tabler_decimal.svg";
 import arrayLogo from "../../assets/icons/tabler_brackets-contain.svg";
-import { EventIcon, ToastIcon } from "../../../../../src/assets/assets.svg";
+import {
+  EventIcon,
+  ScriptIcon,
+  ToastIcon,
+} from "../../../../../src/assets/assets.svg";
 import { useAppContext } from "../../AppContext";
 
 export default memo(({ type, playbook }) => {
@@ -50,8 +54,8 @@ const GenericNodes = ({ onDragStart }) => {
     <Collapsible
       contentOuterClassName="nodeCategoryContainer"
       contentInnerClassName="nodeCategoryInner"
-      triggerClassName="text-xs uppercase px-4"
-      triggerOpenedClassName="text-xs uppercase px-4"
+      triggerClassName="text-xs  px-4"
+      triggerOpenedClassName="text-xs  px-4"
       trigger="Function Nodes"
       open
       transitionTime={100}
@@ -62,7 +66,7 @@ const GenericNodes = ({ onDragStart }) => {
           onDragStart={(event) => onDragStart(event, { type: "stringNode" })}
           draggable
         >
-          <div>
+          <div className="dndnodeicon handleLeft stringBorder">
             <img src={stringLogo} />
           </div>
           <div className="functionText">
@@ -75,7 +79,7 @@ const GenericNodes = ({ onDragStart }) => {
           onDragStart={(event) => onDragStart(event, { type: "integerNode" })}
           draggable
         >
-          <div>
+          <div className="dndnodeicon handleLeft integerBorder">
             <img src={integerLogo} />
           </div>
           <div>
@@ -88,7 +92,7 @@ const GenericNodes = ({ onDragStart }) => {
           onDragStart={(event) => onDragStart(event, { type: "arrayNode" })}
           draggable
         >
-          <div>
+          <div className="dndnodeicon handleLeft arrayBorder">
             <img src={arrayLogo} />
           </div>
           <div>
@@ -101,7 +105,7 @@ const GenericNodes = ({ onDragStart }) => {
           onDragStart={(event) => onDragStart(event, { type: "booleanNode" })}
           draggable
         >
-          <div>
+          <div className="dndnodeicon handleLeft booleanBorder">
             <img src={booleanLogo} />
           </div>
           <div className="functionText">
@@ -114,8 +118,8 @@ const GenericNodes = ({ onDragStart }) => {
           onDragStart={(event) => onDragStart(event, { type: "scriptNode" })}
           draggable
         >
-          <div>
-            <img src={booleanLogo} />
+          <div className="dndnodeicon handleLeft scriptBorder">
+            <ScriptIcon />
           </div>
           <div>
             <div className="nodeTitle">Create Script</div>
@@ -127,8 +131,8 @@ const GenericNodes = ({ onDragStart }) => {
           onDragStart={(event) => onDragStart(event, { type: "sendEventNode" })}
           draggable
         >
-          <div>
-            <img src={booleanLogo} />
+          <div className="dndnodeicon handleLeft eventBorder">
+            <EventIcon />
           </div>
           <div>
             <div className="nodeTitle">Create Event</div>
@@ -145,8 +149,8 @@ const EventFunctionNodes = ({ onDragStart }) => {
     <Collapsible
       contentOuterClassName="nodeCategoryContainer"
       contentInnerClassName="nodeCategoryInner"
-      triggerClassName="text-xs uppercase px-4"
-      triggerOpenedClassName="text-xs uppercase px-4"
+      triggerClassName="text-xs  px-4"
+      triggerOpenedClassName="text-xs  px-4"
       trigger="Event Function Nodes"
       open
       transitionTime={100}
@@ -157,7 +161,7 @@ const EventFunctionNodes = ({ onDragStart }) => {
           onDragStart={(event) => onDragStart(event, { type: "toastNode" })}
           draggable
         >
-          <div>
+          <div className="dndnodeicon handleLeft eventBorder">
             <ToastIcon />
           </div>
           <div className="functionText">
@@ -175,8 +179,8 @@ const EventNodes = ({ onDragStart, eventNodeList }) => {
     <Collapsible
       contentOuterClassName="nodeCategoryContainer"
       contentInnerClassName="nodeCategoryInner"
-      triggerClassName="text-xs uppercase px-4"
-      triggerOpenedClassName="text-xs uppercase px-4"
+      triggerClassName="text-xs  px-4"
+      triggerOpenedClassName="text-xs  px-4"
       trigger="Event Start Nodes"
       open
       transitionTime={100}
@@ -201,7 +205,7 @@ const GetEventNodeList = ({ onDragStart, eventNodeList }) => {
         }
         draggable
       >
-        <div>
+        <div className="dndnodeicon handleLeft eventBorder">
           <EventIcon size={"16"} />
         </div>
         <div>

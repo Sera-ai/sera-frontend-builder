@@ -3,8 +3,25 @@ import apiLogo from "../../assets/icons/ph_link-bold.png";
 import add from "../../assets/icons/add.png";
 import remove from "../../assets/icons/remove.png";
 import { Handle, Position } from "reactflow";
+import {
+  BuilderIcon,
+  InventoryIcon,
+} from "../../../../../src/assets/assets.svg";
 
 //<input className="nodrag" type="color" onChange={data.onChange} defaultValue={data.color} />
+
+const urlText = (type) => {
+  switch (type) {
+    case 1:
+      return "(Client)";
+    case 2:
+      return "(Server)";
+    case 3:
+      return "(Server)";
+    case 4:
+      return "(Client)";
+  }
+};
 
 export default memo(
   ({
@@ -16,40 +33,57 @@ export default memo(
     properArray,
   }) => {
     return (
-      <div>
-        <div style={{ backgroundColor: data.color }} className={`nodeHeader`}>
-          <div className="nodeHeaderDetails">
-            {handleData.headerType != 1 && handleData.headerType != 3 && (
+      <>
+        <div
+          style={{
+            backgroundColor: `${data.color}10`,
+            borderWidth: 1,
+            borderRadius: 4,
+            borderColor: `${data.color}80`,
+          }}
+          className={`nodeHeader`}
+        >
+          {handleData.headerType != 1 && handleData.headerType != 3 && (
+            <div
+              className="nodeHeaderHandle"
+              style={{ borderColor: data.color, borderRightWidth: 1 }}
+            >
               <Handle
                 type="target"
                 position={Position.Left}
-                id={handleData.id}
+                id={handleData.target.id}
                 className={`ioHandle nullEdge`}
               />
-            )}
+            </div>
+          )}
 
-            <div style={{ fontWeight: "400" }}>{data.host}</div>
-            <div style={{ fontSize: 10, color: "#ffffff70", flex: 1 }}></div>
-            <img
-              onClick={() => {
-                toggleItems.length == 0
-                  ? changeToggle(properArray)
-                  : changeToggle([]);
-              }}
-              style={{ height: 11, cursor: "pointer" }}
-              src={toggleItems.length != 0 ? remove : add}
-            />
+          <div style={{ fontWeight: "400" }} className="pl-2">
+            {data.host} {urlText(handleData.headerType)}
           </div>
+          <div style={{ fontSize: 10, color: "#ffffff70", flex: 1 }}></div>
+
+          {handleData.headerType != 2 && handleData.headerType != 4 && (
+            <div
+              className="nodeHeaderHandle"
+              style={{ borderColor: data.color, borderLeftWidth: 1 }}
+            >
+              <Handle
+                type="source"
+                position={Position.Right}
+                id={handleData.source.id}
+                className={`ioHandle nullEdge`}
+              />
+            </div>
+          )}
         </div>
         <div className="nodeHeaderContent">
-          <div className="nodeHeaderContentDetails">
-            <div style={{ fontSize: 8, color: "#ffffff70" }}>
-              {data.path.replace(/\//g, " / ")}
-            </div>
-            <img style={{ height: 8 }} src={apiLogo} />
+          <div className="nodeFieldText">{data.path.replace(/\//g, " / ")}</div>
+          <div style={{ color: "#ffffff70", flex: 1 }}></div>
+          <div className="nodeHeaderHandle noBG handleRight">
+            {<InventoryIcon size="12" color="#3076FF" />}
           </div>
         </div>
-      </div>
+      </>
     );
   }
 );
