@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 export const socket = io(
-  `wss://${window.location.hostname}:${__BE_ROUTER_PORT__}`
+  `wss://${window.location.hostname}:${__BE_ROUTER_PORT__}`,{ path: '/sera-socket-io' }
 );
 import { triggerEvents } from "../events/events.triggers";
 import { socketEvents } from "../events/events.socket";

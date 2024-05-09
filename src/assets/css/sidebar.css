@@ -20,6 +20,7 @@
 }
 
 .sera-flow .dndnode {
+  min-height: 38px;
   display: flex;
   border-radius: 3px;
   align-items: center;
