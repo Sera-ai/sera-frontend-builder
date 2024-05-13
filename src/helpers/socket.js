@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 export const socket = io(
-  `wss://${window.location.hostname}:${__BE_ROUTER_PORT__}`,{ path: '/sera-socket-io' }
+  `wss://${window.location.hostname}:${__BE_ROUTER_PORT__}`, { path: '/sera-socket-io' }
 );
 import { triggerEvents } from "../events/events.triggers";
 import { socketEvents } from "../events/events.socket";
@@ -18,7 +18,7 @@ export const useSocket = (builderContext) => {
     _source: "socket",
   });
 
-  if(socket?.id){
+  if (socket?.id) {
     notify(`Builder Socket Connected`);
 
     console.log("Builder Socket Connected");
