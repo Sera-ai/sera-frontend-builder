@@ -36,17 +36,17 @@ export default memo(
       <>
         <div
           style={{
-            backgroundColor: `${data.color}10`,
+            backgroundColor: `${data.color[0]}`,
             borderWidth: 1,
             borderRadius: 4,
-            borderColor: `${data.color}80`,
+            borderColor: `${data.color[1]}`,
           }}
           className={`nodeHeader`}
         >
           {handleData.headerType != 1 && handleData.headerType != 3 && (
             <div
               className="nodeHeaderHandle"
-              style={{ borderColor: data.color, borderRightWidth: 1 }}
+              style={{ borderColor: data.color[1], borderRightWidth: 1 }}
             >
               <Handle
                 type="target"
@@ -65,7 +65,7 @@ export default memo(
           {handleData.headerType != 2 && handleData.headerType != 4 && (
             <div
               className="nodeHeaderHandle"
-              style={{ borderColor: data.color, borderLeftWidth: 1 }}
+              style={{ borderColor: data.color[1], borderLeftWidth: 1 }}
             >
               <Handle
                 type="source"

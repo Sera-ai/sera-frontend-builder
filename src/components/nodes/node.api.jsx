@@ -105,14 +105,14 @@ export default memo((node) => {
   const getColor = (type) => {
     switch (type) {
       case "GET":
-        return "#2bb74a";
+        return[ "#236D34", "#299F43"];
       case "POST":
-        return "#FF7A00";
+        return ["#B75C08", "#B75C08"];
     }
   };
 
   return (
-    <div className="nodeContainer">
+    <div className={`nodeContainer ${data.header.method}-Node`}>
       <ApiHeaderComponent
         data={{
           method: data.header.method,

@@ -333,6 +333,7 @@
   gap: 10px;
   align-self: stretch;
   border-radius: 4px;
+  background-color: #191A21;
   border: 1px solid #393e49;
 }
 
@@ -499,4 +500,14 @@
 
 .nodeStackedItems > .nodeHeaderContentDetailsTag {
   margin-top: -2px
+}
+
+.apiNode:has(.GET-Node) {
+  background-color: #1B2A25;
+  border-color: #1C3E26 !important;
+}
+
+.apiNode:has(.POST-Node) {
+  background-color: #37261C;
+  border-color: #7c5000 !important;
 }
