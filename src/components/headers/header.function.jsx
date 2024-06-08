@@ -58,7 +58,7 @@ export default memo(({ data, left = false }) => {
           <Handle
             type="target"
             position={Position.Left}
-            id={`sera_start`}
+            id={`sera.sera_start`}
             className={`ioHandle nullEdge`}
           />
         </div>

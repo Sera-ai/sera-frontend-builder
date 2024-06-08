@@ -146,7 +146,7 @@ export default memo(({ data, id }) => {
               top="maxi"
               data={{
                 target: {
-                  id: `sera_start`,
+                  id: `sera.sera_start`,
                   type: null,
                   title: "Start",
                 },
@@ -162,7 +162,7 @@ export default memo(({ data, id }) => {
               top="maxi"
               data={{
                 target: {
-                  id: `sera_start`,
+                  id: `sera.sera_start`,
                   type: null,
                   title: "start",
                 },

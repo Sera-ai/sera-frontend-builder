@@ -36,18 +36,18 @@ export default memo((node) => {
   const [toggleItems, changeToggle] = useState(properArray);
   const [toggleLogs, toggleLog] = useState([]);
 
-  const FieldItems = ({ collapsed, fieldData }) => {
+  const FieldItems = ({ collapsed, fieldData, category }) => {
     return fieldData.map((fieldItem, int) => {
       return (
         <FlowComponent
           data={{
             target: {
-              id: fieldItem.name,
+              id: `${category}.${fieldItem.name}`,
               type: fieldItem.schema.type,
               title: fieldItem.name,
             },
             source: {
-              id: fieldItem.name,
+              id: `${category}.${fieldItem.name}`,
               type: fieldItem.schema.type,
               title: fieldItem.name,
             },
@@ -92,6 +92,7 @@ export default memo((node) => {
           >
             {data && (
               <FieldItems
+                category={field}
                 collapsed={toggleItems.includes(category)}
                 fieldData={data[fieldKey][field]}
               />
@@ -105,7 +106,7 @@ export default memo((node) => {
   const getColor = (type) => {
     switch (type) {
       case "GET":
-        return[ "#236D34", "#299F43"];
+        return ["#236D34", "#299F43"];
       case "POST":
         return ["#B75C08", "#B75C08"];
     }
@@ -122,7 +123,7 @@ export default memo((node) => {
         }}
         handleData={{
           target: {
-            id: `sera_start`,
+            id: `sera.sera_start`,
             type: null,
             title: "start",
           },
