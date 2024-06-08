@@ -44,12 +44,12 @@ export default memo((node) => {
             target: {
               id: `${category}.${fieldItem.name}`,
               type: fieldItem.schema.type,
-              title: fieldItem.name,
+              title: `${category}.${fieldItem.name}`,
             },
             source: {
               id: `${category}.${fieldItem.name}`,
               type: fieldItem.schema.type,
-              title: fieldItem.name,
+              title: `${category}.${fieldItem.name}`,
             },
             nodeType: data.header.type,
           }}
@@ -128,7 +128,7 @@ export default memo((node) => {
             title: "start",
           },
           source: {
-            id: `sera_end`,
+            id: `sera.sera_end`,
             type: null,
             title: "Continue",
           },
