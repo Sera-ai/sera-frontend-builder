@@ -109,6 +109,8 @@ export default memo((node) => {
         return ["#236D34", "#299F43"];
       case "POST":
         return ["#B75C08", "#B75C08"];
+      default:
+        return ["#B75C08", "#B75C08"];
     }
   };
 
@@ -118,7 +120,7 @@ export default memo((node) => {
         data={{
           method: data.header.method,
           host: data.header.host,
-          path: data.header.path,
+          path: data.header.path == "" ? "/" : data.header.path,
           color: getColor(data.header.method),
         }}
         handleData={{
