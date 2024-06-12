@@ -1,12 +1,23 @@
 import { io } from "socket.io-client";
 export const socket = io(
-  `wss://${window.location.hostname}:${__BE_ROUTER_PORT__}`, { path: '/sera-socket-io' }
+  `wss://${window.location.hostname}:${__BE_ROUTER_PORT__}`,
+  {
+    path: '/sera-socket-io',
+    transports: ["websocket"]
+  }
 );
 import { triggerEvents } from "../events/events.triggers";
 import { socketEvents } from "../events/events.socket";
 import { toast } from "react-toastify";
 
 export const useSocket = (builderContext) => {
+
+  const { setOas, setIssue, setNodes, setEdges, builder, builderType } =
+    builderContext;
+
+  socket.emit("builderConnect", builder);
+  socket.builder = builder;
+
   const notify = (str) => toast(str);
 
   const socketEventClass = socketEvents({

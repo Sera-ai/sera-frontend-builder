@@ -1,36 +1,10 @@
 // customFunctions.js
-import { socket } from "../helpers/socket";
 
 export const backendEvents = (builderContext = {}) => {
   const { setOas, setIssue, setNodes, setEdges, builder, builderType } =
     builderContext;
-  const fetchData = async (path = window.location.pathname) => {
-    // try {
-    //   const response = await fetch(
-    //     `/manage/endpoint/?path=${encodeURIComponent(
-    //       path.replace("/builder", "")
-    //     )}`,
-    //     { headers: { "x-sera-service": "be_builder" } }
-    //   );
-    //   const jsonData = await response.json();
-    //   if (!jsonData.issue) {
-    //     //setNodes(jsonData.builder.nodes);
-    //     //setEdges(jsonData.builder.edges);
 
-    //     //setOas(jsonData.oas);
-    //   } else {
-    //     setIssue(jsonData.issue);
-    //     console.log("something went wrong");
-    //   }
-    //   return jsonData
 
-    // } catch (error) {
-    //   console.error("Error fetching data:", error);
-    // }
-
-    socket.emit("builderConnect", builder);
-    socket.builder = builder;
-  };
 
   const createData = async (data) => {
     if (data.error == "NoEndpoint") {
@@ -39,7 +13,6 @@ export const backendEvents = (builderContext = {}) => {
 
       if (created) {
         setIssue(null);
-        fetchData(window.location.pathname);
       } else {
         alert("something went wrong2");
       }
@@ -50,7 +23,6 @@ export const backendEvents = (builderContext = {}) => {
       const created = await updateEndpoint(builder_id);
       if (created) {
         setIssue(null);
-        fetchData();
       } else {
         alert("something went wrong1");
       }
@@ -232,7 +204,6 @@ export const backendEvents = (builderContext = {}) => {
     createData,
     deleteNode,
     createNode,
-    fetchData,
     createEdge,
     removeEdge,
     updateEdge,
