@@ -50,7 +50,8 @@ export const socketEvents = (builderContext) => {
     });
     setNodes((oldEdges) => applyNodeChanges(changedNodes, oldEdges));
     if (changedNodes2.length == 0) return;
-    socket.emit("nodeUpdate", changedNodes);
+    console.log("changedNodes", changedNodes)
+    socket.wsEmit("nodeUpdate", { node: changedNodes });
   };
 
   const handleNodesCreate = (newNode) => {
@@ -66,6 +67,7 @@ export const socketEvents = (builderContext) => {
 
   const handleEdgesDelete = (changes) => {
     console.log("changes", changes);
+
     setEdges((oldEdges) => applyEdgeChanges(changes, oldEdges));
   };
 

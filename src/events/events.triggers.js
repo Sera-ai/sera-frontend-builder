@@ -15,6 +15,7 @@ export const triggerEvents = (builderContext) => {
     _source: "component",
   });
 
+
   const viewPeerPointers = (data) => {
     const childElement =
       builderContext.flowRef.current.children[0].children[0].children[0].querySelector(
@@ -88,7 +89,7 @@ export const triggerEvents = (builderContext) => {
         x: event.clientX,
         y: event.clientY,
       });
-      socket.emit("mouseMove", {
+      if (false) socket.wsEmit("mouseMove", {
         x: position.x,
         y: position.y,
         color: builderContext.bgColor,

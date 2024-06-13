@@ -406,7 +406,6 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  border-bottom: 1px solid #393e49;
 }
 
 .closeCarat {
@@ -510,4 +509,8 @@
 .apiNode:has(.POST-Node) {
   background-color: #37261C;
   border-color: #7c5000 !important;
+}
+
+.nodeContentContainer .nodeContentParent:not(:last-child) {
+  border-bottom: 1px solid #393e49;
 }

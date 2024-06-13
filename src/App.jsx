@@ -16,10 +16,10 @@ import { useEffect } from "react";
 
 const Core = () => {
   const builderContext = useAppContext(); // Access context
+  useSocket(builderContext);
 
   // Refs
   useEffect(() => {
-    useSocket(builderContext);
   }, []);
 
   return (

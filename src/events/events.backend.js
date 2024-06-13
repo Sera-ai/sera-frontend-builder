@@ -3,6 +3,7 @@
 export const backendEvents = (builderContext = {}) => {
   const { setOas, setIssue, setNodes, setEdges, builder, builderType } =
     builderContext;
+  const fetchData = () => { }
 
 
 
@@ -203,6 +204,7 @@ export const backendEvents = (builderContext = {}) => {
   return {
     createData,
     deleteNode,
+    fetchData,
     createNode,
     createEdge,
     removeEdge,
