@@ -7,6 +7,7 @@ import fs from 'fs'
 export default defineConfig({
   define: {
     '__BE_ROUTER_PORT__': JSON.stringify(process.env.BE_ROUTER_PORT),
+    '__DEBUG__': false,
     "global": {}
   },
   plugins: [react()],
