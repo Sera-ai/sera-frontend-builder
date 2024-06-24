@@ -40,9 +40,14 @@ export const useSocket = (builderContext) => {
   );
 
   useEffect(() => {
+    if (isConnected) {
+      wsEmit("builderConnect", { builder });
+    }
+  }, [isConnected]);
+
+  useEffect(() => {
     const handleOpen = () => {
       setIsConnected(true);
-      wsEmit("builderConnect", { builder });
       socket.builder = builder;
       notify(`Builder Socket Connected`);
 
@@ -82,6 +87,7 @@ export const useSocket = (builderContext) => {
           socketEventClass.handleEdgesDelete(parsedMessage.edge);
           break;
         case "edgeCreate":
+          console.log("edge data created")
           socketEventClass.handleEdgesCreate(parsedMessage.edge);
           break;
         case "edgeUpdate":
