@@ -3,7 +3,7 @@ import integerLogo from "../../assets/icons/tabler_decimal.svg";
 import stringLogo from "../../assets/icons/tabler_text-recognition.svg";
 import arrayLogo from "../../assets/icons/tabler_brackets-contain.svg";
 import booleanLogo from "../../assets/icons/radix-icons_component-boolean.png";
-import { EventIcon, ToastIcon } from "../../../../../src/assets/assets.svg";
+import { EventIcon, ToastIcon, ScriptIcon } from "../../../../../src/assets/assets.svg";
 import { Handle, Position } from "reactflow";
 
 export default memo(({ data, left = false }) => {
@@ -19,6 +19,8 @@ export default memo(({ data, left = false }) => {
     switch (varfunction) {
       case "eventNode":
         return "Event Start";
+      case "script":
+        return "Lua Script Editor"
       default:
         return data.title || varfunction;
     }
@@ -30,6 +32,8 @@ export default memo(({ data, left = false }) => {
         return <EventIcon size={"16"} />;
       case "toast":
         return <ToastIcon />;
+      case "script":
+        return <ScriptIcon size={"16"} />;
       default:
         return (
           <img

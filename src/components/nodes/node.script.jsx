@@ -18,7 +18,7 @@ export default memo(({ data, id }) => {
     function: data.function,
   });
   const { edges } = useAppContext();
-  const defaultScript = `function main(){\n//write your code here\n\n//return your variables below\nreturn []\n}\n\n//execute the script\nmain();`;
+  const defaultScript = `local function scriptNode_${id}()\n    -- write your code here\n\n    -- return your variables below\n    return []\nend\n\n-- execute the script\nscriptNode_${id}()`;
 
   const [script, updateScript] = useState(
     data.inputData == null ||
@@ -43,7 +43,7 @@ export default memo(({ data, id }) => {
       (edge) => edge.targetHandle == `scriptAccept`
     );
 
-    let newScript2 = `//Connect nodes to create variables\n`;
+    let newScript2 = `-- Connect nodes to create variables\n`;
 
     ReleventEdges2.map((edge) => {
       newScript2 = newScript2 + `let ${edge.source}_${normalizeVarName(edge.sourceHandle)}\n`;
@@ -62,9 +62,9 @@ export default memo(({ data, id }) => {
       (edge) => edge.targetHandle == `scriptAccept`
     );
 
-    let newScript = `//Connect nodes to create variables\n`;
+    let newScript = `-- Connect nodes to create variables\n`;
     ReleventEdges.map((edge) => {
-      newScript = newScript + `let ${edge.source}_${normalizeVarName(edge.sourceHandle)}\n`;
+      newScript = newScript + `local ${edge.source}_${normalizeVarName(edge.sourceHandle)}\n`;
     });
 
     updateVariables(newScript);
@@ -82,7 +82,7 @@ export default memo(({ data, id }) => {
     setOutParams(parseReturnStatement(newData));
     updateNodeInternals(id);
 
-    socket.emit("updateField", {
+    socket.wsEmit("updateField", {
       id: id,
       data: newData,
       field: "data.inputData",
@@ -110,14 +110,14 @@ export default memo(({ data, id }) => {
   );
 
   return (
-    <div className="scriptNode flex flex-col">
+    <div className="scriptNode flex flex-col space-y-1">
       <FunctionHeaderComponent
         id={id}
         data={functionHeaderData}
         fullFlow={true}
         left={true}
       />
-      <div className="flex flex-grow flex-row">
+      <div className="flex flex-grow flex-row space-x-1">
         <div className="flex w-[15px]">
           <Handle
             type="target"
@@ -133,6 +133,7 @@ export default memo(({ data, id }) => {
             height={100}
             editable={false}
           />
+          <div className="divider"></div>
           <JsonViewerFull
             oas={script}
             main={true}
@@ -140,8 +141,7 @@ export default memo(({ data, id }) => {
             updateField={updateField}
           />
         </div>
-        <div className="flex flex-col" key={outParam.join("-")}>
-          <>
+        <div className="flex flex-col space-y-1" key={outParam.join("-")}>
             <FieldFlow
               top="maxi"
               data={{
@@ -175,7 +175,6 @@ export default memo(({ data, id }) => {
               }}
             />
             <div className="divider"></div>
-          </>
           {targetHandles}
         </div>
       </div>
@@ -199,9 +198,8 @@ function normalizeVarName(name) {
 }
 
 function parseReturnStatement(code) {
-  // Extract the last return statement from the main function
-  const returnPattern =
-    /function main\(\) \{[\s\S]*return \[([^\]]*)\];?[\s\S]*\}/;
+  // Extract the last return statement from the Lua function
+  const returnPattern = /local function \w+\(\)\s*--.*[\s\S]*?return\s*\[([^\]]*)\];?[\s\S]*?end/;
   const match = code.match(returnPattern);
   if (!match) return [];
 
@@ -213,11 +211,7 @@ function parseReturnStatement(code) {
 
   while ((elementsMatch = elementsPattern.exec(returnContents)) !== null) {
     // Add the matched string, number, or variable name to the elements array
-    const element =
-      elementsMatch[1] ||
-      elementsMatch[2] ||
-      elementsMatch[3] ||
-      elementsMatch[4];
+    const element = elementsMatch[1] || elementsMatch[2] || elementsMatch[3] || elementsMatch[4];
     elements.push(element);
   }
 

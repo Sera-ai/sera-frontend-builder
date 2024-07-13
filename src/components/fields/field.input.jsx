@@ -27,7 +27,7 @@ export default memo(
       setInputFieldData(updateData);
       console.log("dataUpdate", dataUpdate.inputData);
       updateNodeInternals(id, { data: dataUpdate });
-      socket.emit("updateField", { id: id, value: newData, node: node });
+      socket.wsEmit("updateField", { id: id, value: newData, node: node });
     };
 
     const NodeFieldTitle = () => {
