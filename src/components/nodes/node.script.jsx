@@ -18,7 +18,7 @@ export default memo(({ data, id }) => {
     function: data.function,
   });
   const { edges } = useAppContext();
-  const defaultScript = `local function scriptNode_${id}()\n    -- write your code here\n\n    -- return your variables below\n    return []\nend\n\n-- execute the script\nscriptNode_${id}()`;
+  const defaultScript = `local function scriptNode_${id}()\n    -- write your code here\n\n    -- put your variables below\n    return nil -- replace nil with return parameter\nend\n\n-- execute the script\nscriptNode_${id}()`;
 
   const [script, updateScript] = useState(
     data.inputData == null ||
@@ -28,7 +28,7 @@ export default memo(({ data, id }) => {
       : data.inputData
   );
   const [variables, updateVariables] = useState(
-    "//Connect nodes to create variables"
+    "-- Connect nodes to create variables"
   );
   const [outParam, setOutParams] = useState([]);
 
@@ -199,21 +199,15 @@ function normalizeVarName(name) {
 
 function parseReturnStatement(code) {
   // Extract the last return statement from the Lua function
-  const returnPattern = /local function \w+\(\)\s*--.*[\s\S]*?return\s*\[([^\]]*)\];?[\s\S]*?end/;
+  const returnPattern = /local function \w+\(\)[\s\S]*?return\s+([^;\n]+)[\s\S]*?end/;
   const match = code.match(returnPattern);
   if (!match) return [];
 
-  // Extract elements from the return statement
-  const returnContents = match[1];
-  const elementsPattern = /"([^"]*)"|'([^']*)'|([a-zA-Z_]\w*)|(\d+(\.\d+)?)/g;
-  let elementsMatch;
-  const elements = [];
+  // Extract the return variables
+  const returnContents = match[1].trim();
 
-  while ((elementsMatch = elementsPattern.exec(returnContents)) !== null) {
-    // Add the matched string, number, or variable name to the elements array
-    const element = elementsMatch[1] || elementsMatch[2] || elementsMatch[3] || elementsMatch[4];
-    elements.push(element);
-  }
+  // Split the return contents by commas
+  const elements = returnContents.split(/\s*,\s*/);
 
   return elements;
 }
