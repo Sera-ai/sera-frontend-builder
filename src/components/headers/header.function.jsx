@@ -6,7 +6,7 @@ import booleanLogo from "../../assets/icons/radix-icons_component-boolean.png";
 import { EventIcon, ToastIcon, ScriptIcon } from "../../../../../src/assets/assets.svg";
 import { Handle, Position } from "reactflow";
 
-export default memo(({ data, left = false }) => {
+export default memo(({ data, left = false, title = "" }) => {
   const apiLogo = {
     integerLogo: integerLogo,
     stringLogo: stringLogo,
@@ -20,7 +20,7 @@ export default memo(({ data, left = false }) => {
       case "eventNode":
         return "Event Start";
       case "script":
-        return "Lua Script Editor"
+        return title
       default:
         return data.title || varfunction;
     }

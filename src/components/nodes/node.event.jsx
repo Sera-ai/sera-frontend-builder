@@ -38,12 +38,12 @@ export default memo((node) => {
           data={{
             target: {
               id: fieldItem,
-              type: items[fieldItem],
+              type: typeof items[fieldItem],
               title: fieldItem,
             },
             source: {
               id: fieldItem,
-              type: items[fieldItem],
+              type: typeof items[fieldItem],
               title: fieldItem,
             },
             nodeType: 0,

@@ -17,8 +17,11 @@ export default memo(({ data, id }) => {
   const [functionHeaderData, setFunctionHeaderData] = useState({
     function: data.function,
   });
-  const { edges } = useAppContext();
-  const defaultScript = `local function scriptNode_${id}()\n    -- write your code here\n\n    -- put your variables below\n    return nil -- replace nil with return parameter\nend\n\n-- execute the script\nscriptNode_${id}()`;
+  const { edges, builderType } = useAppContext();
+
+  const luaStart = `local function scriptNode_${id}()\n    -- write your code here\n\n    -- put your variables below\n    return nil -- replace nil with return parameter\nend\n\n-- execute the script\nscriptNode_${id}()`;
+  const jsStart = `async function scriptNode_${id}(){\n    // write your code here\n\n    // put your variables below\n    return [] // replace nil with return parameter\n}\n\n// execute the script\nscriptNode_${id}()`;
+  const defaultScript = builderType == "builder" ? luaStart : jsStart
 
   const [script, updateScript] = useState(
     data.inputData == null ||
@@ -28,7 +31,7 @@ export default memo(({ data, id }) => {
       : data.inputData
   );
   const [variables, updateVariables] = useState(
-    "-- Connect nodes to create variables"
+    `${builderType == "builder" ? "--" : "//"} Connect nodes to create variables`
   );
   const [outParam, setOutParams] = useState([]);
 
@@ -43,7 +46,7 @@ export default memo(({ data, id }) => {
       (edge) => edge.targetHandle == `scriptAccept`
     );
 
-    let newScript2 = `-- Connect nodes to create variables\n`;
+    let newScript2 = `${builderType == "builder" ? "--" : "//"} Connect nodes to create variables\n`;
 
     ReleventEdges2.map((edge) => {
       newScript2 = newScript2 + `let ${edge.source}_${normalizeVarName(edge.sourceHandle)}\n`;
@@ -52,7 +55,7 @@ export default memo(({ data, id }) => {
 
     //React flow bug, when dynamically placing the handles the listener event doesn't trigger but with a no delay timeout it works...
     setTimeout(() => {
-      setOutParams(parseReturnStatement(script));
+      setOutParams(parseReturnStatement(builderType, script));
       updateNodeInternals(id);
     }, 0);
   }, []);
@@ -62,9 +65,9 @@ export default memo(({ data, id }) => {
       (edge) => edge.targetHandle == `scriptAccept`
     );
 
-    let newScript = `-- Connect nodes to create variables\n`;
+    let newScript = `${builderType == "builder" ? "--" : "//"} Connect nodes to create variables\n`;
     ReleventEdges.map((edge) => {
-      newScript = newScript + `local ${edge.source}_${normalizeVarName(edge.sourceHandle)}\n`;
+      newScript = newScript + `${builderType == "builder" ? "local" : "let"} ${edge.source}_${normalizeVarName(edge.sourceHandle)}\n`;
     });
 
     updateVariables(newScript);
@@ -73,13 +76,13 @@ export default memo(({ data, id }) => {
   useEffect(() => {
     if (data.inputData != script && data.inputData != null) {
       updateScript(data.inputData);
-      setOutParams(parseReturnStatement(data.inputData));
+      setOutParams(parseReturnStatement(builderType, data.inputData));
       updateNodeInternals(id);
     }
   }, [data.inputData]);
 
   const updateField = (newData) => {
-    setOutParams(parseReturnStatement(newData));
+    setOutParams(parseReturnStatement(builderType, newData));
     updateNodeInternals(id);
 
     socket.wsEmit("updateField", {
@@ -113,6 +116,7 @@ export default memo(({ data, id }) => {
     <div className="scriptNode flex flex-col space-y-1">
       <FunctionHeaderComponent
         id={id}
+        title={`${builderType == "builder" ? "Lua" : "Javascript"} Script Editor`}
         data={functionHeaderData}
         fullFlow={true}
         left={true}
@@ -132,6 +136,7 @@ export default memo(({ data, id }) => {
             main={true}
             height={100}
             editable={false}
+            type={builderType == "builder" ? "lua" : "javascript"}
           />
           <div className="divider"></div>
           <JsonViewerFull
@@ -139,6 +144,7 @@ export default memo(({ data, id }) => {
             main={true}
             lines={lines}
             updateField={updateField}
+            type={builderType == "builder" ? "lua" : "javascript"}
           />
         </div>
         <div className="flex flex-col space-y-1" key={outParam.join("-")}>
@@ -197,7 +203,17 @@ function normalizeVarName(name) {
   return normalized;
 }
 
-function parseReturnStatement(code) {
+function parseReturnStatement(builderType, code){
+  if(builderType == "builder"){
+    return luaReturn(code)
+  }else{
+    console.log("this one")
+    console.log(jsReturn(code))
+    return jsReturn(code)
+  }
+}
+
+function luaReturn(code) {
   // Extract the last return statement from the Lua function
   const returnPattern = /local function \w+\(\)[\s\S]*?return\s+([^;\n]+)[\s\S]*?end/;
   const match = code.match(returnPattern);
@@ -208,6 +224,32 @@ function parseReturnStatement(code) {
 
   // Split the return contents by commas
   const elements = returnContents.split(/\s*,\s*/);
+
+  return elements;
+}
+
+function jsReturn(code) {
+  // Extract the last return statement from the main function
+  const returnPattern =
+    /function \w+\(\)[\s\S]*return \[([^\]]*)\];?[\s\S]*\}/;
+  const match = code.match(returnPattern);
+  if (!match) return [];
+
+  // Extract elements from the return statement
+  const returnContents = match[1];
+  const elementsPattern = /"([^"]*)"|'([^']*)'|([a-zA-Z_]\w*)|(\d+(\.\d+)?)/g;
+  let elementsMatch;
+  const elements = [];
+
+  while ((elementsMatch = elementsPattern.exec(returnContents)) !== null) {
+    // Add the matched string, number, or variable name to the elements array
+    const element =
+      elementsMatch[1] ||
+      elementsMatch[2] ||
+      elementsMatch[3] ||
+      elementsMatch[4];
+    elements.push(element);
+  }
 
   return elements;
 }

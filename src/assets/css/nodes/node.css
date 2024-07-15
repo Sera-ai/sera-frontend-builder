@@ -267,6 +267,16 @@
   background-color: #1e1e1e;
 }
 
+.objectEdge {
+  border-color: #f1ee07;
+  background-color: #1e1e1e;
+}
+
+.objectBG {
+  background-color: #f1ee07;
+}
+
+
 .booleanBG {
   background-color: #ff4747;
 }
