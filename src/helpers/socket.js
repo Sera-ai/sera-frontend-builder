@@ -80,9 +80,9 @@ export const useSocket = (builderContext) => {
         case "nodeCreate":
           socketEventClass.handleNodesCreate(parsedMessage);
           break;
-        case "nodeDelete":
-          socketEventClass.handleNodesDelete(parsedMessage);
-          break;
+        // case "nodeDelete":
+        //   socketEventClass.handleNodesDelete(parsedMessage);
+        //   break;
         case "edgeDelete":
           socketEventClass.handleEdgesDelete(parsedMessage.edge);
           break;

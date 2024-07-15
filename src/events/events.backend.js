@@ -146,10 +146,10 @@ export const backendEvents = (builderContext = {}) => {
   };
 
   const deleteNode = (data) => {
-    const url = `https://${__DEBUG__ ? `${window.location.hostname}:${__BE_ROUTER_PORT__}` : `backend.sera`}/manage/endpoint/node?type=${builderType}`;
+    const url = `https://${__DEBUG__ ? `${window.location.hostname}:${__BE_ROUTER_PORT__}` : `backend.sera`}/manage/endpoint/node/delete?type=${builderType}`;
 
     return fetch(url, {
-      method: "DELETE",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         "x-sera-service": "be_builder",
@@ -174,10 +174,10 @@ export const backendEvents = (builderContext = {}) => {
   };
 
   const removeEdge = (data) => {
-    const url = `https://${__DEBUG__ ? `${window.location.hostname}:${__BE_ROUTER_PORT__}` : `backend.sera`}/manage/endpoint/edge?type=${builderType}`;
-
+    const url = `https://${__DEBUG__ ? `${window.location.hostname}:${__BE_ROUTER_PORT__}` : `backend.sera`}/manage/endpoint/edge/delete?type=${builderType}`;
+    console.log("sending")
     return fetch(url, {
-      method: "DELETE",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         "x-sera-service": "be_builder",
