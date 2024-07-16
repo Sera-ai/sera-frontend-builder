@@ -32,24 +32,30 @@ export default memo((node) => {
   }, []);
 
   const FieldItems = () => {
-    return Object.keys(items).map((fieldItem, int) => {
-      return (
-        <FlowComponent
-          data={{
-            target: {
-              id: fieldItem,
-              type: typeof items[fieldItem],
-              title: fieldItem,
-            },
-            source: {
-              id: fieldItem,
-              type: typeof items[fieldItem],
-              title: fieldItem,
-            },
-            nodeType: 0,
-          }}
-        />
-      );
+    return Object.keys(items).map((fieldName, int) => {
+      console.log(items)
+      console.log(fieldName)
+      console.log(items[fieldName])
+      return Object.keys(items[fieldName]).map((fieldItem)=>{
+        console.log(fieldItem)
+        return (
+          <FlowComponent
+            data={{
+              target: {
+                id: `${fieldName}.${fieldItem}`,
+                type: typeof items[fieldName][fieldItem],
+                title: `${fieldName}.${fieldItem}`,
+              },
+              source: {
+                id: `${fieldName}.${fieldItem}`,
+                type: typeof items[fieldName][fieldItem],
+                title: `${fieldName}.${fieldItem}`,
+              },
+              nodeType: 0,
+            }}
+          />
+        );
+      })
     });
   };
 
