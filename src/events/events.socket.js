@@ -56,7 +56,7 @@ export const socketEvents = (builderContext) => {
 
   const handleNodesCreate = (newNode) => {
     console.log(newNode);
-    if (newNode?._id)
+    if (newNode?.id)
       setNodes((nds) =>
         nds.some((node) => node.id === newNode.id) ? nds : nds.concat(newNode)
       );
@@ -72,7 +72,7 @@ export const socketEvents = (builderContext) => {
   };
 
   const handleEdgesCreate = (newEdge) => {
-    console.log("hmm");
+    console.log(newEdge)
     setEdges((eds) => {
       // Check if the edge with the same ID already exists
       const edgeIndex = eds.findIndex((edge) => edge._id === newEdge._id);
@@ -139,11 +139,16 @@ export const socketEvents = (builderContext) => {
         headers: { "x-sera-service": "be_builder" },
       });
       const jsonData = await response.json();
-      if (!jsonData.issue) {
-        nodeData["node_data"] = jsonData;
-        setNodeDetails(nodeData);
+      if (jsonData) {
+        if (!jsonData.issue) {
+          nodeData["node_data"] = jsonData;
+          setNodeDetails(nodeData);
+        } else {
+          setIssue(jsonData.issue);
+          console.log("something went wrong");
+        }
       } else {
-        setIssue(jsonData.issue);
+        setIssue("something went wrong");
         console.log("something went wrong");
       }
     } catch (error) {
