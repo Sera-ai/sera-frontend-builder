@@ -380,6 +380,17 @@
   border-bottom-width: 1px;
 }
 
+.v-divider {
+  display: flex;
+  height: 100%;
+  border-left-color: #334155;
+  border-left-width: 1px;
+}
+
+.v-divider:hover {
+  background-color: #ffffff30;
+}
+
 .headerHandle {
   background-color: transparent !important;
   border-color: transparent !important;
