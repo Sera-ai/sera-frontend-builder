@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { triggerEvents } from "../events/events.triggers";
 import { socketEvents } from "../events/events.socket";
 
-const SOCKET_URL = `wss://${true ? `${window.location.hostname}:9876` : `backend.sera:9876`}/sera-socket-io`;
+const SOCKET_URL = `wss://${window.location.hostname}:9876/sera-socket-io`;
 
 const createWebSocket = () => {
   return new WebSocket(SOCKET_URL);
