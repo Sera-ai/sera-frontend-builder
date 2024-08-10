@@ -45,13 +45,14 @@ export const backendEvents = (builderContext = {}) => {
       builder_id,
     };
 
-    const url = `https://${__DEBUG__ ? `${window.location.hostname}:${__BE_ROUTER_PORT__}` : `backend.sera`}/manage/endpoint/create`;
+    const url = `https://${window.location.hostname}:${__BE_ROUTER_PORT__}/manage/endpoint/create`;
     console.log(JSON.stringify(data2));
     return fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "x-sera-service": "be_builder",
+        "X-Forwarded-For": "backend.sera"
       },
       body: JSON.stringify(data2),
     })
@@ -80,13 +81,14 @@ export const backendEvents = (builderContext = {}) => {
       builder_id: builderId,
     };
 
-    const url = `https://${__DEBUG__ ? `${window.location.hostname}:${__BE_ROUTER_PORT__}` : `backend.sera`}/manage/endpoint/update`;
+    const url = `https://${window.location.hostname}:${__BE_ROUTER_PORT__}/manage/endpoint/update`;
 
     return fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "x-sera-service": "be_builder",
+        "X-Forwarded-For": "backend.sera"
       },
       body: JSON.stringify(data2),
     })
@@ -114,13 +116,14 @@ export const backendEvents = (builderContext = {}) => {
       method: method,
     };
 
-    const url = `https://${__DEBUG__ ? `${window.location.hostname}:${__BE_ROUTER_PORT__}` : `backend.sera`}/manage/builder/create`;
+    const url = `https://${window.location.hostname}:${__BE_ROUTER_PORT__}/manage/builder/create`;
 
     return fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "x-sera-service": "be_builder",
+        "X-Forwarded-For": "backend.sera"
       },
       body: JSON.stringify(data2),
     })
@@ -132,7 +135,7 @@ export const backendEvents = (builderContext = {}) => {
   }
 
   const createNode = (data) => {
-    const url = `https://${__DEBUG__ ? `${window.location.hostname}:${__BE_ROUTER_PORT__}` : `backend.sera`}/manage/endpoint/node?type=${builderType}`;
+    const url = `https://${window.location.hostname}:${__BE_ROUTER_PORT__}/manage/endpoint/node?type=${builderType}`;
     console.log("creatnode", data);
     return fetch(url, {
       method: "POST",
@@ -140,13 +143,14 @@ export const backendEvents = (builderContext = {}) => {
         "Content-Type": "application/json",
         "x-sera-service": "be_builder",
         "x-sera-builder": builder,
+        "X-Forwarded-For": "backend.sera"
       },
       body: JSON.stringify(data),
     }).catch((error) => console.error("Error:", error));
   };
 
   const deleteNode = (data) => {
-    const url = `https://${__DEBUG__ ? `${window.location.hostname}:${__BE_ROUTER_PORT__}` : `backend.sera`}/manage/endpoint/node/delete?type=${builderType}`;
+    const url = `https://${window.location.hostname}:${__BE_ROUTER_PORT__}/manage/endpoint/node/delete?type=${builderType}`;
 
     return fetch(url, {
       method: "POST",
@@ -154,13 +158,14 @@ export const backendEvents = (builderContext = {}) => {
         "Content-Type": "application/json",
         "x-sera-service": "be_builder",
         "x-sera-builder": builder,
+        "X-Forwarded-For": "backend.sera"
       },
       body: JSON.stringify(data),
     }).catch((error) => console.error("Error:", error));
   };
 
   const createEdge = (data) => {
-    const url = `https://${__DEBUG__ ? `${window.location.hostname}:${__BE_ROUTER_PORT__}` : `backend.sera`}/manage/endpoint/edge?type=${builderType}`;
+    const url = `https://${window.location.hostname}:${__BE_ROUTER_PORT__}/manage/endpoint/edge?type=${builderType}`;
 
     return fetch(url, {
       method: "POST",
@@ -168,13 +173,14 @@ export const backendEvents = (builderContext = {}) => {
         "Content-Type": "application/json",
         "x-sera-service": "be_builder",
         "x-sera-builder": builder,
+        "X-Forwarded-For": "backend.sera"
       },
       body: JSON.stringify(data),
     }).catch((error) => console.error("Error:", error));
   };
 
   const removeEdge = (data) => {
-    const url = `https://${__DEBUG__ ? `${window.location.hostname}:${__BE_ROUTER_PORT__}` : `backend.sera`}/manage/endpoint/edge/delete?type=${builderType}`;
+    const url = `https://${window.location.hostname}:${__BE_ROUTER_PORT__}/manage/endpoint/edge/delete?type=${builderType}`;
     console.log("sending")
     return fetch(url, {
       method: "POST",
@@ -182,13 +188,14 @@ export const backendEvents = (builderContext = {}) => {
         "Content-Type": "application/json",
         "x-sera-service": "be_builder",
         "x-sera-builder": builder,
+        "X-Forwarded-For": "backend.sera"
       },
       body: JSON.stringify(data),
     }).catch((error) => console.error("Error:", error));
   };
 
   const updateEdge = (data) => {
-    const url = `https://${__DEBUG__ ? `${window.location.hostname}:${__BE_ROUTER_PORT__}` : `backend.sera`}/manage/endpoint/edge`;
+    const url = `https://${window.location.hostname}:${__BE_ROUTER_PORT__}/manage/endpoint/edge`;
 
     return fetch(url, {
       method: "PATCH",
@@ -196,6 +203,7 @@ export const backendEvents = (builderContext = {}) => {
         "Content-Type": "application/json",
         "x-sera-service": "be_builder",
         "x-sera-builder": builder,
+        "X-Forwarded-For": "backend.sera"
       },
       body: JSON.stringify(data),
     }).catch((error) => console.error("Error:", error));
