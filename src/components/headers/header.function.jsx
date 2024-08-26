@@ -6,7 +6,7 @@ import booleanLogo from "../../assets/icons/radix-icons_component-boolean.png";
 import { EventIcon, ToastIcon, ScriptIcon } from "../../../../../src/assets/assets.svg";
 import { Handle, Position } from "reactflow";
 
-export default memo(({ data, left = false, title = "" }) => {
+export default memo(({ data, left = false, title = "", customIcon }) => {
   const apiLogo = {
     integerLogo: integerLogo,
     stringLogo: stringLogo,
@@ -67,7 +67,7 @@ export default memo(({ data, left = false, title = "" }) => {
           />
         </div>
       )}
-      {getIcon()}
+      {customIcon ? customIcon : getIcon()}
       <div className="functionTitle">{headerText(data.function)}</div>
       <div className="flex flex-grow" />
       {left == false && (

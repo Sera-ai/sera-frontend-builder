@@ -1,5 +1,4 @@
 import { applyEdgeChanges, applyNodeChanges } from "reactflow";
-import { generateRandomString } from "../helpers/helper.node";
 import { socket } from "../helpers/socket";
 import { backendEvents } from "./events.backend";
 
@@ -54,12 +53,16 @@ export const socketEvents = (builderContext) => {
     socket.wsEmit("nodeUpdate", { node: changedNodes });
   };
 
-  const handleNodesCreate = (newNode) => {
+  const handleNodesCreate = (newNodeRaw) => {
+    const newNode = newNodeRaw?.node || newNodeRaw
     console.log(newNode);
     if (newNode?.id)
-      setNodes((nds) =>
-        nds.some((node) => node.id === newNode.id) ? nds : nds.concat(newNode)
-      );
+      if (!JSON.stringify(newNode).includes("replace-host-string")) {
+        setNodes((nds) =>
+          nds.some((node) => node.id === newNode.id) ? nds : nds.concat(newNode)
+        );
+      }
+
     if (_source == "socket") return;
     if (newNode.length === 0) return;
     backendEventClass.createNode(newNode);
@@ -67,7 +70,6 @@ export const socketEvents = (builderContext) => {
 
   const handleEdgesDelete = (changes) => {
     console.log("changes", changes);
-
     setEdges((oldEdges) => applyEdgeChanges(changes, oldEdges));
   };
 
@@ -136,7 +138,10 @@ export const socketEvents = (builderContext) => {
     if (!nodeData) return;
     try {
       const response = await fetch(`https://${window.location.hostname}:${__BE_ROUTER_PORT__}/manage/builder/getNode?id=${nodeData._id}`, {
-        headers: { "x-sera-service": "be_builder" },
+        headers: {
+          "x-sera-service": "be_builder",
+          "X-Forwarded-For": "backend.sera"
+        },
       });
       const jsonData = await response.json();
       if (jsonData) {

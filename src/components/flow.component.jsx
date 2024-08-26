@@ -13,6 +13,7 @@ import scriptNode from "./nodes/node.script";
 import sendEventNode from "./nodes/node.sendEvent";
 import eventNode from "./nodes/node.event";
 import toastNode from "./nodes/node.toast";
+import { FetchIntegration, PushIntegration, fetchIntegrationDeployNode } from "./nodes/node.integration";
 
 import { triggerEvents } from "../events/events.triggers";
 import { backendEvents } from "../events/events.backend";
@@ -33,7 +34,7 @@ const FlowComponent = () => {
       case "event":
         return EventBar;
       default:
-        return null; // Or a default component if you have one
+        return ContentBar; // Or a default component if you have one
     }
   }, [builderContext.builderType]);
 
@@ -45,6 +46,9 @@ const FlowComponent = () => {
       sendEventNode,
       eventNode,
       toastNode,
+      fetchIntegrationNode: FetchIntegration,
+      pushIntegrationNode: PushIntegration,
+      fetchIntegrationDeployNode
     }),
     []
   );

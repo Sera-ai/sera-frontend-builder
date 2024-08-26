@@ -1,4 +1,5 @@
 export const newNodeDefault = (input) => {
+  console.log(input)
   const type = JSON.parse(input);
   const typeMapping = {
     integerNode: "integer",
@@ -9,6 +10,9 @@ export const newNodeDefault = (input) => {
     eventNode: "event",
     toastNode: "toast",
     sendEventNode: "event",
+    fetchIntegrationNode: "fetchIntegration",
+    pushIntegrationNode: "pushIntegration",
+    fetchIntegrationDeployNode: "fetchIntegration"
   };
 
   const ntype = {
@@ -20,6 +24,9 @@ export const newNodeDefault = (input) => {
     eventNode: "eventNode",
     toastNode: "toastNode",
     sendEventNode: "sendEventNode",
+    fetchIntegrationNode: "fetchIntegrationNode",
+    pushIntegrationNode: "pushIntegrationNode",
+    fetchIntegrationDeployNode: "fetchIntegrationDeployNode"
   };
 
   const functionType = typeMapping[type.type];
@@ -31,6 +38,13 @@ export const newNodeDefault = (input) => {
 
   const target = type.type == "scriptNode" ? [] : {};
 
+  let customInput = null
+  if (type.type == "fetchIntegrationNode"){
+    customInput = {}
+    customInput["host"] = "replace-host-string"
+    customInput["method"] = "GET"
+  }
+
   return {
     data: {
       function: functionType,
@@ -38,7 +52,7 @@ export const newNodeDefault = (input) => {
       [sourceName]: target,
       nodeType: 0,
       headerType: 0,
-      inputData: type.name || null,
+      inputData: type.name || customInput,
     },
     id: generateRandomString(),
     type: ntype[type.type],

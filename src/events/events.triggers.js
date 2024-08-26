@@ -172,6 +172,9 @@ export const triggerEvents = (builderContext) => {
     });
     let newNode = newNodeDefault(type);
     newNode.position = position;
+    
+    const parsedType = JSON.parse(type)
+    if (parsedType?.ref) newNode.data["linked"] = parsedType.ref
     socketEventClass.handleNodesCreate(newNode);
   };
 

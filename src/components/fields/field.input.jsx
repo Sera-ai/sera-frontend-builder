@@ -5,8 +5,17 @@ import { Handle, Position, useUpdateNodeInternals } from "reactflow";
 import { socket } from "../../helpers/socket";
 
 export default memo(
-  ({ data, node, id, placeholder = "Input", left = false }) => {
-    console.log("id", id);
+  ({
+    data,
+    node,
+    id,
+    placeholder = "Input",
+    left = false,
+    noFlow = false,
+    disabled = false,
+    nodeDataField = null,
+    textChangeCallback = () => {},
+  }) => {
     const [inputFieldData, setInputFieldData] = useState({
       target: data.target ?? { id: null, type: null, title: null },
       source: data.source ?? { id: null, type: null, title: null },
@@ -14,20 +23,32 @@ export default memo(
       inputData: data.inputData ?? null,
     });
 
-    console.log("data", node);
+    let newDataSpecific;
+    if (nodeDataField) {
+      newDataSpecific = {};
+    }
 
     const updateNodeInternals = useUpdateNodeInternals();
 
     const updateField = (newData) => {
-      console.log("updateField", id);
-      let dataUpdate = data;
-      dataUpdate.inputData = newData;
-      let updateData = inputFieldData;
-      updateData.inputData = dataUpdate.inputData;
-      setInputFieldData(updateData);
-      console.log("dataUpdate", dataUpdate.inputData);
-      updateNodeInternals(id, { data: dataUpdate });
-      socket.wsEmit("updateField", { id: id, value: newData, node: node });
+      let existingData = data;
+      let inputField = inputFieldData;
+
+      if (nodeDataField) newDataSpecific[nodeDataField] = newData;
+      if (!nodeDataField) newDataSpecific = newData;
+
+      existingData.inputData = nodeDataField;
+      inputField.inputData = existingData.inputData;
+
+      setInputFieldData(inputField);
+      updateNodeInternals(id, { data: existingData });
+      console.log("node", node)
+      socket.wsEmit("updateField", {
+        id: id,
+        data: newData,
+        node: node,
+        field: "data.inputData" + (nodeDataField ? `.${nodeDataField}` : "")
+      });
     };
 
     const NodeFieldTitle = () => {
@@ -40,7 +61,12 @@ export default memo(
           className="inlineTextBox"
           type={data.function == "string" ? "text" : "integer"}
           placeholder={placeholder}
-          defaultValue={inputFieldData.inputData}
+          defaultValue={
+            nodeDataField
+              ? inputFieldData.inputData?.[nodeDataField]
+              : inputFieldData.inputData
+          }
+          disabled={disabled}
         />
       );
     };
@@ -74,10 +100,8 @@ export default memo(
     };
     return (
       <div className="nodeHeaderContentDetailsTag nodeContentField">
-        {left && (
-          <div
-            className={`nodeHeaderHandle handleLeft`}
-          >
+        {!noFlow && left && (
+          <div className={`nodeHeaderHandle handleLeft`}>
             <LeftHandle />
           </div>
         )}
@@ -85,7 +109,7 @@ export default memo(
 
         <div style={{ fontSize: 10, color: "#ffffff70", flex: 1 }}></div>
 
-        {(data.nodeType == 1 || data.nodeType == 0) && !left && (
+        {(data.nodeType == 1 || data.nodeType == 0) && !noFlow && !left && (
           <div className={`nodeHeaderHandle handleRight`}>
             <RightHandle />
           </div>

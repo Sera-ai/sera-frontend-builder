@@ -65,6 +65,10 @@
     width: 100%;
 }
 
+.inlineTextBox:disabled {
+    background-color: #141414;
+}
+
 .paneResult {
     display: flex;
     padding: 5px;

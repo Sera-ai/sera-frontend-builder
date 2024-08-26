@@ -177,6 +177,30 @@
   animation: rainbow 18s ease infinite;
 }
 
+.anyCircleEdge {
+  border-radius: 12px !important;
+  width: 4px !important;
+  height: 4px !important;
+  border-color: #ddd;
+  border-width: 1px;
+  padding: 3px;
+  background: linear-gradient(
+    124deg,
+    #ff2400,
+    #e81d1d,
+    #e8b71d,
+    #e3e81d,
+    #1de840,
+    #1ddde8,
+    #2b1de8,
+    #dd00f3,
+    #dd00f3
+  );
+  background-size: 200% 200%; /* This allows the gradient to be larger than the element, enabling the animation */
+  -webkit-animation: rainbow 18s ease infinite;
+  animation: rainbow 18s ease infinite;
+}
+
 @-webkit-keyframes rainbow {
   0% {
     background-position: 0% 82%;
@@ -371,6 +395,7 @@
   border-radius: 3px;
   border: 1px solid #393e49;
   background: #111214;
+  gap: 4px;
 }
 
 .divider {
