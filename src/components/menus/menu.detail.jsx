@@ -25,7 +25,7 @@ export default memo(({ nodeDetails, nodes, edges }) => {
       case 3: return null;
     }
   }
-
+  return
   return (
     <aside className='detailsMenu'>
       <div className='detailsOverview'>

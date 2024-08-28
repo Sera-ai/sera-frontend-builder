@@ -46,7 +46,7 @@ export default memo(({ type, playbook }) => {
       const integrationNodes = await response.json();
       setIntegrationItems(integrationNodes);
     };
-    if (type == "builder") getIntegrationInventory();
+    if (type != "integration") getIntegrationInventory();
   }, []);
 
   const onDragStart = (event, nodeType) => {
@@ -59,13 +59,13 @@ export default memo(({ type, playbook }) => {
 
   return (
     <aside>
-      {type == "integration" && <IntegrationNodes onDragStart={onDragStart} />}
+      {type != "integration" && <IntegrationNodes onDragStart={onDragStart} />}
       {type == "event" && (
         <EventNodes onDragStart={onDragStart} eventNodeList={items} />
       )}
       {type == "event" && <EventFunctionNodes onDragStart={onDragStart} />}
       <GenericNodes basic={type == "integration"} onDragStart={onDragStart} />
-      {type == "builder" && (
+      {type != "integration" && (
         <IntegrationItems
           integrationItems={integrationItems}
           onDragStart={onDragStart}
