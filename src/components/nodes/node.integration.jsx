@@ -317,10 +317,10 @@ export const fetchIntegrationDeployNode = memo((node) => {
       <TagComponent data={0} />
       <FunctionHeaderComponent
         customIcon={<div className="pl-1"></div>}
-        left={true}
+        left={"both"}
         data={{
           function: "fetchIntegration",
-          title: `(Fetch) ${
+          title: `${
             refData?.data?.inputData?.name ??
             refData?.data?.inputData?.host + refData?.data?.inputData?.endpoint
           }`,

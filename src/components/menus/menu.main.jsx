@@ -59,7 +59,7 @@ export default memo(({ type, playbook }) => {
 
   return (
     <aside>
-      {type != "integration" && <IntegrationNodes onDragStart={onDragStart} />}
+      {type == "integration" && <IntegrationNodes onDragStart={onDragStart} />}
       {type == "event" && (
         <EventNodes onDragStart={onDragStart} eventNodeList={items} />
       )}

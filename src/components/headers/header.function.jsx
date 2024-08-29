@@ -54,7 +54,7 @@ export default memo(({ data, left = false, title = "", customIcon }) => {
         borderColor: `#ffffff80`,
       }}
     >
-      {left && (
+      {(left == true || left == "both") && (
         <div
           className="nodeHeaderHandle"
           style={{ borderColor: "#ffffff50", borderRightWidth: 1 }}
@@ -70,7 +70,7 @@ export default memo(({ data, left = false, title = "", customIcon }) => {
       {customIcon ? customIcon : getIcon()}
       <div className="functionTitle">{headerText(data.function)}</div>
       <div className="flex flex-grow" />
-      {left == false && (
+      {(left == false || left == "both") && (
         <div
           className="nodeHeaderHandle"
           style={{ borderColor: "#ffffff50", borderLeftWidth: 1 }}
