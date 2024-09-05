@@ -15,7 +15,7 @@ export const backendEvents = (builderContext = {}) => {
       if (created) {
         setIssue(null);
       } else {
-        alert("something went wrong2");
+        alert("No Endpoint");
       }
     }
 
@@ -25,7 +25,7 @@ export const backendEvents = (builderContext = {}) => {
       if (created) {
         setIssue(null);
       } else {
-        alert("something went wrong1");
+        alert("No Builder");
       }
     }
   };

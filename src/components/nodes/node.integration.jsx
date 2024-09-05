@@ -201,7 +201,7 @@ export const fetchIntegrationDeployNode = memo((node) => {
             setRefData(jsonData);
           }
         } else {
-          console.log("something went wrong");
+          console.log("No Integration Node Data");
         }
       } catch (error) {
         console.error("Error fetching data:", error);

@@ -150,11 +150,11 @@ export const socketEvents = (builderContext) => {
           setNodeDetails(nodeData);
         } else {
           setIssue(jsonData.issue);
-          console.log("something went wrong");
+          console.log("Has Node Issue");
         }
       } else {
         setIssue("something went wrong");
-        console.log("something went wrong");
+        console.log("No Node Details");
       }
     } catch (error) {
       console.error("Error fetching data:", error);
